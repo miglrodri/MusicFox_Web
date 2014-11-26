@@ -211,15 +211,21 @@ public class MusicController extends HttpServlet {
 	 */
 	public ResultSet queryDB(String qq) {
 		System.out.println("public ResultSet queryDB(String qq) {");
-		String inputFileName = "MusicOntologyWithIndividuals.owl";
-		String SOURCE = "http://www.semanticweb.org/MusicOntology";
-		final InputStream inputStream = FileManager.get().open(inputFileName);
-		final OntModel model = ModelFactory.createOntologyModel(
-				OntModelSpec.OWL_DL_MEM, null);
+//		String inputFileName = "MusicOntologyWithIndividuals.owl";
+//		String SOURCE = "http://www.semanticweb.org/MusicOntology";
+//		final InputStream inputStream = FileManager.get().open(inputFileName);
+//		final OntModel model = ModelFactory.createOntologyModel(
+//				OntModelSpec.OWL_DL_MEM, null);
+//		
+//		System.out.println("trying to read owl to model");
+//		model.read(inputStream, "MusicOntologyWithIndividuals.owl");
+//		System.out.println("owl was read to model");
 		
-		System.out.println("trying to read owl to model");
-		model.read(inputStream, SOURCE);
-		System.out.println("owl was read to model");
+		
+		InputStream in = FileManager.get().open("MusicOntologyWithIndividuals.owl");
+		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
+		model.read(in, arg1);
+		
 		
 		String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
 				+ "PREFIX owl: <http://www.w3.org/2002/07/owl#>"
