@@ -49,7 +49,7 @@ public class MusicController extends HttpServlet {
 		String searchQuery = "";
 		Map<String, String> resultsMap = new HashMap<String, String>();
 
-		if (!request.getParameter("artist_id").isEmpty()) {
+		if (request.getParameter("artist_id") != null) {
 			// mostrar página de artist
 			String artist_id = request.getParameter("artist_id");
 			searchQuery = "SELECT ?id ?name ?maingenre ?decade ?gender"
@@ -102,7 +102,7 @@ public class MusicController extends HttpServlet {
 						request, response);
 			}
 
-		} else if (!request.getParameter("album_id").isEmpty()) {
+		} else if (request.getParameter("album_id") != null) {
 			// // mostrar pagina de album
 			String album_id = request.getParameter("album_id");
 			searchQuery = "SELECT ?id ?title ?releasedate ?numberoftracks ?decade"
@@ -162,7 +162,7 @@ public class MusicController extends HttpServlet {
 						request, response);
 			}
 
-		} else if (!request.getParameter("genre").isEmpty()) {
+		} else if (request.getParameter("genre") != null) {
 			// mostrar artistas por genero
 			String genre_selected = request.getParameter("genre");
 			System.out.println("param genre: "+genre_selected);
@@ -195,7 +195,12 @@ public class MusicController extends HttpServlet {
 			}
 
 			
-		}	
+		} else {
+			mybean.setOption(null);
+			request.setAttribute("mybean", mybean);
+			getServletContext().getRequestDispatcher("/HomeView.jsp").forward(
+					request, response);
+		}
 
 	}
 
@@ -205,16 +210,17 @@ public class MusicController extends HttpServlet {
 	 * @return
 	 */
 	public ResultSet queryDB(String qq) {
-
-		String inputFileName = "MusicOntology.owl";
+		System.out.println("public ResultSet queryDB(String qq) {");
+		String inputFileName = "MusicOntologyWithIndividuals.owl";
 		String SOURCE = "http://www.semanticweb.org/MusicOntology";
-		String NS = SOURCE + "#";
-		String outFileName = "MusicOntologyWithIndividuals.owl";
 		final InputStream inputStream = FileManager.get().open(inputFileName);
 		final OntModel model = ModelFactory.createOntologyModel(
 				OntModelSpec.OWL_DL_MEM, null);
+		
+		System.out.println("trying to read owl to model");
 		model.read(inputStream, SOURCE);
-
+		System.out.println("owl was read to model");
+		
 		String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
 				+ "PREFIX owl: <http://www.w3.org/2002/07/owl#>"
 				+ "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"
