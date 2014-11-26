@@ -2,9 +2,10 @@ package com.musicfox;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,8 +19,8 @@ import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.util.FileManager;
 
@@ -44,16 +45,94 @@ public class MusicController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		String genre_selected = request.getParameter("genre");
+
 		JavaBean mybean = new JavaBean();
-		mybean.setOption(genre_selected);
+		String searchQuery = "";
+		Map<String, String> resultsMap = new HashMap<String, String>();
+
+		if (request.getParameter("artist_id").isEmpty()) {
+			// mostrar página de artist
+			String artist_id = request.getParameter("artist_id");
+			searchQuery = "SELECT ?id ?name ?maingenre ?decade ?gender"
+					+ "WHERE {"
+					+ "      ?id rdf:type music:Artist."
+					+ "?id music:hasName ?name"
+					+ "?id music:hasMainGenre ?maingenre"
+					+ "?id music:hasDecade ?decade"
+					+ "?id music:hasGender ?gender"
+					+ "FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#"
+					+ artist_id + "\")}";
+
+			ResultSet results = queryDB(searchQuery);
+			while (results.hasNext()) {
+				QuerySolution binding = results.nextSolution();
+				String temp_artist_id = binding.get("id").toString();
+				String temp_artist_name = binding.get("name").toString();
+				String temp_artist_maingenre = binding.get("maingenre")
+						.toString();
+				String temp_artist_decade = binding.get("decade").toString();
+				String temp_artist_gender = binding.get("gender").toString();
+				System.out.println();
+				resultsMap.put(temp_artist_id, temp_artist_name);
+
+			}
+
+			mybean.setOption(null);
+		} else if (request.getParameter("album_id").isEmpty()) {
+			// // mostrar pagina de album
+			// String genre_selected = request.getParameter("genre");
+			// searchQuery = "SELECT ?id ?name"
+			// + "WHERE {"
+			// + "      ?id music:hasMainGenre \""
+			// + genre_selected
+			// + "\"^^xsd:string  ." + "?id music:hasName ?name }";
+			//
+			// ResultSet results = queryDB(searchQuery);
+			// while (results.hasNext()) {
+			// QuerySolution binding = results.nextSolution();
+			// String temp_artist_id = binding.get("id").toString();
+			// String temp_artist_name = binding.get("name").toString();
+			// System.out.println();
+			// resultsMap.put(temp_artist_id, temp_artist_name);
+			//
+			// }
+			//
+			// mybean.setOption(genre_selected);
+		} else if (request.getParameter("genre").isEmpty()) {
+			// mostrar artistas por genero
+			String genre_selected = request.getParameter("genre");
+			searchQuery = "SELECT ?id ?name" + "WHERE {"
+					+ "      ?id music:hasMainGenre \"" + genre_selected
+					+ "\"^^xsd:string  ." + "?id music:hasName ?name }";
+
+			ResultSet results = queryDB(searchQuery);
+			while (results.hasNext()) {
+				QuerySolution binding = results.nextSolution();
+				String temp_artist_id = binding.get("id").toString();
+				String temp_artist_name = binding.get("name").toString();
+				System.out.println();
+				resultsMap.put(temp_artist_id, temp_artist_name);
+
+			}
+
+			mybean.setOption(genre_selected);
+		}
+
+		mybean.setResultsMap(resultsMap);
+
 		request.setAttribute("mybean", mybean);
 
 		getServletContext().getRequestDispatcher("/HomeView.jsp").forward(
 				request, response);
 
-		// Open the bloggers RDF graph from the filesystem
-		/*InputStream in = new FileInputStream(new File("bloggers.rdf"));
+	}
+
+	/**
+	 * 
+	 * @param query
+	 * @return
+	 */
+	public ResultSet queryDB(String qq) {
 
 		String inputFileName = "MusicOntology.owl";
 		String SOURCE = "http://www.semanticweb.org/MusicOntology";
@@ -62,48 +141,24 @@ public class MusicController extends HttpServlet {
 		final InputStream inputStream = FileManager.get().open(inputFileName);
 		final OntModel model = ModelFactory.createOntologyModel(
 				OntModelSpec.OWL_DL_MEM, null);
-
 		model.read(inputStream, SOURCE);
 
-		// Create a new query
 		String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
 				+ "PREFIX owl: <http://www.w3.org/2002/07/owl#>"
 				+ "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"
 				+ "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>"
 				+ "PREFIX music: <http://www.semanticweb.org/MusicOntology#>"
-				+ "SELECT ?subject ?name"
-				+ "WHERE {"
-				+ "      ?subject music:hasMainGenre \""
-				+ genre_selected
-				+ "\"^^xsd:string  ." + "?subject music:hasName ?name }";
-
-		// String simpleQuery =
-		// "SELECT ?x  " +
-		// "WHERE { ?x" +
-		// "	<http://www.w3.org/2001/vcard-rdf/3.0#FN> John Smith";
-		// " };";
+				+ qq;
 
 		Query query = QueryFactory.create(queryString);
-
-		// Execute the query and obtain results
 		QueryExecution qe = QueryExecutionFactory.create(query, model);
+
 		ResultSet results = qe.execSelect();
 
-		// Output query results
-		ResultSetFormatter.out(System.out, results, query);
-
 		// Important - free up resources used running the query
-		qe.close();*/
+		qe.close();
 
+		return results;
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	// protected void doPost(HttpServletRequest request, HttpServletResponse
-	// response) throws ServletException, IOException {
-	// // TODO Auto-generated method stub
-	// }
 
 }
