@@ -221,17 +221,20 @@ public class MusicController extends HttpServlet {
 //		model.read(inputStream, "MusicOntologyWithIndividuals.owl");
 //		System.out.println("owl was read to model");
 		
-		
-		InputStream in = FileManager.get().open("MusicOntologyWithIndividuals.owl");
+		String path = getServletContext().getRealPath("/music_rdf_file.owl");
+		InputStream in = FileManager.get().open(path);
 		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
-		model.read(in, arg1);
+		
+		System.out.println("line before model.read(in, null);");
+		model.read(in, null);
+		System.out.println("line after model.read(in, null);");
 		
 		
-		String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
-				+ "PREFIX owl: <http://www.w3.org/2002/07/owl#>"
-				+ "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"
-				+ "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>"
-				+ "PREFIX music: <http://www.semanticweb.org/MusicOntology#>"
+		String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
+				+ "PREFIX owl: <http://www.w3.org/2002/07/owl#> "
+				+ "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> "
+				+ "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> "
+				+ "PREFIX music: <http://www.semanticweb.org/MusicOntology#> "
 				+ qq;
 
 		Query query = QueryFactory.create(queryString);
