@@ -46,7 +46,7 @@ public class MusicController extends HttpServlet {
 		Map<String, String> resultsMap = new HashMap<String, String>();
 		QueryExecution qe;
 		ResultSet results = null;
-		
+
 		if (request.getParameter("artist_id") != null) {
 			// mostrar página de artist
 			String artist_id = request.getParameter("artist_id");
@@ -152,7 +152,6 @@ public class MusicController extends HttpServlet {
 							track_info);
 				}
 				qe1.close();
-				
 
 				temp_album.setTracksMap(tracks_list);
 				mybean.setOption(null);
@@ -170,13 +169,14 @@ public class MusicController extends HttpServlet {
 		} else if (request.getParameter("genre") != null) {
 			// mostrar artistas por genero
 			String genre_selected = request.getParameter("genre");
-			System.out.println("param genre: "+genre_selected);
+			System.out.println("param genre: " + genre_selected);
 			searchQuery = "SELECT ?id ?name " + "WHERE {"
-					+ "?id music:hasMainGenre \"" + genre_selected.toLowerCase()
-					+ "\"^^xsd:string. ?id music:hasName ?name }";
+					+ "?id music:hasMainGenre ?genre ."
+					+ " ?id music:hasName ?name ." + " FILTER regex(?genre, \""
+					+ genre_selected + "\", \"i\") }";
 
-			System.out.println("quering >> "+ searchQuery);
-			
+			System.out.println("quering >> " + searchQuery);
+
 			qe = queryDB(searchQuery);
 			results = qe.execSelect();
 			if (results.hasNext()) {
@@ -184,32 +184,31 @@ public class MusicController extends HttpServlet {
 					QuerySolution binding = results.nextSolution();
 					String temp_artist_id = binding.get("id").toString();
 					String temp_artist_name = binding.get("name").toString();
+					System.out.println(temp_artist_id + " \\ "
+							+ temp_artist_name);
 					resultsMap.put(temp_artist_id, temp_artist_name);
 
 				}
-				
+
 				mybean.setOption(genre_selected);
 				mybean.setResultsMap(resultsMap);
 				request.setAttribute("mybean", mybean);
-				getServletContext().getRequestDispatcher("/HomeView.jsp").forward(
-						request, response);
-				
-			}
-			else {
+				getServletContext().getRequestDispatcher("/HomeView.jsp")
+						.forward(request, response);
+
+			} else {
 				getServletContext().getRequestDispatcher("/404.html").forward(
 						request, response);
 			}
 			qe.close();
 
-			
 		} else {
 			mybean.setOption(null);
 			request.setAttribute("mybean", mybean);
 			getServletContext().getRequestDispatcher("/HomeView.jsp").forward(
 					request, response);
 		}
-		
-		
+
 	}
 
 	/**
@@ -219,7 +218,7 @@ public class MusicController extends HttpServlet {
 	 */
 	public QueryExecution queryDB(String qq) {
 		System.out.println("public ResultSet queryDB(String qq) {");
-		
+
 		OntModel model = initServletContext.model;
 
 		String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
