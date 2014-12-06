@@ -17,9 +17,6 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
  * Servlet implementation class MusicController
@@ -47,7 +44,9 @@ public class MusicController extends HttpServlet {
 		JavaBean mybean = new JavaBean();
 		String searchQuery = "";
 		Map<String, String> resultsMap = new HashMap<String, String>();
-
+		QueryExecution qe;
+		ResultSet results = null;
+		
 		if (request.getParameter("artist_id") != null) {
 			// mostrar página de artist
 			String artist_id = request.getParameter("artist_id");
@@ -61,7 +60,8 @@ public class MusicController extends HttpServlet {
 					+ "FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#"
 					+ artist_id + "\")}";
 
-			ResultSet results = queryDB(searchQuery);
+			qe = queryDB(searchQuery);
+			results = qe.execSelect();
 			if (results.hasNext()) {
 				QuerySolution binding = results.nextSolution();
 				Artist temp_artist = new Artist();
@@ -78,8 +78,8 @@ public class MusicController extends HttpServlet {
 						+ "?albumid music:hasTitle ?albumtitle"
 						+ "FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#"
 						+ artist_id + "\")}";
-
-				results = queryDB(searchQuery);
+				qe = queryDB(searchQuery);
+				results = qe.execSelect();
 				Map<String, String> albums_list = new HashMap<String, String>();
 				while (results.hasNext()) {
 					binding = results.nextSolution();
@@ -100,6 +100,7 @@ public class MusicController extends HttpServlet {
 				getServletContext().getRequestDispatcher("/404.html").forward(
 						request, response);
 			}
+			qe.close();
 
 		} else if (request.getParameter("album_id") != null) {
 			// // mostrar pagina de album
@@ -113,7 +114,8 @@ public class MusicController extends HttpServlet {
 					+ "FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#"
 					+ album_id + "\")}";
 
-			ResultSet results = queryDB(searchQuery);
+			qe = queryDB(searchQuery);
+			results = qe.execSelect();
 			if (results.hasNext()) {
 				QuerySolution binding = results.nextSolution();
 				Album temp_album = new Album();
@@ -134,10 +136,11 @@ public class MusicController extends HttpServlet {
 						+ "FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#"
 						+ album_id + "\")}";
 
-				results = queryDB(searchQuery);
+				QueryExecution qe1 = queryDB(searchQuery);
+				ResultSet results1 = qe1.execSelect();
 				Map<String, Map> tracks_list = new HashMap<String, Map>();
 				Map<String, String> track_info = new HashMap<String, String>();
-				while (results.hasNext()) {
+				while (results1.hasNext()) {
 					binding = results.nextSolution();
 					track_info.put("tracktitle", binding.get("tracktitle")
 							.toString());
@@ -148,6 +151,8 @@ public class MusicController extends HttpServlet {
 					tracks_list.put(binding.get("trackid").toString(),
 							track_info);
 				}
+				qe1.close();
+				
 
 				temp_album.setTracksMap(tracks_list);
 				mybean.setOption(null);
@@ -160,18 +165,20 @@ public class MusicController extends HttpServlet {
 				getServletContext().getRequestDispatcher("/404.html").forward(
 						request, response);
 			}
+			qe.close();
 
 		} else if (request.getParameter("genre") != null) {
 			// mostrar artistas por genero
 			String genre_selected = request.getParameter("genre");
 			System.out.println("param genre: "+genre_selected);
 			searchQuery = "SELECT ?id ?name " + "WHERE {"
-					+ "      ?id music:hasMainGenre \"" + genre_selected
-					+ "\"^^xsd:string  ." + "?id music:hasName ?name }";
+					+ "?id music:hasMainGenre \"" + genre_selected.toLowerCase()
+					+ "\"^^xsd:string. ?id music:hasName ?name }";
 
 			System.out.println("quering >> "+ searchQuery);
 			
-			ResultSet results = queryDB(searchQuery);
+			qe = queryDB(searchQuery);
+			results = qe.execSelect();
 			if (results.hasNext()) {
 				while (results.hasNext()) {
 					QuerySolution binding = results.nextSolution();
@@ -192,6 +199,7 @@ public class MusicController extends HttpServlet {
 				getServletContext().getRequestDispatcher("/404.html").forward(
 						request, response);
 			}
+			qe.close();
 
 			
 		} else {
@@ -200,7 +208,8 @@ public class MusicController extends HttpServlet {
 			getServletContext().getRequestDispatcher("/HomeView.jsp").forward(
 					request, response);
 		}
-
+		
+		
 	}
 
 	/**
@@ -208,7 +217,7 @@ public class MusicController extends HttpServlet {
 	 * @param query
 	 * @return
 	 */
-	public ResultSet queryDB(String qq) {
+	public QueryExecution queryDB(String qq) {
 		System.out.println("public ResultSet queryDB(String qq) {");
 		
 		OntModel model = initServletContext.model;
@@ -223,17 +232,7 @@ public class MusicController extends HttpServlet {
 		Query query = QueryFactory.create(queryString);
 		QueryExecution qe = QueryExecutionFactory.create(query, model);
 
-		ResultSet results = qe.execSelect();
-		for ( ; results.hasNext() ; )
-	    {
-	      QuerySolution soln = results.nextSolution() ;
-	      RDFNode x = soln.get("varName") ;       // Get a result variable by name.
-	      Resource r = soln.getResource("VarR") ; // Get a result variable - must be a resource
-	      Literal l = soln.getLiteral("VarL") ;   // Get a result variable - must be a literal
-	      System.out.println(x+ " "+r+" "+l);
-	    }
-
-		return results;
+		return qe;
 	}
 
 }
