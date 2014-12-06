@@ -1,7 +1,6 @@
 package com.musicfox;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,15 +11,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.util.FileManager;
+import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
  * Servlet implementation class MusicController
@@ -52,7 +51,7 @@ public class MusicController extends HttpServlet {
 		if (request.getParameter("artist_id") != null) {
 			// mostrar página de artist
 			String artist_id = request.getParameter("artist_id");
-			searchQuery = "SELECT ?id ?name ?maingenre ?decade ?gender"
+			searchQuery = "SELECT ?id ?name ?maingenre ?decade ?gender "
 					+ "WHERE {"
 					+ "      ?id rdf:type music:Artist."
 					+ "?id music:hasName ?name"
@@ -73,7 +72,7 @@ public class MusicController extends HttpServlet {
 				temp_artist.setDecade(binding.get("decade").toString());
 				temp_artist.setGender(binding.get("gender").toString());
 
-				searchQuery = "SELECT ?id ?albumid ?albumtitle"
+				searchQuery = "SELECT ?id ?albumid ?albumtitle "
 						+ "WHERE { ?id rdf:type music:Artist."
 						+ "?id music:producesAlbum ?albumid."
 						+ "?albumid music:hasTitle ?albumtitle"
@@ -105,7 +104,7 @@ public class MusicController extends HttpServlet {
 		} else if (request.getParameter("album_id") != null) {
 			// // mostrar pagina de album
 			String album_id = request.getParameter("album_id");
-			searchQuery = "SELECT ?id ?title ?releasedate ?numberoftracks ?decade"
+			searchQuery = "SELECT ?id ?title ?releasedate ?numberoftracks ?decade "
 					+ "WHERE { ?id rdf:type music:Album."
 					+ "?id music:hasTitle ?title."
 					+ "?id music:hasReleaseDate ?releasedate."
@@ -125,7 +124,7 @@ public class MusicController extends HttpServlet {
 						"numberoftracks").toString()));
 				temp_album.setDecade(binding.get("decade").toString());
 
-				searchQuery = "SELECT ?trackid ?tracktitle ?trackindex ?duration"
+				searchQuery = "SELECT ?trackid ?tracktitle ?trackindex ?duration "
 						+ "WHERE { ?id rdf:type music:Album."
 						+ "?trackid rdf:type music:Track."
 						+ "?id music:hasTrack ?trackid."
@@ -166,7 +165,7 @@ public class MusicController extends HttpServlet {
 			// mostrar artistas por genero
 			String genre_selected = request.getParameter("genre");
 			System.out.println("param genre: "+genre_selected);
-			searchQuery = "SELECT ?id ?name" + "WHERE {"
+			searchQuery = "SELECT ?id ?name " + "WHERE {"
 					+ "      ?id music:hasMainGenre \"" + genre_selected
 					+ "\"^^xsd:string  ." + "?id music:hasName ?name }";
 
@@ -211,25 +210,9 @@ public class MusicController extends HttpServlet {
 	 */
 	public ResultSet queryDB(String qq) {
 		System.out.println("public ResultSet queryDB(String qq) {");
-//		String inputFileName = "MusicOntologyWithIndividuals.owl";
-//		String SOURCE = "http://www.semanticweb.org/MusicOntology";
-//		final InputStream inputStream = FileManager.get().open(inputFileName);
-//		final OntModel model = ModelFactory.createOntologyModel(
-//				OntModelSpec.OWL_DL_MEM, null);
-//		
-//		System.out.println("trying to read owl to model");
-//		model.read(inputStream, "MusicOntologyWithIndividuals.owl");
-//		System.out.println("owl was read to model");
 		
-		String path = getServletContext().getRealPath("/music_rdf_file.owl");
-		InputStream in = FileManager.get().open(path);
-		OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
-		
-		System.out.println("line before model.read(in, null);");
-		model.read(in, null);
-		System.out.println("line after model.read(in, null);");
-		
-		
+		OntModel model = initServletContext.model;
+
 		String queryString = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
 				+ "PREFIX owl: <http://www.w3.org/2002/07/owl#> "
 				+ "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> "
@@ -241,9 +224,14 @@ public class MusicController extends HttpServlet {
 		QueryExecution qe = QueryExecutionFactory.create(query, model);
 
 		ResultSet results = qe.execSelect();
-
-		// Important - free up resources used running the query
-		qe.close();
+		for ( ; results.hasNext() ; )
+	    {
+	      QuerySolution soln = results.nextSolution() ;
+	      RDFNode x = soln.get("varName") ;       // Get a result variable by name.
+	      Resource r = soln.getResource("VarR") ; // Get a result variable - must be a resource
+	      Literal l = soln.getLiteral("VarL") ;   // Get a result variable - must be a literal
+	      System.out.println(x+ " "+r+" "+l);
+	    }
 
 		return results;
 	}
