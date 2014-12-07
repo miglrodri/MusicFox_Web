@@ -145,7 +145,18 @@ public class Artist {
 		albumsArray.add(album);
 	}
 
+	public void setCover(String url) {
+		setCoverUrl(url);
+		
+	}
 
+	public String getCoverUrl() {
+		return coverUrl;
+	}
+
+	public void setCoverUrl(String coverUrl) {
+		this.coverUrl = coverUrl;
+	}
 
 	/**
 	 * albumsMap contains info about the artist albums (album_id, album_title)
@@ -168,4 +179,5 @@ public class Artist {
 	private String lastFMUrl;
 	private int lastFMListeners;
 	private int lastFMPlayCount;
+	private String coverUrl;
 }
