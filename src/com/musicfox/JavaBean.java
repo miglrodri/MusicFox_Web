@@ -1,3 +1,4 @@
+
 package com.musicfox;
 
 import java.util.ArrayList;
@@ -55,3 +56,4 @@ public class JavaBean {
 	}
 
 }
+
