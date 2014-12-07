@@ -16,6 +16,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.echonest.api.v4.EchoNestAPI;
+import com.echonest.api.v4.EchoNestException;
+import com.echonest.api.v4.Image;
+
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -51,6 +55,7 @@ public class MusicController extends HttpServlet {
 		QueryExecution qe;
 		ResultSet results = null;
 
+		EchoNestAPI echoNest = new EchoNestAPI("IE2ZINGXDYWASD9NH");
 		System.out.println("request to controller>>>>>>");
 
 		// disponibiliza um bean com artistsArray contendo 1 único artist
@@ -60,17 +65,6 @@ public class MusicController extends HttpServlet {
 			String artist_id = request.getParameter("artistid");
 			System.out.println("param artist_id = " + artist_id);
 			searchQuery = "SELECT ?id ?name ?maingenre ?decade ?gender ?vevourl ?vevovtotal ?vevolm ?twitterurl ?twitterfoll ?fburl ?fbpta ?fblikes  WHERE { ?id rdf:type music:Artist. 	?id music:hasName ?name. ?id music:hasMainGenre ?maingenre.  ?id music:hasDecade ?decade. 		?id music:hasGender ?gender.  ?id music:hasVevoUrl ?vevourl. 	?id music:hasVevoViewsLastMonth ?vevolm. ?id music:hasVevoViewsTotal ?vevovtotal.  ?id music:hasTwitterUrl ?twitterurl. ?id music:hasTwitterFollowers ?twitterfoll. ?id music:hasFacebookUrl ?fburl.  ?id music:hasFacebookPeopleTalkingAbout ?fbpta. ?id music:hasFacebookLikes ?fblikes.		FILTER regex( str(?id), \""+ artist_id +"\" ) 	}";
-
-//			String artist_id = request.getParameter("artist_id");
-//			searchQuery = "SELECT ?id ?name ?maingenre ?decade ?gender "
-//					+ "WHERE {"
-//					+ " ?id rdf:type music:Artist. "
-//					+ "?id music:hasName ?name. "
-//					+ "?id music:hasMainGenre ?maingenre. "
-//					+ "?id music:hasDecade ?decade. "
-//					+ "?id music:hasGender ?gender. "
-//					+ "FILTER(str(?id)=\""
-//					+ artist_id + "\")}";
 
 
 			qe = queryDB(searchQuery);
@@ -104,20 +98,6 @@ public class MusicController extends HttpServlet {
 				searchQuery = "SELECT ?albumid ?albumtitle WHERE { ?id rdf:type music:Artist. ?id music:producesAlbum ?albumid. ?albumid music:hasTitle ?albumtitle FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#" + artist_id + "\") }";
 				//System.out.println("quering >> " + searchQuery);
 
-//				temp_artist.setId(binding.get("id").toString());
-//				temp_artist.setName(binding.get("name").toString());
-//				temp_artist.setMainGenre(binding.get("maingenre").toString());
-//				temp_artist.setDecade(binding.get("decade").toString());
-//				temp_artist.setGender(binding.get("gender").toString());
-//				System.out.println(binding.get("id").toString()+"\\"+binding.get("maingenre"));
-//
-//				searchQuery = "SELECT ?id ?albumid ?albumtitle "
-//						+ "WHERE { ?id rdf:type music:Artist."
-//						+ "?id music:producesAlbum ?albumid."
-//						+ "?albumid music:hasTitle ?albumtitle "
-//						+ "FILTER(str(?id)=\""
-//						+ artist_id + "\")}";
-
 				qe = queryDB(searchQuery);
 				results = qe.execSelect();
 				
@@ -131,6 +111,21 @@ public class MusicController extends HttpServlet {
 //					System.out.print("albumid: "+temp_album_id);
 //					System.out.println(" #albumtitle: "+temp_album_title);
 
+					try {
+						String query = temp_album_title.substring(0, temp_album_title.indexOf("^^"));
+						albums = echoNest.searchArtists(query);
+						if (artists.size() > 0) {
+							java.util.List<Image> images = artists.get(0).getImages();
+							if(images.size() > 0){
+								temp_artist.setCover(images.get(0).getURL());
+								System.out.println(images.get(0).getURL());
+							}	
+						}
+					} catch (EchoNestException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 					Album temp_album = new Album();
 					temp_album.setId(cleanId(temp_album_id));
 					temp_album.setTitle(cleanLiteral(temp_album_title));
@@ -227,6 +222,22 @@ public class MusicController extends HttpServlet {
 					Artist temp_artist = new Artist();
 					temp_artist.setId(cleanId(temp_artist_id));
 					temp_artist.setName(cleanLiteral(temp_artist_name));
+					
+					try {
+						String query = temp_artist_name.substring(0, temp_artist_name.indexOf("^^"));
+						artists = echoNest.searchArtists(query);
+						if (artists.size() > 0) {
+							java.util.List<Image> images = artists.get(0).getImages();
+							if(images.size() > 0){
+								temp_artist.setCover(images.get(0).getURL());
+								System.out.println(images.get(0).getURL());
+							}	
+						}
+					} catch (EchoNestException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 					mybean.addToArtistsArray(temp_artist);
 					temp++; // incremente o contador do nr de resultados
 							// encontrados
@@ -277,6 +288,22 @@ public class MusicController extends HttpServlet {
 					Artist temp_artist = new Artist();
 					temp_artist.setId(cleanId(temp_artist_id));
 					temp_artist.setName(cleanLiteral(temp_artist_name));
+					
+					try {
+						String query = temp_artist_name.substring(0, temp_artist_name.indexOf("^^"));
+						artists = echoNest.searchArtists(query);
+						if (artists.size() > 0) {
+							java.util.List<Image> images = artists.get(0).getImages();
+							if(images.size() > 0){
+								temp_artist.setCover(images.get(0).getURL());
+								System.out.println(images.get(0).getURL());
+							}	
+						}
+					} catch (EchoNestException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 					mybean.addToArtistsArray(temp_artist);
 
 					temp++; // incremente o contador do nr de resultados
