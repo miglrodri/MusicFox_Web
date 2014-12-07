@@ -262,11 +262,12 @@ r
 									for (int i = 0; i < temp_array.size(); i++) {
 										String artist_id = temp_array.get(i).getId();
 										String artist_name = temp_array.get(i).getName();
+										String artist_cover = temp_array.get(i).getCoverUrl();
 
 						%>
 
 						<div class="col-xs-6 col-md-3 thumbnail">
-							<a href="#"> <img src="images/cenas.png" alt="cenas">
+							<a href="#"> <img src="<%=artist_cover%>" style="max-width: 200px;" alt="cenas">
 							</a>
 							<div class="caption">
 								<h3><%=artist_name%>
