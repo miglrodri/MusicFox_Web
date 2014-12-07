@@ -1,3 +1,12 @@
+
+// TODO quando é feito um pedido para mostrar artista por id, se esse artista nao tiver a info das stats toda completa a query cai por terra!!
+// solução seria fazer uma BD que populasse todos os dados, mesmo com 0 ou nulls. do lado do sparql teria que se andar a fazer vários pedidos, a cada estatística..
+// no entanto ainda devemos investigar porque acho que dá para declarar campos opcionais na pesquisa sparql, no entanto nao sei como funca e se dá mais trab.
+
+// TODO teste ^^ Escolher género Electronica, Afrojck dá erro porque falta alguma stat, e Alesso dá na boa..
+
+// TODO falta paginação \ e pequenos pormenores de navegação
+
 package com.musicfox;
 
 import java.io.IOException;
@@ -37,62 +46,105 @@ public class MusicController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	@SuppressWarnings("rawtypes")
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
 		JavaBean mybean = new JavaBean();
 		String searchQuery = "";
-		Map<String, String> resultsMap = new HashMap<String, String>();
 		QueryExecution qe;
 		ResultSet results = null;
 
-		if (request.getParameter("artist_id") != null) {
+		System.out.println("request to controller>>>>>>");
+
+		// disponibiliza um bean com artistsArray contendo 1 único artist
+		if (request.getParameter("artistid") != null) {
 			// mostrar página de artist
-			String artist_id = request.getParameter("artist_id");
-			searchQuery = "SELECT ?id ?name ?maingenre ?decade ?gender "
-					+ "WHERE {"
-					+ "      ?id rdf:type music:Artist."
-					+ "?id music:hasName ?name"
-					+ "?id music:hasMainGenre ?maingenre"
-					+ "?id music:hasDecade ?decade"
-					+ "?id music:hasGender ?gender"
-					+ "FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#"
-					+ artist_id + "\")}";
+
+			String artist_id = request.getParameter("artistid");
+			System.out.println("param artist_id = " + artist_id);
+			searchQuery = "SELECT ?id ?name ?maingenre ?decade ?gender ?vevourl ?vevovtotal ?vevolm ?twitterurl ?twitterfoll ?fburl ?fbpta ?fblikes  WHERE { ?id rdf:type music:Artist. 	?id music:hasName ?name. ?id music:hasMainGenre ?maingenre.  ?id music:hasDecade ?decade. 		?id music:hasGender ?gender.  ?id music:hasVevoUrl ?vevourl. 	?id music:hasVevoViewsLastMonth ?vevolm. ?id music:hasVevoViewsTotal ?vevovtotal.  ?id music:hasTwitterUrl ?twitterurl. ?id music:hasTwitterFollowers ?twitterfoll. ?id music:hasFacebookUrl ?fburl.  ?id music:hasFacebookPeopleTalkingAbout ?fbpta. ?id music:hasFacebookLikes ?fblikes.		FILTER regex( str(?id), \""+ artist_id +"\" ) 	}";
+
+//			String artist_id = request.getParameter("artist_id");
+//			searchQuery = "SELECT ?id ?name ?maingenre ?decade ?gender "
+//					+ "WHERE {"
+//					+ " ?id rdf:type music:Artist. "
+//					+ "?id music:hasName ?name. "
+//					+ "?id music:hasMainGenre ?maingenre. "
+//					+ "?id music:hasDecade ?decade. "
+//					+ "?id music:hasGender ?gender. "
+//					+ "FILTER(str(?id)=\""
+//					+ artist_id + "\")}";
+
 
 			qe = queryDB(searchQuery);
 			results = qe.execSelect();
+			System.out.println(searchQuery);
+
 			if (results.hasNext()) {
+				System.out.println("######tem dados de artista para mostrar, stats");
 				QuerySolution binding = results.nextSolution();
 				Artist temp_artist = new Artist();
-				temp_artist.setId(Integer
-						.parseInt(binding.get("id").toString()));
-				temp_artist.setName(binding.get("name").toString());
-				temp_artist.setMainGenre(binding.get("maingenre").toString());
-				temp_artist.setDecade(binding.get("decade").toString());
-				temp_artist.setGender(binding.get("gender").toString());
 
-				searchQuery = "SELECT ?id ?albumid ?albumtitle "
-						+ "WHERE { ?id rdf:type music:Artist."
-						+ "?id music:producesAlbum ?albumid."
-						+ "?albumid music:hasTitle ?albumtitle"
-						+ "FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#"
-						+ artist_id + "\")}";
+				temp_artist.setId(cleanId(binding.get("id").toString()));
+				temp_artist.setName(cleanLiteral(binding.get("name").toString()));
+				temp_artist.setMainGenre(cleanLiteral(binding.get("maingenre").toString()));
+				temp_artist.setDecade(cleanLiteral(binding.get("decade").toString()));
+				temp_artist.setGender(cleanLiteral(binding.get("gender").toString()));
+//				temp_artist.setVevoUrl(cleanLiteral(binding.get("vevourl").toString()));
+//				temp_artist.setVevoViewsLastMonth(Integer.parseInt(cleanLiteral(binding.get("vevolm").toString())));
+//				temp_artist.setVevoViewsTotal(Integer.parseInt(cleanLiteral(binding.get("vevovtotal").toString())));
+//				temp_artist.setTwitterUrl(cleanLiteral(binding.get("twitterurl").toString()));
+//				temp_artist.setTwitterFollowers(Integer.parseInt(cleanLiteral(binding.get("twitterfoll").toString())));
+//				temp_artist.setFacebookUrl(cleanLiteral(binding.get("fburl").toString()));
+//				temp_artist.setFacebookPeopleTalkingAbout(Integer.parseInt(cleanLiteral(binding.get("fbpta").toString())));
+//				temp_artist.setFacebookLikes(Integer.parseInt(cleanLiteral(binding.get("fblikes").toString())));
+				
+//						?id music:hasLastFMUrl ?lastfmurl.
+//						?id music:hasLastFMListeners ?lastfmlist.
+//						?id music:hasLastFMPlayCount ?lastfmcount.
+//				
+				
+				searchQuery = "SELECT ?albumid ?albumtitle WHERE { ?id rdf:type music:Artist. ?id music:producesAlbum ?albumid. ?albumid music:hasTitle ?albumtitle FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#" + artist_id + "\") }";
+				//System.out.println("quering >> " + searchQuery);
+
+//				temp_artist.setId(binding.get("id").toString());
+//				temp_artist.setName(binding.get("name").toString());
+//				temp_artist.setMainGenre(binding.get("maingenre").toString());
+//				temp_artist.setDecade(binding.get("decade").toString());
+//				temp_artist.setGender(binding.get("gender").toString());
+//				System.out.println(binding.get("id").toString()+"\\"+binding.get("maingenre"));
+//
+//				searchQuery = "SELECT ?id ?albumid ?albumtitle "
+//						+ "WHERE { ?id rdf:type music:Artist."
+//						+ "?id music:producesAlbum ?albumid."
+//						+ "?albumid music:hasTitle ?albumtitle "
+//						+ "FILTER(str(?id)=\""
+//						+ artist_id + "\")}";
+
 				qe = queryDB(searchQuery);
 				results = qe.execSelect();
-				Map<String, String> albums_list = new HashMap<String, String>();
+				
 				while (results.hasNext()) {
+					
 					binding = results.nextSolution();
 					String temp_album_id = binding.get("albumid").toString();
 					String temp_album_title = binding.get("albumtitle")
 							.toString();
-					albums_list.put(temp_album_id, temp_album_title);
+					
+//					System.out.print("albumid: "+temp_album_id);
+//					System.out.println(" #albumtitle: "+temp_album_title);
+
+					Album temp_album = new Album();
+					temp_album.setId(cleanId(temp_album_id));
+					temp_album.setTitle(cleanLiteral(temp_album_title));
+
+					temp_artist.addToAlbumsArray(temp_album);
 				}
 
-				temp_artist.setAlbumsMap(albums_list);
+				mybean.setPageType("artist_page");
+				mybean.addToArtistsArray(temp_artist);
 				mybean.setOption(null);
 				request.setAttribute("mybean", mybean);
-				request.setAttribute("artist", temp_artist);
 				getServletContext().getRequestDispatcher("/HomeView.jsp")
 						.forward(request, response);
 
@@ -102,61 +154,42 @@ public class MusicController extends HttpServlet {
 			}
 			qe.close();
 
-		} else if (request.getParameter("album_id") != null) {
+		} else if (request.getParameter("albumid") != null) {
 			// // mostrar pagina de album
-			String album_id = request.getParameter("album_id");
-			searchQuery = "SELECT ?id ?title ?releasedate ?numberoftracks ?decade "
-					+ "WHERE { ?id rdf:type music:Album."
-					+ "?id music:hasTitle ?title."
-					+ "?id music:hasReleaseDate ?releasedate."
-					+ "?id music:hasNumberOfTracks ?numberoftracks."
-					+ "?id music:hasDecade ?decade"
-					+ "FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#"
-					+ album_id + "\")}";
-
+			String album_id = request.getParameter("albumid");
+			System.out.println("param album_id = " + album_id);
+			searchQuery = "SELECT ?id ?title ?release ?ntracks ?decade  WHERE { ?id rdf:type music:Album. 	?id music:hasTitle ?title. ?id music:hasReleaseDate ?release.  ?id music:hasNumberOfTracks ?ntracks.	?id music:hasDecade ?decade.	FILTER regex( str(?id), \""+ album_id +"\" ) 	}";	
+			
 			qe = queryDB(searchQuery);
 			results = qe.execSelect();
 			if (results.hasNext()) {
 				QuerySolution binding = results.nextSolution();
 				Album temp_album = new Album();
-				temp_album.setTitle(binding.get("title").toString());
-				temp_album
-						.setReleaseDate(binding.get("releasedate").toString());
-				temp_album.setNumberOfTracks(Integer.parseInt(binding.get(
-						"numberoftracks").toString()));
-				temp_album.setDecade(binding.get("decade").toString());
+				temp_album.setId(cleanId(binding.get("id").toString()));
+				temp_album.setTitle(cleanLiteral(binding.get("title").toString()));
+				temp_album.setReleaseDate(cleanLiteral(binding.get("release").toString()));
+				temp_album.setNumberOfTracks(Integer.parseInt(cleanLiteral(binding.get("ntracks").toString())));
+				temp_album.setDecade(cleanLiteral(binding.get("decade").toString()));
 
-				searchQuery = "SELECT ?trackid ?tracktitle ?trackindex ?duration "
-						+ "WHERE { ?id rdf:type music:Album."
-						+ "?trackid rdf:type music:Track."
-						+ "?id music:hasTrack ?trackid."
-						+ "?trackid music:hasTitle ?tracktitle."
-						+ "?trackid music:hasTrackIndex ?trackindex."
-						+ "?trackid music:hasDuration ?duration"
-						+ "FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#"
-						+ album_id + "\")}";
-
+				searchQuery = "SELECT ?trackid ?tracktitle ?trackindex ?duration 	WHERE { ?id rdf:type music:Album. 	?trackid rdf:type music:Track.  ?id music:hasTrack ?trackid. 	?trackid music:hasTitle ?tracktitle. ?trackid music:hasTrackIndex ?trackindex. ?trackid music:hasDuration ?duration  	FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#" + album_id + "\") }";
+			
 				QueryExecution qe1 = queryDB(searchQuery);
 				ResultSet results1 = qe1.execSelect();
-				Map<String, Map> tracks_list = new HashMap<String, Map>();
-				Map<String, String> track_info = new HashMap<String, String>();
 				while (results1.hasNext()) {
-					binding = results.nextSolution();
-					track_info.put("tracktitle", binding.get("tracktitle")
-							.toString());
-					track_info.put("trackindex", binding.get("trackindex")
-							.toString());
-					track_info.put("duration", binding.get("duration")
-							.toString());
-					tracks_list.put(binding.get("trackid").toString(),
-							track_info);
+					QuerySolution binding1 = results1.nextSolution();
+					Track temp_track = new Track();
+					temp_track.setId(cleanId(binding1.get("trackid").toString()));
+					temp_track.setTitle(cleanLiteral(binding1.get("tracktitle").toString()));
+					temp_track.setTrackIndex(cleanLiteral(binding1.get("trackindex").toString()));
+					temp_track.setDuration(cleanLiteral(binding1.get("duration").toString()));
+					temp_album.addToTracksArray(temp_track);
 				}
 				qe1.close();
 
-				temp_album.setTracksMap(tracks_list);
+				mybean.setPageType("album_page");
+				mybean.setAlbum_information(temp_album);
 				mybean.setOption(null);
 				request.setAttribute("mybean", mybean);
-				request.setAttribute("album", temp_album);
 				getServletContext().getRequestDispatcher("/HomeView.jsp")
 						.forward(request, response);
 
@@ -166,43 +199,109 @@ public class MusicController extends HttpServlet {
 			}
 			qe.close();
 
-		} else if (request.getParameter("genre") != null) {
+		} else if (request.getParameter("genre") != null) { // disponibiliza 1
+															// bean com o
+															// aristsArray
+															// preenchido com id
+															// e nome de artista
+															// somente
 			// mostrar artistas por genero
 			String genre_selected = request.getParameter("genre");
+			if (genre_selected.toLowerCase().equals("rnb")) {
+				genre_selected = "R&B";
+			}
 			System.out.println("param genre: " + genre_selected);
 			searchQuery = "SELECT ?id ?name " + "WHERE {"
 					+ "?id music:hasMainGenre ?genre ."
 					+ " ?id music:hasName ?name ." + " FILTER regex(?genre, \""
-					+ genre_selected + "\", \"i\") }";
-
-			System.out.println("quering >> " + searchQuery);
+					+ genre_selected + "\", \"i\") }" + "ORDER BY ?name";
 
 			qe = queryDB(searchQuery);
 			results = qe.execSelect();
+
+			int temp = 0;
 			if (results.hasNext()) {
 				while (results.hasNext()) {
 					QuerySolution binding = results.nextSolution();
 					String temp_artist_id = binding.get("id").toString();
 					String temp_artist_name = binding.get("name").toString();
-					System.out.println(temp_artist_id + " \\ "
-							+ temp_artist_name);
-					resultsMap.put(temp_artist_id, temp_artist_name);
+
+					
+					Artist temp_artist = new Artist();
+					temp_artist.setId(cleanId(temp_artist_id));
+					temp_artist.setName(cleanLiteral(temp_artist_name));
+					mybean.addToArtistsArray(temp_artist);
+					temp++; // incremente o contador do nr de resultados
+							// encontrados
 
 				}
 
+				mybean.setPageType("artist_list_page");
 				mybean.setOption(genre_selected);
-				mybean.setResultsMap(resultsMap);
+				mybean.setNumberItems(temp);
 				request.setAttribute("mybean", mybean);
 				getServletContext().getRequestDispatcher("/HomeView.jsp")
 						.forward(request, response);
 
 			} else {
+				mybean.setNumberItems(temp);
 				getServletContext().getRequestDispatcher("/404.html").forward(
 						request, response);
 			}
 			qe.close();
 
+		} else if (request.getParameter("decade") != null) { // disponibiliza 1
+																// bean com o
+																// aristsArray
+																// preenchido
+																// com id e nome
+																// de artista
+																// somente
+			// mostrar artistas por decade
+			String decade_selected = request.getParameter("decade");
+			System.out.println("param decade: " + decade_selected);
+			searchQuery = "SELECT ?id ?name " + "WHERE {"
+					+ "?id music:hasDecade ?decade ."
+					+ " ?id music:hasName ?name ."
+					+ " FILTER regex(?decade, \"" + decade_selected
+					+ "\", \"i\") }" + "ORDER BY ?name";
+
+
+			qe = queryDB(searchQuery);
+			results = qe.execSelect();
+
+			int temp = 0;
+			if (results.hasNext()) {
+				while (results.hasNext()) {
+					QuerySolution binding = results.nextSolution();
+					String temp_artist_id = binding.get("id").toString();
+					String temp_artist_name = binding.get("name").toString();
+
+					Artist temp_artist = new Artist();
+					temp_artist.setId(cleanId(temp_artist_id));
+					temp_artist.setName(cleanLiteral(temp_artist_name));
+					mybean.addToArtistsArray(temp_artist);
+
+					temp++; // incremente o contador do nr de resultados
+							// encontrados
+
+				}
+
+				mybean.setPageType("artist_list_page");
+				mybean.setOption(decade_selected);
+				mybean.setNumberItems(temp);
+				request.setAttribute("mybean", mybean);
+				getServletContext().getRequestDispatcher("/HomeView.jsp")
+						.forward(request, response);
+
+			} else {
+				mybean.setNumberItems(temp); // devolve que encontrou 0 items
+				getServletContext().getRequestDispatcher("/404.html").forward(
+						request, response);
+			}
+			qe.close();
 		} else {
+			mybean.setPageType("homepage");
 			mybean.setOption(null);
 			request.setAttribute("mybean", mybean);
 			getServletContext().getRequestDispatcher("/HomeView.jsp").forward(
@@ -232,6 +331,14 @@ public class MusicController extends HttpServlet {
 		QueryExecution qe = QueryExecutionFactory.create(query, model);
 
 		return qe;
+	}
+	
+	public String cleanId(String dirty) {
+		return dirty.substring( dirty.indexOf("#") + 1, dirty.length());
+	}
+	
+	public String cleanLiteral(String dirty) {
+		return dirty.substring(0, dirty.indexOf("^^"));
 	}
 
 }
