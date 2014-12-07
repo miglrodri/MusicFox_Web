@@ -52,31 +52,33 @@ public class MusicController extends HttpServlet {
 			String artist_id = request.getParameter("artist_id");
 			searchQuery = "SELECT ?id ?name ?maingenre ?decade ?gender "
 					+ "WHERE {"
-					+ "      ?id rdf:type music:Artist."
-					+ "?id music:hasName ?name"
-					+ "?id music:hasMainGenre ?maingenre"
-					+ "?id music:hasDecade ?decade"
-					+ "?id music:hasGender ?gender"
-					+ "FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#"
+					+ " ?id rdf:type music:Artist. "
+					+ "?id music:hasName ?name. "
+					+ "?id music:hasMainGenre ?maingenre. "
+					+ "?id music:hasDecade ?decade. "
+					+ "?id music:hasGender ?gender. "
+					+ "FILTER(str(?id)=\""
 					+ artist_id + "\")}";
 
 			qe = queryDB(searchQuery);
 			results = qe.execSelect();
+			System.out.println(searchQuery);
+
 			if (results.hasNext()) {
 				QuerySolution binding = results.nextSolution();
 				Artist temp_artist = new Artist();
-				temp_artist.setId(Integer
-						.parseInt(binding.get("id").toString()));
+				temp_artist.setId(binding.get("id").toString());
 				temp_artist.setName(binding.get("name").toString());
 				temp_artist.setMainGenre(binding.get("maingenre").toString());
 				temp_artist.setDecade(binding.get("decade").toString());
 				temp_artist.setGender(binding.get("gender").toString());
+				System.out.println(binding.get("id").toString()+"\\"+binding.get("maingenre"));
 
 				searchQuery = "SELECT ?id ?albumid ?albumtitle "
 						+ "WHERE { ?id rdf:type music:Artist."
 						+ "?id music:producesAlbum ?albumid."
-						+ "?albumid music:hasTitle ?albumtitle"
-						+ "FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#"
+						+ "?albumid music:hasTitle ?albumtitle "
+						+ "FILTER(str(?id)=\""
 						+ artist_id + "\")}";
 				qe = queryDB(searchQuery);
 				results = qe.execSelect();
@@ -184,8 +186,7 @@ public class MusicController extends HttpServlet {
 					QuerySolution binding = results.nextSolution();
 					String temp_artist_id = binding.get("id").toString();
 					String temp_artist_name = binding.get("name").toString();
-					System.out.println(temp_artist_id + " \\ "
-							+ temp_artist_name);
+					//System.out.println(temp_artist_id + " \\ " + temp_artist_name);
 					resultsMap.put(temp_artist_id, temp_artist_name);
 
 				}

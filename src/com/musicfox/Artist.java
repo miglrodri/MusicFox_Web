@@ -133,11 +133,11 @@ public class Artist {
 		this.lastFMPlayCount = lastFMPlayCount;
 	}
 	
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -148,7 +148,7 @@ public class Artist {
 	 */
 	private Map<String, String> albumsMap = new HashMap<String, String>();
 
-	private int id;
+	private String id;
 	private String name;
 	private String mainGenre;
 	private String decade;
