@@ -55,7 +55,7 @@ public class MusicController extends HttpServlet {
 		ResultSet results = null;
 
 		EchoNestAPI echoNest = new EchoNestAPI("IE2ZINGXDYWASD9NH");
-		java.util.List<com.echonest.api.v4.Artist> artists;
+		java.util.List<com.echonest.api.v4.Artist> artists = null;
 		
 		System.out.println("request to controller>>>>>>");
 
@@ -64,11 +64,12 @@ public class MusicController extends HttpServlet {
 			// mostrar página de artist
 			String artist_id = request.getParameter("artistid");
 			System.out.println("param artist_id = " + artist_id);
-			searchQuery = "SELECT ?id ?name ?maingenre ?decade ?gender ?vevourl ?vevovtotal ?vevolm ?twitterurl ?twitterfoll ?fburl ?fbpta ?fblikes  WHERE { ?id rdf:type music:Artist. 	?id music:hasName ?name. ?id music:hasMainGenre ?maingenre.  ?id music:hasDecade ?decade. 		?id music:hasGender ?gender.  ?id music:hasVevoUrl ?vevourl. 	?id music:hasVevoViewsLastMonth ?vevolm. ?id music:hasVevoViewsTotal ?vevovtotal.  ?id music:hasTwitterUrl ?twitterurl. ?id music:hasTwitterFollowers ?twitterfoll. ?id music:hasFacebookUrl ?fburl.  ?id music:hasFacebookPeopleTalkingAbout ?fbpta. ?id music:hasFacebookLikes ?fblikes.		FILTER regex( str(?id), \""
+			searchQuery = "SELECT ?id ?name ?maingenre ?decade ?gender WHERE { ?id rdf:type music:Artist. ?id music:hasName ?name. ?id music:hasMainGenre ?maingenre. ?id music:hasDecade ?decade. ?id music:hasGender ?gender.  FILTER regex( str(?id), \""
 					+ artist_id + "\" ) 	}";
 
 			qe = queryDB(searchQuery);
 			results = qe.execSelect();
+			System.out.println(searchQuery);
 			if (results.hasNext()) {
 				System.out
 						.println("######tem dados de artista para mostrar, stats");
@@ -83,19 +84,33 @@ public class MusicController extends HttpServlet {
 						.toString()));
 				temp_artist.setGender(cleanLiteral(binding.get("gender")
 						.toString()));
-				// temp_artist.setVevoUrl(cleanLiteral(binding.get("vevourl").toString()));
-				// temp_artist.setVevoViewsLastMonth(Integer.parseInt(cleanLiteral(binding.get("vevolm").toString())));
-				// temp_artist.setVevoViewsTotal(Integer.parseInt(cleanLiteral(binding.get("vevovtotal").toString())));
-				// temp_artist.setTwitterUrl(cleanLiteral(binding.get("twitterurl").toString()));
-				// temp_artist.setTwitterFollowers(Integer.parseInt(cleanLiteral(binding.get("twitterfoll").toString())));
-				// temp_artist.setFacebookUrl(cleanLiteral(binding.get("fburl").toString()));
-				// temp_artist.setFacebookPeopleTalkingAbout(Integer.parseInt(cleanLiteral(binding.get("fbpta").toString())));
-				// temp_artist.setFacebookLikes(Integer.parseInt(cleanLiteral(binding.get("fblikes").toString())));
+				
+				searchQuery = "SELECT ?id ?vevourl ?vevovtotal ?vevolm ?twitterurl ?twitterfoll ?fburl ?fbpta ?fblikes  "
+						+ "WHERE { ?id rdf:type music:Artist. ?id music:hasVevoUrl ?vevourl. ?id music:hasVevoViewsLastMonth "
+						+ "?vevolm. ?id music:hasVevoViewsTotal ?vevovtotal.  ?id music:hasTwitterUrl ?twitterurl. ?id music:hasTwitterFollowers "
+						+ "?twitterfoll. ?id music:hasFacebookUrl ?fburl.  ?id music:hasFacebookPeopleTalkingAbout ?fbpta. ?id music:hasFacebookLikes "
+						+ "?fblikes.		FILTER regex( str(?id), \"" + artist_id + "\" ) 	}";
+				
+				QueryExecution qe1 = queryDB(searchQuery);
+				ResultSet results1 = qe1.execSelect();
+				
+				if (results1.hasNext()) {
+					binding = results1.nextSolution();
+					temp_artist.setVevoUrl(cleanLiteral(binding.get("vevourl").toString()));
+					temp_artist.setVevoViewsLastMonth(Integer.parseInt(cleanLiteral(binding.get("vevolm").toString())));
+					temp_artist.setVevoViewsTotal(Integer.parseInt(cleanLiteral(binding.get("vevovtotal").toString())));
+					temp_artist.setTwitterUrl(cleanLiteral(binding.get("twitterurl").toString()));
+					temp_artist.setTwitterFollowers(Integer.parseInt(cleanLiteral(binding.get("twitterfoll").toString())));
+					temp_artist.setFacebookUrl(cleanLiteral(binding.get("fburl").toString()));
+					temp_artist.setFacebookPeopleTalkingAbout(Integer.parseInt(cleanLiteral(binding.get("fbpta").toString())));
+					temp_artist.setFacebookLikes(Integer.parseInt(cleanLiteral(binding.get("fblikes").toString())));
 
-				// ?id music:hasLastFMUrl ?lastfmurl.
-				// ?id music:hasLastFMListeners ?lastfmlist.
-				// ?id music:hasLastFMPlayCount ?lastfmcount.
-				//
+					// ?id music:hasLastFMUrl ?lastfmurl.
+					// ?id music:hasLastFMListeners ?lastfmlist.
+					// ?id music:hasLastFMPlayCount ?lastfmcount.
+					//
+				}
+				qe1.close();	
 
 				searchQuery = "SELECT ?albumid ?albumtitle WHERE { "
 						+ "?id rdf:type music:Artist. ?id music:producesAlbum "
@@ -103,31 +118,16 @@ public class MusicController extends HttpServlet {
 						+ "FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#"
 						+ artist_id + "\") }";
 				// System.out.println("quering >> " + searchQuery);
-				qe = queryDB(searchQuery);
-				results = qe.execSelect();
+				qe1 = queryDB(searchQuery);
+				results1 = qe1.execSelect();
 
-				while (results.hasNext()) {
+				while (results1.hasNext()) {
 
-					binding = results.nextSolution();
+					binding = results1.nextSolution();
 					String temp_album_id = binding.get("albumid").toString();
 					String temp_album_title = binding.get("albumtitle")
 							.toString();
 					
-					try {
-						String query = temp_album_title.substring(0, temp_album_title.indexOf("^^"));
-						albums = echoNest.searchArtists(query);
-						if (artists.size() > 0) {
-							java.util.List<Image> images = artists.get(0).getImages();
-							if(images.size() > 0){
-								temp_artist.setCover(images.get(0).getURL());
-								System.out.println(images.get(0).getURL());
-							}	
-						}
-					} catch (EchoNestException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
 					
 
 					Album temp_album = new Album();
@@ -136,6 +136,7 @@ public class MusicController extends HttpServlet {
 
 					temp_artist.addToAlbumsArray(temp_album);
 				}
+				qe1.close();
 
 				mybean.setPageType("artist_page");
 				mybean.addToArtistsArray(temp_artist);
