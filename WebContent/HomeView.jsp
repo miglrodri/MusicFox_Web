@@ -1,7 +1,12 @@
+
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="com.musicfox.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="ISO-8859-1"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <jsp:useBean id="mybean" scope="request" class="com.musicfox.JavaBean"></jsp:useBean>
 <html lang="en">
@@ -20,6 +25,9 @@
 <!-- Custom styles for this template -->
 <link href="css/dashboard.css" rel="stylesheet">
 
+<link href="css/simple-sidebar.css" rel="stylesheet">
+
+
 <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
 <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 <script src="js/ie-emulation-modes-warning.js"></script>
@@ -29,16 +37,20 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    
-    
+
+<link
+	href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
+	rel="stylesheet">
 </head>
 
 <body>
 
+r
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
+
 				<button type="button" class="navbar-toggle collapsed"
 					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 					<span class="sr-only">Toggle navigation</span> <span
@@ -46,6 +58,11 @@
 						class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="#">MusicFox</a>
+
+
+				<a href="#menu-toggle" class="navbar-brand" id="menu-toggle"><i
+					class="fa fa-ellipsis-v"></i> MusicFox</a>
+
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
@@ -58,7 +75,9 @@
 					<button type="submit" class="btn btn-default">Submit</button>
 				</form>
 				<ul class="nav navbar-nav navbar-right">
-					<li><p class="navbar-text">by Luís Jerónimo &amp; Miguel Jesus</p></li>
+
+					<p class="navbar-text">by Luís Jerónimo &amp; Miguel Jesus</p>
+
 				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
@@ -101,7 +120,7 @@
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 				<h1 class="page-header">
 					option:
-					<jsp:getProperty property="option" name="mybean" /> (<jsp:getProperty
+					<jsp:getProperty property="option" name="mybean" />(<jsp:getProperty
 						property="numberItems" name="mybean" />)
 				</h1>
 				<div class="row placeholders">
@@ -247,14 +266,12 @@
 									for (int i = 0; i < temp_array.size(); i++) {
 										String artist_id = temp_array.get(i).getId();
 										String artist_name = temp_array.get(i).getName();
-										String artist_cover = temp_array.get(i).getCover();
 
 						%>
 
-						
 						<div class="col-xs-6 col-md-3 thumbnail">
-				
-							<a href="#"> <img src="<%=artist_cover%>" style="max-height: 200px;" alt="cenas"></a>
+							<a href="#"> <img src="images/cenas.png" alt="cenas">
+							</a>
 							<div class="caption">
 								<h3><%=artist_name%>
 								</h3>
@@ -394,6 +411,8 @@
 									<a href="#" class="btn btn-primary" role="button">Button</a> <a
 										href="#" class="btn btn-default" role="button">Button</a>
 								</p>
+	
+	
 							</div>
 						</div>
 					</div>
@@ -401,9 +420,11 @@
 
 
 
+
 			</div>
 
 		</div>
+	</div>
 	</div>
 
 	<!-- Bootstrap core JavaScript
@@ -412,6 +433,26 @@
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+
+			</div>
+			<!-- /#page-content-wrapper -->
+
+		</div>
+		<!-- /#wrapper -->
+
+		<!-- jQuery -->
+		<script src="js/jquery.js"></script>
+
+
+		<!-- Menu Toggle Script -->
+		<script>
+			$("#menu-toggle").click(function(e) {
+				e.preventDefault();
+				$("#wrapper").toggleClass("toggled");
+			});
+		</script>
+
 </body>
 
 </html>
+

@@ -1,9 +1,9 @@
+
 package com.musicfox;
 
 import java.util.ArrayList;
 
 public class Artist {
-
 
 	public ArrayList<Album> getAlbumsArray() {
 		return albumsArray;
@@ -145,14 +145,8 @@ public class Artist {
 		albumsArray.add(album);
 	}
 
-	public void setCover(String url) {
-		coverUrl = url;
-		
-	}
-	
-	public String getCover(){
-		return coverUrl;
-	}
+
+
 	/**
 	 * albumsMap contains info about the artist albums (album_id, album_title)
 	 */
@@ -174,6 +168,4 @@ public class Artist {
 	private String lastFMUrl;
 	private int lastFMListeners;
 	private int lastFMPlayCount;
-	private String coverUrl;
-	
 }
