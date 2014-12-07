@@ -59,10 +59,6 @@ r
 				</button>
 				<a class="navbar-brand" href="#">MusicFox</a>
 
-
-				<a href="#menu-toggle" class="navbar-brand" id="menu-toggle"><i
-					class="fa fa-ellipsis-v"></i> MusicFox</a>
-
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
@@ -76,7 +72,7 @@ r
 				</form>
 				<ul class="nav navbar-nav navbar-right">
 
-					<p class="navbar-text">by Luís Jerónimo &amp; Miguel Jesus</p>
+					<li><p class="navbar-text">by Luís Jerónimo &amp; Miguel Jesus</p></li>
 
 				</ul>
 			</div>
@@ -425,7 +421,6 @@ r
 
 		</div>
 	</div>
-	</div>
 
 	<!-- Bootstrap core JavaScript
     ================================================== -->
@@ -440,17 +435,6 @@ r
 		</div>
 		<!-- /#wrapper -->
 
-		<!-- jQuery -->
-		<script src="js/jquery.js"></script>
-
-
-		<!-- Menu Toggle Script -->
-		<script>
-			$("#menu-toggle").click(function(e) {
-				e.preventDefault();
-				$("#wrapper").toggleClass("toggled");
-			});
-		</script>
 
 </body>
 
