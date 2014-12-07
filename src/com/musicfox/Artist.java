@@ -1,16 +1,16 @@
 package com.musicfox;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
 public class Artist {
 
-	public Map<String, String> getAlbumsMap() {
-		return albumsMap;
+
+	public ArrayList<Album> getAlbumsArray() {
+		return albumsArray;
 	}
 
-	public void setAlbumsMap(Map<String, String> albumsMap) {
-		this.albumsMap = albumsMap;
+	public void setAlbumsMap(ArrayList<Album> albumsArray) {
+		this.albumsArray = albumsArray;
 	}
 
 	public String getName() {
@@ -140,13 +140,23 @@ public class Artist {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
+	public void addToAlbumsArray(Album album){
+		albumsArray.add(album);
+	}
 
-
-
+	public void setCover(String url) {
+		coverUrl = url;
+		
+	}
+	
+	public String getCover(){
+		return coverUrl;
+	}
 	/**
 	 * albumsMap contains info about the artist albums (album_id, album_title)
 	 */
-	private Map<String, String> albumsMap = new HashMap<String, String>();
+	private ArrayList<Album> albumsArray = new ArrayList<Album>();
 
 	private String id;
 	private String name;
@@ -164,4 +174,6 @@ public class Artist {
 	private String lastFMUrl;
 	private int lastFMListeners;
 	private int lastFMPlayCount;
+	private String coverUrl;
+	
 }

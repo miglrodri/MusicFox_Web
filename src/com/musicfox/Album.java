@@ -1,25 +1,23 @@
 package com.musicfox;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
-@SuppressWarnings("rawtypes")
 public class Album {
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public Map<String, Map> getTracksMap() {
-		return tracksMap;
+	public ArrayList<Track> getTracksArray() {
+		return tracksArray;
 	}
 
-	public void setTracksMap(Map<String, Map> tracksMap) {
-		this.tracksMap = tracksMap;
+	public void setTracksMap(ArrayList<Track> tracksArray) {
+		this.tracksArray = tracksArray;
 	}
 
 	public String getTitle() {
@@ -53,14 +51,18 @@ public class Album {
 	public void setDecade(String decade) {
 		this.decade = decade;
 	}
+	
+	public void addToTracksArray(Track track) {
+		this.tracksArray.add(track);
+	}
 
 	/**
 	 * tracksMap contains info about the album tracks (track_id, MAP
 	 * info_about_track)
 	 */
-	private Map<String, Map> tracksMap = new HashMap<String, Map>();
+	private ArrayList<Track> tracksArray = new ArrayList<Track>();
 
-	private int id;
+	private String id;
 	private String title;
 	private String releaseDate;
 	private int numberOfTracks;

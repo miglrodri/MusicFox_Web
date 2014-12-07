@@ -47,5 +47,11 @@
   		<artifactId>jstl</artifactId>
   		<version>1.2</version>
   	</dependency>
+  	<dependency>
+	<groupId>com.googlecode.jen-api</groupId>
+	<artifactId>jen-api</artifactId>
+	<version>4.x.p</version>
+</dependency>
+  	
   </dependencies>
 </project>
