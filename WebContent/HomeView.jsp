@@ -267,7 +267,7 @@ r
 						%>
 
 						<div class="col-xs-6 col-md-3 thumbnail">
-							<a href="#"> <img src="<%=artist_cover%>" style="max-width: 200px;" alt="cenas">
+							<a href="#"> <img src="<%=artist_cover%>" style="height: 150px" alt="cenas">
 							</a>
 							<div class="caption">
 								<h3><%=artist_name%>
