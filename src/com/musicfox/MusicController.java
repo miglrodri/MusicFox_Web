@@ -57,6 +57,7 @@ public class MusicController extends HttpServlet {
 		ResultSet results = null;
 
 		EchoNestAPI echoNest = new EchoNestAPI("IE2ZINGXDYWASD9NH");
+		java.util.List<com.echonest.api.v4.Artist> artists;
 		System.out.println("request to controller>>>>>>");
 
 		// disponibiliza um bean com artistsArray contendo 1 único artist
