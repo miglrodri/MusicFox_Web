@@ -45,7 +45,6 @@
 
 <body>
 
-r
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
@@ -64,9 +63,9 @@ r
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
-				<form class="navbar-form navbar-left" role="search">
+				<form action="searchController" method="POST" class="navbar-form navbar-left" role="search">
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Search">
+						<input type="text" class="form-control" name="query" placeholder="Search">
 					</div>
 					<button type="submit" class="btn btn-default">Submit</button>
 				</form>
@@ -87,26 +86,26 @@ r
 
 				<h1>Genres</h1>
 				<ul class="nav nav-sidebar">
-					<li><a href="?genre=Blues">Blues</a></li>
-					<li><a href="?genre=Country">Country</a></li>
-					<li><a href="?genre=Vocal">Vocal</a></li>
-					<li><a href="?genre=Electronic">Electronic</a></li>
+					<li><a href="MusicController?genre=Blues">Blues</a></li>
+					<li><a href="MusicController?genre=Country">Country</a></li>
+					<li><a href="MusicController?genre=Vocal">Vocal</a></li>
+					<li><a href="MusicController?genre=Electronic">Electronic</a></li>
 					<!-- <li><a href="?genre=International">International</a></li> -->
-					<li><a href="?genre=Jazz">Jazz</a></li>
-					<li><a href="?genre=Pop">Pop</a></li>
-					<li><a href="?genre=Rock">Rock</a></li>
-					<li><a href="?genre=RnB">RnB</a></li>
-					<li><a href="?genre=Rap">Rap</a></li>
-					<li><a href="?genre=Reggae">Reggae</a></li>
+					<li><a href="MusicController?genre=Jazz">Jazz</a></li>
+					<li><a href="MusicController?genre=Pop">Pop</a></li>
+					<li><a href="MusicController?genre=Rock">Rock</a></li>
+					<li><a href="MusicController?genre=RnB">RnB</a></li>
+					<li><a href="MusicController?genre=Rap">Rap</a></li>
+					<li><a href="MusicController?genre=Reggae">Reggae</a></li>
 				</ul>
 
 				<h1>Decades</h1>
 				<ul class="nav nav-sidebar">
-					<li><a href="?decade=1970">1970</a></li>
-					<li><a href="?decade=1980">1980</a></li>
-					<li><a href="?decade=1990">1990</a></li>
-					<li><a href="?decade=2000">2000</a></li>
-					<li><a href="?decade=2010">2010</a></li>
+					<li><a href="MusicController?decade=1970">1970</a></li>
+					<li><a href="MusicController?decade=1980">1980</a></li>
+					<li><a href="MusicController?decade=1990">1990</a></li>
+					<li><a href="MusicController?decade=2000">2000</a></li>
+					<li><a href="MusicController?decade=2010">2010</a></li>
 				</ul>
 
 			</div>
@@ -124,9 +123,10 @@ r
 
 
 						<%
+						
 							System.out.println(mybean.getPageType());
 							// ve se é um artist
-							if (mybean.getPageType().equals("artist_page")) {
+							if (mybean.getPageType()!=null && mybean.getPageType().equals("artist_page")) {
 								Artist temp_artist = mybean.getArtistsArray().get(0);
 
 								String temp_artistname = temp_artist.getName();								
@@ -184,7 +184,7 @@ r
 								%>
 							<tr>
 								<td><%=temp_albumtitle%></td>
-								<td><a href="<%="?albumid=" + temp_albumid%>"
+								<td><a href="MusicController<%="?albumid=" + temp_albumid%>"
 									class="btn btn-default btn-lg" role="button">More info</a></td>
 							</tr>
 							<%
@@ -196,7 +196,7 @@ r
 						<%
 							}
 							// ve se é um album
-							else if (mybean.getPageType().equals("album_page")) {
+							else if (mybean.getPageType()!=null && mybean.getPageType().equals("album_page")) {
 								Album temp_album = mybean.getAlbum_information();
 
 								String temp_albumtitle = temp_album.getTitle();
@@ -256,7 +256,7 @@ r
 						<%
 							}
 							// ve se é genre ou decade e faz listagem
-							else if (mybean.getPageType().equals("artist_list_page")) {
+							else if (mybean.getPageType()!=null && mybean.getPageType().equals("artist_list_page")) {
 								if (mybean.getNumberItems() > 0) {
 									ArrayList<Artist> temp_array = mybean.getArtistsArray();
 									for (int i = 0; i < temp_array.size(); i++) {
@@ -274,7 +274,7 @@ r
 								</h3>
 								<p><%=artist_id%></p>
 								<p>
-									<a href="<%="?artistid=" + artist_id%>" class="btn btn-primary"
+									<a href="MusicController<%="?artistid=" + artist_id%>" class="btn btn-primary"
 										role="button">More info</a>
 								</p>
 							</div>
@@ -430,10 +430,8 @@ r
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 
-			</div>
 			<!-- /#page-content-wrapper -->
 
-		</div>
 		<!-- /#wrapper -->
 
 
