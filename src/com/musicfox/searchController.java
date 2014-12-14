@@ -63,6 +63,15 @@ public class searchController extends HttpServlet {
 				tmp = search.replaceAll("decade", "");
 				q = new String[]{"decade",tmp.trim()};
 			}
+			else {
+				// não se procurou por uma das classes anteriores
+				// search: "black"
+				// A ideia era mostrar os resultados por artista, albums e track. numa tabela.
+				// vamos popular então o mybean->semanticArray(resource_id, resource_name)
+				
+				q = new String[]{"all",search};
+				System.out.println("\\ALL : search: "+ search);
+			}
 			
 			JavaBean bean = Results.search(null, q);
 	

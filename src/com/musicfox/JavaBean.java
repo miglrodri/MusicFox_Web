@@ -10,6 +10,20 @@ public class JavaBean {
 	private int numberItems;
 	private ArrayList<Artist> artistsArray = new ArrayList<Artist>();
 	private Album album_information = new Album();
+	private ArrayList<SemanticResult> semanticArray = new ArrayList<SemanticResult>();
+
+
+	public ArrayList<SemanticResult> getSemanticArray() {
+		return semanticArray;
+	}
+
+	public void setSemanticArray(ArrayList<SemanticResult> semanticArray) {
+		this.semanticArray = semanticArray;
+	}
+	
+	public void addToSemanticArray(SemanticResult semantic_result) {
+		this.semanticArray.add(semantic_result);
+	}
 
 	public Album getAlbum_information() {
 		return album_information;

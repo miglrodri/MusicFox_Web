@@ -27,6 +27,13 @@ public class Results {
 
 		System.out.println("SEMANTIC SEARCH");
 		mybean = new JavaBean();
+		
+		/**
+		 * TODO TER CUIDADO COM A PESQUISA SÓ COM O NOME DA CLASSE:
+		 * Exemplo:
+		 * Query = "artist" ou Query = "decade"
+		 * Mostra todos os artists. É o esperado?
+		 */
 
 		// disponibiliza um bean com artistsArray contendo 1 único artist
 		if ((request != null && request.getParameter("artistid") != null)
@@ -64,6 +71,9 @@ public class Results {
 
 		} else if (query != null && query[0].equals("artist")) {
 			artistSearch(query[1]);
+		} else if (query != null && query[0].equals("all")) {
+			// search foi feito sem nenhuma classe associada
+			allClassesSearch(query[1]);
 		} else {
 
 			mybean.setPageType("homepage");
@@ -132,6 +142,90 @@ public class Results {
 		mybean.setOption(name);
 		mybean.setNumberItems(temp);
 
+		qe.close();
+
+		return mybean;
+	}
+	
+	private static JavaBean allClassesSearch(String query) {
+		
+		System.out.println("private static JavaBean allClassesSearch(String query) { :: " + query);
+		
+		/**
+		 * Gather information about artists
+		 */
+		
+		searchQuery = "SELECT ?id ?name WHERE { ?id rdf:type music:Artist. ?id music:hasName ?name. FILTER regex( ?name, \""
+				+ query + "\", \"i\" )} ORDER BY ?name";
+
+		qe = queryDB(searchQuery);
+		results = qe.execSelect();
+		temp = 0;
+
+		while (results.hasNext()) {
+			QuerySolution binding = results.nextSolution();
+			String temp_artist_id = binding.get("id").toString();
+			String temp_artist_name = binding.get("name").toString();
+
+			SemanticResult sresult = new SemanticResult();
+			sresult.setResource_name("a" + cleanLiteral(temp_artist_name));
+			sresult.setResource_url("/MusicController?artistid=" + cleanId(temp_artist_id));
+			temp++; // incremente o contador do nr de resultados
+			// encontrados
+			mybean.addToSemanticArray(sresult);
+		}
+
+		/**
+		 * Gather information about albums
+		 * TODO implement
+		 */
+
+		searchQuery = "SELECT ?id ?name WHERE { ?id rdf:type music:Album. ?id music:hasTitle ?name. FILTER regex( ?name, \""
+				+ query + "\", \"i\" )} ORDER BY ?name";
+
+		qe = queryDB(searchQuery);
+		results = qe.execSelect();
+
+		while (results.hasNext()) {
+			QuerySolution binding = results.nextSolution();
+			String temp_album_id = binding.get("id").toString();
+			String temp_album_name = binding.get("name").toString();
+
+			SemanticResult sresult = new SemanticResult();
+			sresult.setResource_name("b" + cleanLiteral(temp_album_name));
+			sresult.setResource_url("/MusicController?albumid=" + cleanId(temp_album_id));
+			temp++; // incremente o contador do nr de resultados
+			// encontrados
+			mybean.addToSemanticArray(sresult);
+		}
+		
+		/**
+		 * Gather information about tracks
+		 * TODO implement
+		 */
+		
+		searchQuery = "SELECT ?id ?name WHERE { ?id rdf:type music:Track. ?id music:hasTitle ?name. FILTER regex( ?name, \""
+				+ query + "\", \"i\" )} ORDER BY ?name";
+
+		qe = queryDB(searchQuery);
+		results = qe.execSelect();
+		
+		while (results.hasNext()) {
+			QuerySolution binding = results.nextSolution();
+			String temp_track_id = binding.get("id").toString();
+			String temp_track_name = binding.get("name").toString();
+
+			SemanticResult sresult = new SemanticResult();
+			sresult.setResource_name("c" + cleanLiteral(temp_track_name));
+			sresult.setResource_url("/MusicController?trackid=" + cleanId(temp_track_id));
+			temp++; // incremente o contador do nr de resultados
+			// encontrados
+			mybean.addToSemanticArray(sresult);
+		}
+		
+		mybean.setPageType("semantic_search_page");
+		mybean.setOption(query);
+		mybean.setNumberItems(temp);
 
 		qe.close();
 
@@ -354,20 +448,20 @@ public class Results {
 
 	private static String getImages(String temp_artist_name) {
 		String image = null;
-		try {
-			String query1 = temp_artist_name.substring(0,
-					temp_artist_name.indexOf("^^"));
-			artists = echoNest.searchArtists(query1);
-			if (artists.size() > 0) {
-				java.util.List<Image> images = artists.get(0).getImages();
-				if (images.size() > 0) {
-					image = images.get(0).getURL();
-					System.out.println(image);
-				}
-			}
-		} catch (EchoNestException e) {
-			e.printStackTrace();
-		}
+		// try {
+		// String query1 = temp_artist_name.substring(0,
+		// temp_artist_name.indexOf("^^"));
+		// artists = echoNest.searchArtists(query1);
+		// if (artists.size() > 0) {
+		// java.util.List<Image> images = artists.get(0).getImages();
+		// if (images.size() > 0) {
+		// image = images.get(0).getURL();
+		// System.out.println(image);
+		// }
+		// }
+		// } catch (EchoNestException e) {
+		// e.printStackTrace();
+		// }
 
 		return image;
 	}
