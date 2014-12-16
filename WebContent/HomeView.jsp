@@ -458,15 +458,7 @@
 							else if (mybean.getPageType() != null
 									&& mybean.getPageType().equals("semantic_search_page")) {
 
-								// Receber uma ArrayList<String, String>, com ID - Name (aa_artist, bb_album, cc_track)
-								// Colocar tudo numa tabela. <nome, link para o resource>
-								//
-								// search: "black"
-								// A ideia era mostrar os resultados por artista, albums e track.
-
-								// search: "artist <cenas>" ou "track <cenas>" ou "albums <cenas>"
-								// Neste caso filtar só pela classe
-
+								
 								if (mybean.getNumberItems() > 0) {
 						%>
 

@@ -218,7 +218,8 @@ public class Results {
 
 			qe = queryDB(searchQuery);
 			results = qe.execSelect();
-
+			temp = 0;
+			
 			while (results.hasNext()) {
 				QuerySolution binding = results.nextSolution();
 				String temp_album_id = binding.get("id").toString();
@@ -243,7 +244,8 @@ public class Results {
 
 			qe = queryDB(searchQuery);
 			results = qe.execSelect();
-
+			temp = 0;
+			
 			while (results.hasNext()) {
 				QuerySolution binding = results.nextSolution();
 				String temp_track_id = binding.get("id").toString();
@@ -284,6 +286,7 @@ public class Results {
 		qe = queryDB(searchQuery);
 		results = qe.execSelect();
 		temp = 0;
+		
 		if (results.hasNext()) {
 			while (results.hasNext()) {
 				QuerySolution binding = results.nextSolution();
@@ -321,8 +324,8 @@ public class Results {
 
 		qe = queryDB(searchQuery);
 		results = qe.execSelect();
-
 		temp = 0;
+		
 		if (results.hasNext()) {
 			while (results.hasNext()) {
 				QuerySolution binding = results.nextSolution();
