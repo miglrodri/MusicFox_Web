@@ -66,10 +66,10 @@ public class searchController extends HttpServlet {
 				tmp = search.replaceFirst("decade", "");
 				q = new String[]{"decade",tmp.trim()};
 			}
-			else if(search.contains("year")){
-				tmp = search.replaceFirst("year", "");
-				q = new String[]{"year",tmp.trim()};
-			}
+//			else if(search.contains("year")){
+//				tmp = search.replaceFirst("year", "");
+//				q = new String[]{"year",tmp.trim()};
+//			}
 			else {
 				q = new String[]{"all",search};
 				System.out.println("\\ALL : search: "+ search);

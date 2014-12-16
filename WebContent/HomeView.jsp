@@ -210,7 +210,7 @@
 							<tr>
 								<td><b>Vevo url</b></td>
 								<%
-									if (temp_artistvevourl != null) {
+									if (temp_artistvevourl != null && !temp_artistvevourl.equals("null")) {
 								%>
 								<td><a href="<%=temp_artistvevourl%>" target="_blank"><%=temp_artistvevourl%></a></td>
 								<%
@@ -232,7 +232,7 @@
 							<tr>
 								<td><b>Twitter url</b></td>
 								<%
-									if (temp_artistturl != null) {
+									if (temp_artistturl != null && !temp_artistturl.equals("null")) {
 								%>
 								<td><a href="<%=temp_artistturl%>"  target="_blank"><%=temp_artistturl%></a></td>
 								<%
@@ -250,7 +250,7 @@
 							<tr>
 								<td><b>Facebook url</b></td>
 								<%
-									if (temp_artistfburl != null) {
+									if (temp_artistfburl != null && !temp_artistfburl.equals("null")) {
 								%>
 								<td><a href="<%=temp_artistfburl%>" target="_blank"><%=temp_artistfburl%></a></td>
 								<%

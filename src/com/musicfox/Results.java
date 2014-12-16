@@ -180,8 +180,8 @@ public class Results {
 	private static JavaBean allClassesExactSearch(String query, String option) {
 
 		System.out
-				.println("private static JavaBean allClassesSearch(String query) { :: "
-						+ query);
+				.println("private static JavaBean allClassesSearch(String query) { :: \""
+						+ query + "\"");
 
 		/**
 		 * Gather information about artists
