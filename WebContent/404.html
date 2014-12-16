@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>MUSICFOX</title>
+<title>MUSICFOX - Information not found</title>
 
 <!-- Bootstrap core CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Custom styles for this template -->
 <link href="css/dashboard.css" rel="stylesheet">
+
+<link href="css/simple-sidebar.css" rel="stylesheet">
+
 
 <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
 <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -24,6 +28,9 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+<link
+	href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
+	rel="stylesheet">
 </head>
 
 <body>
@@ -32,26 +39,33 @@
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
+
 				<button type="button" class="navbar-toggle collapsed"
 					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 					<span class="sr-only">Toggle navigation</span> <span
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">MusicFox</a>
+				<a class="navbar-brand" href="HomeView.jsp">MusicFox</a>
+
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
-				<form class="navbar-form navbar-left" role="search">
+				<form action="searchController" method="POST"
+					class="navbar-form navbar-left" role="search">
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Search">
+						<input type="text" class="form-control" name="query"
+							placeholder="Search">
 					</div>
 					<button type="submit" class="btn btn-default">Submit</button>
 				</form>
 				<ul class="nav navbar-nav navbar-right">
-					<li><p class="navbar-text">by Luís Jerónimo &amp; Miguel Jesus</p></li>
+
+					<li><p class="navbar-text">by Luís Jerónimo &amp; Miguel
+							Jesus</p></li>
+
 				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
@@ -63,28 +77,28 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 
-				<h1>Genres</h1>
+				<h3>Genres</h3>
 				<ul class="nav nav-sidebar">
-					<li><a href="?genre=Blues">Blues</a></li>
-					<li><a href="?genre=Country">Country</a></li>
-					<li><a href="?genre=Vocal">Vocal</a></li>
-					<li><a href="?genre=Electronic">Electronic</a></li>
+					<li><a href="MusicController?genre=Blues">Blues</a></li>
+					<li><a href="MusicController?genre=Country">Country</a></li>
+					<li><a href="MusicController?genre=Vocal">Vocal</a></li>
+					<li><a href="MusicController?genre=Electronic">Electronic</a></li>
 					<!-- <li><a href="?genre=International">International</a></li> -->
-					<li><a href="?genre=Jazz">Jazz</a></li>
-					<li><a href="?genre=Pop">Pop</a></li>
-					<li><a href="?genre=Rock">Rock</a></li>
-					<li><a href="?genre=R&B">R&amp;B</a></li>
-					<li><a href="?genre=Rap">Rap</a></li>
-					<li><a href="?genre=Reggae">Reggae</a></li>
+					<li><a href="MusicController?genre=Jazz">Jazz</a></li>
+					<li><a href="MusicController?genre=Pop">Pop</a></li>
+					<li><a href="MusicController?genre=Rock">Rock</a></li>
+					<li><a href="MusicController?genre=RnB">RnB</a></li>
+					<li><a href="MusicController?genre=Rap">Rap</a></li>
+					<li><a href="MusicController?genre=Reggae">Reggae</a></li>
 				</ul>
-				
-				<h1>Decades</h1>
+
+				<h3>Decades</h3>
 				<ul class="nav nav-sidebar">
-					<li><a href="?decade=1970">1970</a></li>
-					<li><a href="?decade=1980">1980</a></li>
-					<li><a href="?decade=1990">1990</a></li>
-					<li><a href="?decade=2000">2000</a></li>
-					<li><a href="?decade=2010">2010</a></li>
+					<li><a href="MusicController?decade=1970">1970</a></li>
+					<li><a href="MusicController?decade=1980">1980</a></li>
+					<li><a href="MusicController?decade=1990">1990</a></li>
+					<li><a href="MusicController?decade=2000">2000</a></li>
+					<li><a href="MusicController?decade=2010">2010</a></li>
 				</ul>
 
 			</div>
@@ -92,13 +106,24 @@
 
 
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-				<h1 class="page-header">404: Informação não encontrada!</h1>
+
+
+				<div class="jumbotron">
+					<div class="container">
+						<h1>Welcome to MusicFox!</h1>
+						<p>Navigate through our Artists, Albums and Tracks database.</p>
+						<p>
+							<a class="btn btn-primary btn-lg"
+								href="MusicController?genre=rock" role="button">See some
+								Rock artists right away!</a>
+						</p>
+					</div>
+				</div>
 
 			</div>
 
 		</div>
 	</div>
-	
 
 	<!-- Bootstrap core JavaScript
     ================================================== -->
@@ -106,6 +131,13 @@
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+
+	<!-- /#page-content-wrapper -->
+
+	<!-- /#wrapper -->
+
+
 </body>
 
 </html>
+

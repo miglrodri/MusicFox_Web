@@ -28,7 +28,7 @@ public class searchController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		getServletContext().getRequestDispatcher("/HomeView.jsp").forward(request, response);
 	}
 
 	/**
@@ -38,37 +38,39 @@ public class searchController extends HttpServlet {
 		// TODO Auto-generated method stub
 		
 		Map<String, String[]> query = request.getParameterMap();
-		if(query.get("query")!=null)
+		if(query.get("query")!=null && query.get("query")[0].length() > 3)
 		{
 			String search = query.get("query")[0], tmp;
 			String[] q = null;
 			
 			if(search.contains("genre")){
-				tmp = search.replaceAll("genre", "");
+				tmp = search.replaceFirst("genre", "");
 				q = new String[]{"genre",tmp.trim()};
 			}
 			else if(search.contains("track")){
-				tmp = search.replaceAll("track", "");
+				tmp = search.replaceFirst("tracks", "");
+				tmp = tmp.replaceFirst("track", "");
 				q = new String[]{"track",tmp.trim()};
 			}
 			else if(search.contains("album")){
-				tmp = search.replaceAll("album", "");
+				tmp = search.replaceFirst("albums", "");
+				tmp = tmp.replaceFirst("album", "");
 				q = new String[]{"album",tmp.trim()};
 			}
 			else if(search.contains("artist")){
-				tmp = search.replaceAll("artist", "");
+				tmp = search.replaceFirst("artists", "");
+				tmp = tmp.replaceFirst("artist", "");
 				q = new String[]{"artist",tmp.trim()};
 			}
 			else if(search.contains("decade")){
-				tmp = search.replaceAll("decade", "");
+				tmp = search.replaceFirst("decade", "");
 				q = new String[]{"decade",tmp.trim()};
 			}
+			else if(search.contains("year")){
+				tmp = search.replaceFirst("year", "");
+				q = new String[]{"year",tmp.trim()};
+			}
 			else {
-				// não se procurou por uma das classes anteriores
-				// search: "black"
-				// A ideia era mostrar os resultados por artista, albums e track. numa tabela.
-				// vamos popular então o mybean->semanticArray(resource_id, resource_name)
-				
 				q = new String[]{"all",search};
 				System.out.println("\\ALL : search: "+ search);
 			}
@@ -76,7 +78,7 @@ public class searchController extends HttpServlet {
 			JavaBean bean = Results.search(null, q);
 	
 			request.setAttribute("mybean", bean);
-			System.out.println(bean.getNumberItems()+" "+query.get("query")[0]);
+			//System.out.println(bean.getNumberItems()+" "+query.get("query")[0]);
 		}
 	
 		getServletContext().getRequestDispatcher("/HomeView.jsp").forward(request, response);

@@ -1,9 +1,3 @@
-// TODO quando é feito um pedido para mostrar artista por id, se esse artista nao tiver a info das stats toda completa a query cai por terra!!
-// solução seria fazer uma BD que populasse todos os dados, mesmo com 0 ou nulls. do lado do sparql teria que se andar a fazer vários pedidos, a cada estatística..
-// no entanto ainda devemos investigar porque acho que dá para declarar campos opcionais na pesquisa sparql, no entanto nao sei como funca e se dá mais trab.
-
-// TODO falta paginação \ e pequenos pormenores de navegação
-
 package com.musicfox;
 
 import java.io.IOException;
@@ -41,7 +35,7 @@ public class MusicController extends HttpServlet {
 		
 		request.setAttribute("mybean", bean);
 		
-		System.out.println(bean.getNumberItems());
+		//System.out.println(bean.getNumberItems());
 		getServletContext().getRequestDispatcher("/HomeView.jsp").forward(request, response);
 		
 		

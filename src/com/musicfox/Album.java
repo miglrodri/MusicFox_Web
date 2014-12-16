@@ -4,6 +4,36 @@ package com.musicfox;
 import java.util.ArrayList;
 
 public class Album {
+	
+	/**
+	 * tracksMap contains info about the album tracks (track_id, MAP
+	 * info_about_track)
+	 */
+	private ArrayList<Track> tracksArray = new ArrayList<Track>();
+
+	private String id;
+	private String title;
+	private String releaseDate;
+	private int numberOfTracks;
+	private String decade;
+	private String artistId;
+	private String artistName;
+	
+	public String getArtistId() {
+		return artistId;
+	}
+
+	public void setArtistId(String artistId) {
+		this.artistId = artistId;
+	}
+
+	public String getArtistName() {
+		return artistName;
+	}
+
+	public void setArtistName(String artistName) {
+		this.artistName = artistName;
+	}
 
 	public String getId() {
 		return id;
@@ -56,17 +86,5 @@ public class Album {
 	public void addToTracksArray(Track track) {
 		this.tracksArray.add(track);
 	}
-
-	/**
-	 * tracksMap contains info about the album tracks (track_id, MAP
-	 * info_about_track)
-	 */
-	private ArrayList<Track> tracksArray = new ArrayList<Track>();
-
-	private String id;
-	private String title;
-	private String releaseDate;
-	private int numberOfTracks;
-	private String decade;
 
 }

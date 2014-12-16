@@ -56,7 +56,7 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">MusicFox</a>
+				<a class="navbar-brand" href="HomeView.jsp">MusicFox</a>
 
 			</div>
 
@@ -87,7 +87,7 @@
 		<div class="row">
 			<div class="col-sm-3 col-md-2 sidebar">
 
-				<h1>Genres</h1>
+				<h3>Genres</h3>
 				<ul class="nav nav-sidebar">
 					<li><a href="MusicController?genre=Blues">Blues</a></li>
 					<li><a href="MusicController?genre=Country">Country</a></li>
@@ -102,7 +102,7 @@
 					<li><a href="MusicController?genre=Reggae">Reggae</a></li>
 				</ul>
 
-				<h1>Decades</h1>
+				<h3>Decades</h3>
 				<ul class="nav nav-sidebar">
 					<li><a href="MusicController?decade=1970">1970</a></li>
 					<li><a href="MusicController?decade=1980">1980</a></li>
@@ -116,18 +116,54 @@
 
 
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-				<h1 class="page-header">
-					option:
-					<jsp:getProperty property="option" name="mybean" />(<jsp:getProperty
-						property="numberItems" name="mybean" />)
-				</h1>
+
+				<%
+					if (mybean.getPageType() != null
+							&& (mybean.getPageType().equals("artist_page")
+									|| mybean.getPageType().equals("album_page") || mybean
+									.getPageType().equals("track_page"))) {
+						// para já nada
+					} else if (mybean.getPageType() != null
+							&& mybean.getPageType().equals("semantic_search_page")) {
+				%>
+				<h3 class="page-header">
+					Search:
+					<%=mybean.getOption()%>
+					(<%=mybean.getNumberItems()%>)
+				</h3>
+				<%
+					} else if (mybean.getPageType() != null
+							&& mybean.getPageType().equals("artist_list_page")) {
+				%>
+				<h3 class="page-header">
+					Artists:
+					<%=mybean.getOption()%>
+					(<%=mybean.getNumberItems()%>)
+				</h3>
+				<%
+					} else {
+				%>
+				<div class="jumbotron">
+					<div class="container">
+						<h1>Welcome to MusicFox!</h1>
+						<p>Navigate through our Artists, Albums and Tracks database.</p>
+						<p>
+							<a class="btn btn-primary btn-lg"
+								href="MusicController?genre=rock" role="button">See some
+								Rock artists right away!</a>
+						</p>
+					</div>
+				</div>
+
+				<%
+					}
+				%>
+
 				<div class="row placeholders">
 					<div class="row">
 
 
 						<%
-							System.out.println(mybean.getPageType());
-							// ve se é um artist
 							if (mybean.getPageType() != null
 									&& mybean.getPageType().equals("artist_page")) {
 								Artist temp_artist = mybean.getArtistsArray().get(0);
@@ -146,10 +182,17 @@
 										.getFacebookPeopleTalkingAbout();
 								int temp_artistfblikes = temp_artist.getFacebookLikes();
 						%>
-						<h1>
-							Artist name:
-							<%=temp_artistname%></h1>
 
+						<ol class="breadcrumb">
+							<li><a href="HomeView.jsp">Home</a></li>
+							<li class="active">Artist: <%=temp_artistname%></li>
+						</ol>
+
+						<div class="page-header">
+							<h2>
+								<%= temp_artistname %> <small><%= temp_artistgenre %></small>
+							</h2>
+						</div>
 
 						<table class="table table-hover table-bordered">
 							<tr>
@@ -166,7 +209,17 @@
 							</tr>
 							<tr>
 								<td><b>Vevo url</b></td>
-								<td><a href="<%=temp_artistvevourl%>"><%=temp_artistvevourl%></a></td>
+								<%
+									if (temp_artistvevourl != null) {
+								%>
+								<td><a href="<%=temp_artistvevourl%>" target="_blank"><%=temp_artistvevourl%></a></td>
+								<%
+									} else {
+								%>
+								<td>n/a</td>
+								<%
+									}
+								%>
 							</tr>
 							<tr>
 								<td><b>Vevo total views</b></td>
@@ -178,7 +231,17 @@
 							</tr>
 							<tr>
 								<td><b>Twitter url</b></td>
-								<td><a href="<%=temp_artistturl%>"><%=temp_artistturl%></a></td>
+								<%
+									if (temp_artistturl != null) {
+								%>
+								<td><a href="<%=temp_artistturl%>"  target="_blank"><%=temp_artistturl%></a></td>
+								<%
+									} else {
+								%>
+								<td>n/a</td>
+								<%
+									}
+								%>
 							</tr>
 							<tr>
 								<td><b>Twitter followers</b></td>
@@ -186,7 +249,17 @@
 							</tr>
 							<tr>
 								<td><b>Facebook url</b></td>
-								<td><a href="<%=temp_artistfburl%>"><%=temp_artistfburl%></a></td>
+								<%
+									if (temp_artistfburl != null) {
+								%>
+								<td><a href="<%=temp_artistfburl%>" target="_blank"><%=temp_artistfburl%></a></td>
+								<%
+									} else {
+								%>
+								<td>n/a</td>
+								<%
+									}
+								%>
 							</tr>
 							<tr>
 								<td><b>Facebook people talking about</b></td>
@@ -222,7 +295,7 @@
 								<td><%=temp_albumtitle%></td>
 								<td><a
 									href="MusicController<%="?albumid=" + temp_albumid%>"
-									class="btn btn-default btn-lg" role="button">More info</a></td>
+									class="btn btn-default" role="button">More info</a></td>
 							</tr>
 							<%
 								}
@@ -231,9 +304,7 @@
 						</table>
 
 						<%
-							}
-							// ve se é um album
-							else if (mybean.getPageType() != null
+							} else if (mybean.getPageType() != null
 									&& mybean.getPageType().equals("album_page")) {
 								Album temp_album = mybean.getAlbum_information();
 
@@ -242,20 +313,35 @@
 								String temp_albumrelease = temp_album.getReleaseDate();
 								int temp_albumntracks = temp_album.getNumberOfTracks();
 								String temp_albumdecade = temp_album.getDecade();
+								String temp_albumartistid = temp_album.getArtistId();
+								String temp_albumartistname = temp_album.getArtistName();
 						%>
-						<h1>
-							Album name:
-							<%=temp_albumtitle%></h1>
+
+						<ol class="breadcrumb">
+							<li><a href="HomeView.jsp">Home</a></li>
+							<li><a
+								href="MusicController?artistid=<%=temp_albumartistid%>">Artist:
+									<%=temp_albumartistname%></a></li>
+							<li class="active">Album: <%=temp_albumtitle%></li>
+						</ol>
+
+						<div class="page-header">
+							<h2>
+								<%=temp_albumtitle%> <small>by <%=temp_albumartistname%></small>
+							</h2>
+						</div>
 
 						<table class="table table-hover table-bordered">
 							<tr>
-								<th>Release Date</th>
-								<th>Decade</th>
-								<th>Number of Tracks</th>
+								<td><b>Release Date</b></td>
+								<td><%=temp_albumrelease%></td>
 							</tr>
 							<tr>
-								<td><%=temp_albumrelease%></td>
+								<td><b>Decade</b></td>
 								<td><%=temp_albumdecade%></td>
+							</tr>
+							<tr>
+								<td><b>Number of tracks</b></td>
 								<td><%=temp_albumntracks%></td>
 							</tr>
 
@@ -266,7 +352,7 @@
 							<tr>
 								<th>Index</th>
 								<th>Track title</th>
-								<th>Duration</th>
+								<th>More info</th>
 							</tr>
 
 							<%
@@ -277,13 +363,13 @@
 										String temp_tracktitle = temp_track_list.get(i).getTitle();
 										String temp_trackindex = temp_track_list.get(i)
 												.getTrackIndex();
-										String tmep_trackduration = temp_track_list.get(i)
-												.getDuration();
 							%>
 							<tr>
 								<td><%=temp_trackindex%></td>
 								<td><%=temp_tracktitle%></td>
-								<td><%=tmep_trackduration%></td>
+								<td><a
+									href="MusicController<%="?trackid=" + temp_trackid%>"
+									class="btn btn-default" role="button">More info</a></td>
 
 							</tr>
 							<%
@@ -293,7 +379,49 @@
 						</table>
 						<%
 							}
-							// ve se é genre ou decade e faz listagem
+
+							else if (mybean.getPageType() != null
+									&& mybean.getPageType().equals("track_page")) {
+								Track temp_track = mybean.getTrack_information();
+
+								String temp_tracktitle = temp_track.getTitle();
+								String temp_trackindex = temp_track.getTrackIndex();
+								String temp_trackduration = temp_track.getDuration();
+								String temp_trackartistid = temp_track.getArtistId();
+								String temp_trackartistname = temp_track.getArtistName();
+								String temp_trackalbumid = temp_track.getAlbumId();
+								String temp_trackalbumname = temp_track.getAlbumName();
+						%>
+						<ol class="breadcrumb">
+							<li><a href="HomeView.jsp">Home</a></li>
+							<li><a
+								href="MusicController?artistid=<%=temp_trackartistid%>">Artist:
+									<%=temp_trackartistname%></a></li>
+							<li><a href="MusicController?albumid=<%=temp_trackalbumid%>">Album:
+									<%=temp_trackalbumname%></a></li>
+							<li class="active">Track: <%=temp_tracktitle%></li>
+						</ol>
+
+						<div class="page-header">
+							<h2>
+								<%=temp_tracktitle%> <small>by <%=temp_trackartistname%></small>
+							</h2>
+						</div>
+
+						<table class="table table-hover table-bordered">
+							<tr>
+								<td><b>Track index</b></td>
+								<td><%=temp_trackindex%></td>
+							</tr>
+							<tr>
+								<td><b>Duration (seconds)</b></td>
+								<td><%=temp_trackduration%> seg</td>
+							</tr>
+
+						</table>
+						<%
+							}
+
 							else if (mybean.getPageType() != null
 									&& mybean.getPageType().equals("artist_list_page")) {
 								if (mybean.getNumberItems() > 0) {
@@ -343,44 +471,43 @@
 						%>
 
 						<table class="table table-hover table-bordered">
-							<tr>
-								<th>Name</th>
-								<th></th>
-							</tr>
+							
 
 							<%
 								ArrayList<SemanticResult> temp_array = mybean
 												.getSemanticArray();
-							//
-							// Implement ordem no array, para ficar com artists, albums e tracks
-							//
-							
-							
+										//
+										// Implement ordem no array, para ficar com artists, albums e tracks
+										//
+
 										for (int i = 0; i < temp_array.size(); i++) {
-											String temp_resource_url = temp_array.get(i).getResource_url();
-											String temp_resource_name = temp_array.get(i).getResource_name();
+											String temp_resource_url = temp_array.get(i)
+													.getResource_url();
+											String temp_resource_name = temp_array.get(i)
+													.getResource_name();
 											String class_label = "label_danger";
 											String label_name = "SOME";
 											// verificar se é artista, album ou track e definir:
-										 	// class_label =
-										 	// label_name =
-										 	if (temp_resource_name.charAt(0) == 'a') {
-											 	class_label = "label-default";
+											// class_label =
+											// label_name =
+											if (temp_resource_name.charAt(0) == 'a') {
+												class_label = "label-default";
 												label_name = "ARTIST";
-										 	}
-										 	else if (temp_resource_name.charAt(0) == 'b') {
-											 	class_label = "label-info";
+											} else if (temp_resource_name.charAt(0) == 'b') {
+												class_label = "label-info";
 												label_name = "ALBUM";
-										 	}
-										 	else if (temp_resource_name.charAt(0) == 'c') {
-											 	class_label = "label-warning";
+											} else if (temp_resource_name.charAt(0) == 'c') {
+												class_label = "label-warning";
 												label_name = "TRACK";
-										 	}
+											}
 							%>
 							<tr>
-								<td><span class="label <%= class_label %>"><%= label_name %></span> <%= temp_resource_name.substring(1, temp_resource_name.length()) %></td>
-								<td><a href="<%= temp_resource_url %>" class="btn btn-default" role="button">More info</a></td>
-								
+								<td><span class="label <%=class_label%>"><%=label_name%></span>
+									<%=temp_resource_name.substring(1,
+								temp_resource_name.length())%></td>
+								<td><a href="<%=temp_resource_url%>"
+									class="btn btn-default" role="button">More info</a></td>
+
 
 							</tr>
 
@@ -409,35 +536,11 @@
 
 
 
-				<h1 class="page-header">
+				<h3 class="page-header">
 					<small>Artists you may like</small>
-				</h1>
+				</h3>
 				<div class="row placeholders">
 					<div class="row">
-						<div class="col-xs-6 col-md-3 thumbnail">
-							<a href="#"> <img src="images/cenas.png" alt="cenas">
-							</a>
-							<div class="caption">
-								<h3>Thumbnail label</h3>
-								<p>asd asd asd asd asd asd asd asd asd</p>
-								<p>
-									<a href="#" class="btn btn-primary" role="button">Button</a> <a
-										href="#" class="btn btn-default" role="button">Button</a>
-								</p>
-							</div>
-						</div>
-						<div class="col-xs-6 col-md-3 thumbnail">
-							<a href="#"> <img src="images/cenas.png" alt="cenas">
-							</a>
-							<div class="caption">
-								<h3>Thumbnail label</h3>
-								<p>asd asd asd asd asd asd asd asd asd</p>
-								<p>
-									<a href="#" class="btn btn-primary" role="button">Button</a> <a
-										href="#" class="btn btn-default" role="button">Button</a>
-								</p>
-							</div>
-						</div>
 						<div class="col-xs-6 col-md-3 thumbnail">
 							<a href="#"> <img src="images/cenas.png" alt="cenas">
 							</a>
@@ -467,9 +570,9 @@
 
 
 
-				<h1 class="page-header">
+				<h3 class="page-header">
 					<small>Tracks you may like</small>
-				</h1>
+				</h3>
 				<div class="row placeholders">
 					<div class="row">
 						<div class="col-xs-6 col-md-3 thumbnail">
@@ -494,32 +597,6 @@
 									<a href="#" class="btn btn-primary" role="button">Button</a> <a
 										href="#" class="btn btn-default" role="button">Button</a>
 								</p>
-							</div>
-						</div>
-						<div class="col-xs-6 col-md-3 thumbnail">
-							<a href="#"> <img src="images/cenas.png" alt="cenas">
-							</a>
-							<div class="caption">
-								<h3>Thumbnail label</h3>
-								<p>asd asd asd asd asd asd asd asd asd</p>
-								<p>
-									<a href="#" class="btn btn-primary" role="button">Button</a> <a
-										href="#" class="btn btn-default" role="button">Button</a>
-								</p>
-							</div>
-						</div>
-						<div class="col-xs-6 col-md-3 thumbnail">
-							<a href="#"> <img src="images/cenas.png" alt="cenas">
-							</a>
-							<div class="caption">
-								<h3>Thumbnail label</h3>
-								<p>asd asd asd asd asd asd asd asd asd</p>
-								<p>
-									<a href="#" class="btn btn-primary" role="button">Button</a> <a
-										href="#" class="btn btn-default" role="button">Button</a>
-								</p>
-
-
 							</div>
 						</div>
 					</div>

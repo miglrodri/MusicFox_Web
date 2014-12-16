@@ -10,8 +10,18 @@ public class JavaBean {
 	private int numberItems;
 	private ArrayList<Artist> artistsArray = new ArrayList<Artist>();
 	private Album album_information = new Album();
+	private Track track_information = new Track();
 	private ArrayList<SemanticResult> semanticArray = new ArrayList<SemanticResult>();
 
+	
+	
+	public Track getTrack_information() {
+		return track_information;
+	}
+
+	public void setTrack_information(Track track_information) {
+		this.track_information = track_information;
+	}
 
 	public ArrayList<SemanticResult> getSemanticArray() {
 		return semanticArray;
