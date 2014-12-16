@@ -154,6 +154,9 @@
 						</p>
 					</div>
 				</div>
+				
+				<p class="greeting-id">The ID is </p>
+            <p class="greeting-content">The content is </p>
 
 				<%
 					}
@@ -189,7 +192,10 @@
 						</ol>
 
 						<div class="page-header">
-							<h2>
+							<img class="cover-large" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxANDQwKCBANCAwIDQwICQgICBsIDQgKFB0WFhQRExMkKCggGBolGxMTITEhJSkrLi4yFx8zODMsNygtLisBCgoKBQUFDgUFDisZExkrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAHgAeAMBIgACEQEDEQH/xAAZAAEAAwEBAAAAAAAAAAAAAAAAAgMEAQf/xAAlEAEAAQEJAAIDAQAAAAAAAAAAAQIDERIhMUFRcZGhwTJhsRP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9bAAAASoov8AuUWiiLo+Qc/yjtGbHj5WgM80TGyLUrtqN421BSAAAAAAAAABGsdtTNTrHcNIAAB9gDLMDtesuAAAAAAAAA7TrHcNLLGsfrNqAAAABmr1ntx2rWe3AAAAAAAAAF9lVfHWShKzqunvIGgAByuq6L/HWauq/XbQHAAAAAAAAAACBKzpvn+g0AAMs6y1KLWm6b9pBAAAAAAAFlFlf+WQK4jjNZFlO+XytiLtHQVxZRvn8LIi7TIAAAAAQmyjrpCbHjP9aLgGWYu1yGqYv1U12W9PgKwAWWNN83zt/VyFjGXaYAAAAAAAAAAAAKbem7ONxO206kAs5i6NPUsUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AI2kxdOceugD//Z"
+								style="height: 250px; width: 250px;" alt="<%= temp_artistname %>">
+								
+								<h2>
 								<%= temp_artistname %> <small><%= temp_artistgenre %></small>
 							</h2>
 						</div>
@@ -429,17 +435,16 @@
 									for (int i = 0; i < temp_array.size(); i++) {
 										String artist_id = temp_array.get(i).getId();
 										String artist_name = temp_array.get(i).getName();
-										String artist_cover = temp_array.get(i).getCoverUrl();
+										//String artist_cover = temp_array.get(i).getCoverUrl();
 						%>
 
 						<div class="col-xs-6 col-md-3 thumbnail">
-							<a href="#"> <img src="<%=artist_cover%>"
-								style="height: 150px" alt="cenas">
+							<a href="MusicController<%="?artistid=" + artist_id%>"> <img class="cover" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxANDQwKCBANCAwIDQwICQgICBsIDQgKFB0WFhQRExMkKCggGBolGxMTITEhJSkrLi4yFx8zODMsNygtLisBCgoKBQUFDgUFDisZExkrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAHgAeAMBIgACEQEDEQH/xAAZAAEAAwEBAAAAAAAAAAAAAAAAAgMEAQf/xAAlEAEAAQEJAAIDAQAAAAAAAAAAAQIDERIhMUFRcZGhwTJhsRP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9bAAAASoov8AuUWiiLo+Qc/yjtGbHj5WgM80TGyLUrtqN421BSAAAAAAAAABGsdtTNTrHcNIAAB9gDLMDtesuAAAAAAAAA7TrHcNLLGsfrNqAAAABmr1ntx2rWe3AAAAAAAAAF9lVfHWShKzqunvIGgAByuq6L/HWauq/XbQHAAAAAAAAAACBKzpvn+g0AAMs6y1KLWm6b9pBAAAAAAAFlFlf+WQK4jjNZFlO+XytiLtHQVxZRvn8LIi7TIAAAAAQmyjrpCbHjP9aLgGWYu1yGqYv1U12W9PgKwAWWNN83zt/VyFjGXaYAAAAAAAAAAAAKbem7ONxO206kAs5i6NPUsUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AI2kxdOceugD//Z"
+								style="height: 100px; width: 100px;" alt="<%= artist_name %>">
 							</a>
 							<div class="caption">
 								<h3><%=artist_name%>
 								</h3>
-								<p><%=artist_id%></p>
 								<p>
 									<a href="MusicController<%="?artistid=" + artist_id%>"
 										class="btn btn-primary" role="button">More info</a>
@@ -608,6 +613,8 @@
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+	<script src="js/small_cover.js"></script>
+	<script src="js/large_cover.js"></script>
 
 	<!-- /#page-content-wrapper -->
 
