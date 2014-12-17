@@ -193,7 +193,7 @@
 
 						<div class="page-header">
 							<img class="cover-large" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxANDQwKCBANCAwIDQwICQgICBsIDQgKFB0WFhQRExMkKCggGBolGxMTITEhJSkrLi4yFx8zODMsNygtLisBCgoKBQUFDgUFDisZExkrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAHgAeAMBIgACEQEDEQH/xAAZAAEAAwEBAAAAAAAAAAAAAAAAAgMEAQf/xAAlEAEAAQEJAAIDAQAAAAAAAAAAAQIDERIhMUFRcZGhwTJhsRP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9bAAAASoov8AuUWiiLo+Qc/yjtGbHj5WgM80TGyLUrtqN421BSAAAAAAAAABGsdtTNTrHcNIAAB9gDLMDtesuAAAAAAAAA7TrHcNLLGsfrNqAAAABmr1ntx2rWe3AAAAAAAAAF9lVfHWShKzqunvIGgAByuq6L/HWauq/XbQHAAAAAAAAAACBKzpvn+g0AAMs6y1KLWm6b9pBAAAAAAAFlFlf+WQK4jjNZFlO+XytiLtHQVxZRvn8LIi7TIAAAAAQmyjrpCbHjP9aLgGWYu1yGqYv1U12W9PgKwAWWNN83zt/VyFjGXaYAAAAAAAAAAAAKbem7ONxO206kAs5i6NPUsUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AI2kxdOceugD//Z"
-								style="height: 250px; width: 250px;" alt="<%= temp_artistname %>">
+								style="height: 250px; " alt="<%= temp_artistname %>">
 								
 								<h2>
 								<%= temp_artistname %> <small><%= temp_artistgenre %></small>
@@ -438,17 +438,17 @@
 										//String artist_cover = temp_array.get(i).getCoverUrl();
 						%>
 
-						<div class="col-xs-6 col-md-3 thumbnail">
+						<div class="col-xs-6 col-md-3 thumbnail" style="height: 200px">
 							<a href="MusicController<%="?artistid=" + artist_id%>"> <img class="cover" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxANDQwKCBANCAwIDQwICQgICBsIDQgKFB0WFhQRExMkKCggGBolGxMTITEhJSkrLi4yFx8zODMsNygtLisBCgoKBQUFDgUFDisZExkrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAHgAeAMBIgACEQEDEQH/xAAZAAEAAwEBAAAAAAAAAAAAAAAAAgMEAQf/xAAlEAEAAQEJAAIDAQAAAAAAAAAAAQIDERIhMUFRcZGhwTJhsRP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9bAAAASoov8AuUWiiLo+Qc/yjtGbHj5WgM80TGyLUrtqN421BSAAAAAAAAABGsdtTNTrHcNIAAB9gDLMDtesuAAAAAAAAA7TrHcNLLGsfrNqAAAABmr1ntx2rWe3AAAAAAAAAF9lVfHWShKzqunvIGgAByuq6L/HWauq/XbQHAAAAAAAAAACBKzpvn+g0AAMs6y1KLWm6b9pBAAAAAAAFlFlf+WQK4jjNZFlO+XytiLtHQVxZRvn8LIi7TIAAAAAQmyjrpCbHjP9aLgGWYu1yGqYv1U12W9PgKwAWWNN83zt/VyFjGXaYAAAAAAAAAAAAKbem7ONxO206kAs5i6NPUsUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AI2kxdOceugD//Z"
-								style="height: 100px; width: 100px;" alt="<%= artist_name %>">
+								style="height: 100px;" alt="<%= artist_name %>">
 							</a>
-							<div class="caption">
-								<h3><%=artist_name%>
+							<div class="caption" style="">
+								<h3><a href="MusicController<%="?artistid=" + artist_id%>"><%=artist_name%></a>
 								</h3>
-								<p>
+								<%--p>
 									<a href="MusicController<%="?artistid=" + artist_id%>"
 										class="btn btn-primary" role="button">More info</a>
-								</p>
+								</p--%>
 							</div>
 						</div>
 						<%
@@ -477,6 +477,13 @@
 										// Implement ordem no array, para ficar com artists, albums e tracks
 										//
 
+										
+										/* TODO: ?x hasGenre country
+												?x rdf:type Artist
+												?x hasDecade ?s
+												FILTER REGEX(?s, "1980")
+										*/
+										
 										for (int i = 0; i < temp_array.size(); i++) {
 											String temp_resource_url = temp_array.get(i)
 													.getResource_url();
