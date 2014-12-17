@@ -270,12 +270,6 @@ public class Results {
 		return mybean;
 	
 	}
-	
-	private static JavaBean yearSearch(String year) {
-		System.out.println("yearSearch: "+ year);
-
-		return mybean;
-	}
 
 	private static JavaBean decadeSearch(String decade_selected) {
 		searchQuery = "SELECT ?id ?name " + "WHERE {"
