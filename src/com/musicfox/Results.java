@@ -19,10 +19,13 @@ public class Results {
 	private static QueryExecution qe;
 	private static ResultSet results;
 	private static JavaBean mybean;
-	private static EchoNestAPI echoNest = new EchoNestAPI("IE2ZINGXDYWASD9NH");
-	private static java.util.List<com.echonest.api.v4.Artist> artists = null;
 	private static int temp;
 
+	/**
+	 * VER ALTERNATIVA http://www.apple.com/itunes/affiliates/resources/documentation/itunes-store-web-service-search-api.html
+	 * OUTRA, sem ser json: http://www.lastfm.com.br/api/show/artist.getInfo
+	 */
+	
 	static JavaBean search(HttpServletRequest request, String[] query) {
 
 		mybean = new JavaBean();
@@ -162,7 +165,6 @@ public class Results {
 
 			temp_artist.setId(cleanId(temp_artist_id));
 			temp_artist.setName(cleanLiteral(temp_artist_name));
-			temp_artist.setCover(getImages(temp_artist_name));
 			temp++; // incremente o contador do nr de resultados
 			// encontrados
 			mybean.addToArtistsArray(temp_artist);
@@ -290,7 +292,6 @@ public class Results {
 				Artist temp_artist = new Artist();
 				temp_artist.setId(cleanId(temp_artist_id));
 				temp_artist.setName(cleanLiteral(temp_artist_name));
-				temp_artist.setCover(getImages(temp_artist_name));
 
 				mybean.addToArtistsArray(temp_artist);
 				temp++; // incremente o contador do nr de resultados
@@ -329,7 +330,6 @@ public class Results {
 				Artist temp_artist = new Artist();
 				temp_artist.setId(cleanId(temp_artist_id));
 				temp_artist.setName(cleanLiteral(temp_artist_name));
-				temp_artist.setCover(getImages(temp_artist_name));
 
 				mybean.addToArtistsArray(temp_artist);
 				temp++; // incremente o contador do nr de resultados
@@ -531,29 +531,9 @@ public class Results {
 		qe.close();
 		return mybean;
 	}
+	
 
-	private static String getImages(String temp_artist_name) {
-		String image = null;
-		// try {
-		// String query1 = temp_artist_name.substring(0,
-		// temp_artist_name.indexOf("^^"));
-		// artists = echoNest.searchArtists(query1);
-		// if (artists.size() > 0) {
-		// java.util.List<Image> images = artists.get(0).getImages();
-		// if (images.size() > 0) {
-		// image = images.get(0).getURL();
-		// System.out.println(image);
-		// }
-		// }
-		// } catch (EchoNestException e) {
-		// e.printStackTrace();
-		// }
 
-		/**
-		 * VER ALTERNATIVA http://www.apple.com/itunes/affiliates/resources/documentation/itunes-store-web-service-search-api.html
-		 * OUTRA, sem ser json: http://www.lastfm.com.br/api/show/artist.getInfo
-		 */
-		
-		return image;
-	}
+
+	
 }
