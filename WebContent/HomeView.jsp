@@ -155,8 +155,6 @@
 					</div>
 				</div>
 				
-				<p class="greeting-id">The ID is </p>
-            <p class="greeting-content">The content is </p>
 
 				<%
 					}
