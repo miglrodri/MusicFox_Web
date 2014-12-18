@@ -261,7 +261,7 @@ public class Results {
 			String temp_artist_id = binding.get("s").toString();
 			String temp_artist_name = binding.get("value").toString();
 
-			System.out.println("loaded result: id:"+ temp_artist_id + " # name:"+temp_artist_name);
+//			System.out.println("loaded result: id:"+ temp_artist_id + " # name:"+temp_artist_name);
 			
 			SemanticResult sresult = new SemanticResult();
 			sresult.setResource_name("a" + cleanLiteral(temp_artist_name));
