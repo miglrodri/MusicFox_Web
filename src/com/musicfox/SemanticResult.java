@@ -3,7 +3,14 @@ package com.musicfox;
 public class SemanticResult {
 	private String resource_name;
 	private String resource_url;
+	private String resource_type; // artist, album, track
 	
+	public String getResource_type() {
+		return resource_type;
+	}
+	public void setResource_type(String resource_type) {
+		this.resource_type = resource_type;
+	}
 	public String getResource_name() {
 		return resource_name;
 	}

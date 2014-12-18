@@ -1,5 +1,8 @@
 package com.musicfox;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.echonest.api.v4.EchoNestAPI;
@@ -22,33 +25,19 @@ public class Results {
 	private static int temp;
 
 	/**
-	 * VER ALTERNATIVA http://www.apple.com/itunes/affiliates/resources/documentation/itunes-store-web-service-search-api.html
-	 * OUTRA, sem ser json: http://www.lastfm.com.br/api/show/artist.getInfo
+	 * VER ALTERNATIVA
+	 * http://www.apple.com/itunes/affiliates/resources/documentation
+	 * /itunes-store-web-service-search-api.html OUTRA, sem ser json:
+	 * http://www.lastfm.com.br/api/show/artist.getInfo
 	 */
-	
+
 	static JavaBean search(HttpServletRequest request, String[] query) {
 
 		mybean = new JavaBean();
 
 		/**
-		 * QUERIES
-		 * query: "artist" ou "artists" = mostra todos os artistas´
-		 * query: "artist <search_string>" = lista de artistas
 		 * 
-		 * query: "album" ou "albums" = mostra todos os albums
-		 * query: "album <search_string>" = lista de albums
-		 * 
-		 * query: "track" ou "tracks" = mostra todas as tracks
-		 * query: "track <search_string>" = lista de tracks
-		 * 
-		 * query: "decade" = mostra todos os artistas
-		 * query: "genre" = mostra todos os artistas
-		 * 
-		 * query: "year <search_string>" = lista de albums desse ano
-		 * 
-		 * 404 artists
-		 * 114041 albums
-		 * 220406 tracks
+		 * 404 artists 114041 albums 220406 tracks
 		 */
 
 		/**
@@ -78,44 +67,29 @@ public class Results {
 		/**
 		 * Pedidos POST (semantic search)
 		 */
-		else if (query != null && query[0].equals("artist")) {
-			artistSearch(query[1]);
-		} else if (query != null && query[0].equals("album")) {
-			allClassesExactSearch(query[1], "albums");
-		} else if (query != null && query[0].equals("track")) {
-			allClassesExactSearch(query[1], "tracks");
-		} else if (query != null && query[0].equals("decade")) {
-			decadeSearch(query[1]);
-		} else if (query != null && query[0].equals("genre")) {
-			genreSearch(query[1]);
+		else if (query != null && query[0].equals("new")) {
+			semanticSearch(query[1]);
 		}
-//		else if (query != null && query[0].equals("year")) {
-//			if (convertYearToDecade(query[1]) > 0) {
-//				yearSearch(""+convertYearToDecade(query[1])+"");
-//			} else {
-//				mybean.setPageType("homepage");
-//				mybean.setOption(null);
-//			}
-//		}
-		else if (query != null && query[0].equals("all")) {
-			// search foi feito sem nenhuma classe associada
-			allClassesExactSearch(query[1], "all");
-		} else {
-
+		// else if (query != null && query[0].equals("artist")) {
+		// artistSearch(query[1]);
+		// } else if (query != null && query[0].equals("album")) {
+		// allClassesExactSearch(query[1], "albums");
+		// } else if (query != null && query[0].equals("track")) {
+		// allClassesExactSearch(query[1], "tracks");
+		// } else if (query != null && query[0].equals("decade")) {
+		// decadeSearch(query[1]);
+		// } else if (query != null && query[0].equals("genre")) {
+		// genreSearch(query[1]);
+		// }
+		// else if (query != null && query[0].equals("all")) {
+		// allClassesExactSearch(query[1], "all");
+		// }
+		else {
 			mybean.setPageType("homepage");
 			mybean.setOption(null);
-
 		}
 
 		return mybean;
-	}
-
-	private static int convertYearToDecade(String string) {
-		int numero = Integer.parseInt(string);
-		if (numero < 1900 || numero > 2020) {
-			return -1;
-		}
-		return numero;
 	}
 
 	/**
@@ -146,6 +120,180 @@ public class Results {
 
 	public static String cleanLiteral(String dirty) {
 		return dirty.substring(0, dirty.indexOf("^^"));
+	}
+
+	/**
+	 * Method to construct SPARQL query
+	 * 
+	 * @param POST
+	 *            query
+	 * @return
+	 */
+	private static JavaBean semanticSearch(String query) {
+
+		System.out.println("semanticSearch(String " + query + ")");
+
+		String SPARQL_QUERY = "";
+		String select = " SELECT ?s ";
+		String where = " WHERE { ";
+		String filter = " FILTER (";
+		String order = " ORDER BY ";
+		String nothing_filter = "";
+
+//		String[] ontology_classes = { "artist", "artists", "album", "albums",
+//				"track", "tracks" };
+//		String[] ontology_properties = { "decade", "decades", "genre" };
+		ArrayList<String> ontology_genres = new ArrayList<String>(
+				Arrays.asList("pop", "rock", "country", "rap"));
+
+		String active_class = "";
+		boolean isClass;
+		boolean isProperty;
+		boolean isDecade;
+		boolean firstNothing = true;
+		boolean firstFilter = true;
+		int index = 0;
+
+		/**
+		 * QUERY SPARQL example:
+		 * PEARL(nothing) JAM(nothing) ALBUM(class) ROCK(property=genre) 1992(property=decade)
+		 */
+
+		/**
+		 * For each token
+		 */
+		for (String token : query.split(" ")) {
+			System.out.println(token);
+			isClass = false;
+			isProperty = false;
+			isDecade = false;
+
+			/**
+			 * Verify if its a class
+			 */
+			if (token.equals("artist") || token.equals("artists")) {
+				System.out.println(token + " is class");
+				active_class = "artist";
+				isClass = true;
+				where += " ?s rdf:type music:Artist. ";
+				where += " ?s music:hasName ?value. ";
+				select += " ?value ";
+			} else {
+				// outra classe
+			}
+
+			/**
+			 * Verify if its a property
+			 */
+			if (ontology_genres.contains(token)) {
+				System.out.println(token + " is property");
+				isProperty = true;
+				where += " ?s music:hasMainGenre ?genre" + index + ". ";
+				if (!firstFilter) {
+					filter += " && ";
+				}
+				filter += " regex( ?genre" + index + ", \"" + token
+						+ "\", \"i\" ) ";
+				firstFilter = false;
+			}
+
+			/**
+			 * Verify if its a value
+			 */
+			// verify if its a DECADE
+			if (isDecade(token)) {
+				isDecade = true;
+				System.out.println(token + " is decade");
+			}
+			// verify if its a NOTHING
+			else if (isClass == false && isProperty == false) {
+				System.out.println(token + " is nothing");
+				if (firstNothing) {
+					nothing_filter = token;
+				} else {
+					nothing_filter += " " + token;
+				}
+				firstNothing = false;
+			}
+
+			index++;
+		}
+
+		if (!nothing_filter.isEmpty()) {
+			if (active_class.equals("artist") || active_class.equals("album")
+					|| active_class.equals("track")) {
+				if (!firstFilter) {
+					filter += " && ";
+				}
+				filter += " regex( ?value, \"" + nothing_filter
+						+ "\", \"i\" ) ";
+				firstFilter = false;
+			} else {
+				// tem que procurar em todas as classes
+
+				// procura no artista
+				where += " ?s rdf:type music:Artist. ";
+				where += " ?s music:hasName ?value. ";
+				select += " ?value ";
+
+				if (!firstFilter) {
+					filter += " && ";
+				}
+				filter += " regex( ?value, \"" + nothing_filter
+						+ "\", \"i\" ) ";
+				firstFilter = false;
+			}
+		}
+
+		SPARQL_QUERY = select + where + filter + " ) " + " } ";
+
+		System.out.println("SPARQL QUERY: "+ SPARQL_QUERY);
+		
+		searchQuery = SPARQL_QUERY;
+
+		qe = queryDB(searchQuery);
+		results = qe.execSelect();
+		temp = 0;
+
+		while (results.hasNext()) {
+			System.out.println("got results from the query!");
+			QuerySolution binding = results.nextSolution();
+			String temp_artist_id = binding.get("s").toString();
+			String temp_artist_name = binding.get("value").toString();
+
+			System.out.println("loaded result: id:"+ temp_artist_id + " # name:"+temp_artist_name);
+			
+			SemanticResult sresult = new SemanticResult();
+			sresult.setResource_name("a" + cleanLiteral(temp_artist_name));
+			sresult.setResource_url("MusicController?artistid="
+					+ cleanId(temp_artist_id));
+			temp++; // incremente o contador do nr de resultados
+			// encontrados
+			mybean.addToSemanticArray(sresult);
+		}
+
+		mybean.setPageType("semantic_search_page");
+		mybean.setOption(query);
+		mybean.setNumberItems(temp);
+
+		qe.close();
+
+		return mybean;
+
+	}
+
+	private static boolean isDecade(String token) {
+		int numero;
+		try {
+			numero = Integer.parseInt(token);
+		} catch (NumberFormatException e) {
+			// e.printStackTrace();
+			return false;
+		}
+		if (numero < 1900 || numero > 2020) {
+			return false;
+		}
+		return true;
 	}
 
 	private static JavaBean artistSearch(String name) {
@@ -221,7 +369,7 @@ public class Results {
 			qe = queryDB(searchQuery);
 			results = qe.execSelect();
 			temp = 0;
-			
+
 			while (results.hasNext()) {
 				QuerySolution binding = results.nextSolution();
 				String temp_album_id = binding.get("id").toString();
@@ -247,7 +395,7 @@ public class Results {
 			qe = queryDB(searchQuery);
 			results = qe.execSelect();
 			temp = 0;
-			
+
 			while (results.hasNext()) {
 				QuerySolution binding = results.nextSolution();
 				String temp_track_id = binding.get("id").toString();
@@ -270,7 +418,7 @@ public class Results {
 		qe.close();
 
 		return mybean;
-	
+
 	}
 
 	private static JavaBean decadeSearch(String decade_selected) {
@@ -282,7 +430,7 @@ public class Results {
 		qe = queryDB(searchQuery);
 		results = qe.execSelect();
 		temp = 0;
-		
+
 		if (results.hasNext()) {
 			while (results.hasNext()) {
 				QuerySolution binding = results.nextSolution();
@@ -320,7 +468,7 @@ public class Results {
 		qe = queryDB(searchQuery);
 		results = qe.execSelect();
 		temp = 0;
-		
+
 		if (results.hasNext()) {
 			while (results.hasNext()) {
 				QuerySolution binding = results.nextSolution();
@@ -364,23 +512,24 @@ public class Results {
 			temp_track.setDuration(cleanLiteral(binding.get("duration")
 					.toString()));
 
-			searchQuery = "SELECT ?id ?albumid ?albumtitle ?artistid ?artistname  WHERE { ?id rdf:type music:Track.   ?id music:isPartOf ?albumid.  ?albumid music:hasTitle ?albumtitle.  ?albumid music:isAssembledBy ?artistid.  ?artistid music:hasName ?artistname	FILTER regex( str(?id), \"" + track_id + "\" ) 	}";
+			searchQuery = "SELECT ?id ?albumid ?albumtitle ?artistid ?artistname  WHERE { ?id rdf:type music:Track.   ?id music:isPartOf ?albumid.  ?albumid music:hasTitle ?albumtitle.  ?albumid music:isAssembledBy ?artistid.  ?artistid music:hasName ?artistname	FILTER regex( str(?id), \""
+					+ track_id + "\" ) 	}";
 			QueryExecution qe2 = queryDB(searchQuery);
 			ResultSet results2 = qe2.execSelect();
 			while (results2.hasNext()) {
 				QuerySolution binding2 = results2.nextSolution();
-				
+
 				temp_track.setAlbumId(cleanId(binding2.get("albumid")
 						.toString()));
 				temp_track.setAlbumName(cleanLiteral(binding2.get("albumtitle")
 						.toString()));
 				temp_track.setArtistId(cleanId(binding2.get("artistid")
 						.toString()));
-				temp_track.setArtistName(cleanLiteral(binding2.get("artistname")
-						.toString()));
+				temp_track.setArtistName(cleanLiteral(binding2
+						.get("artistname").toString()));
 			}
 			qe2.close();
-			
+
 			mybean.setPageType("track_page");
 			mybean.setTrack_information(temp_track);
 			mybean.setOption(null);
@@ -415,8 +564,8 @@ public class Results {
 				QuerySolution binding2 = results2.nextSolution();
 				temp_album.setArtistId(cleanId(binding2.get("artistid")
 						.toString()));
-				temp_album.setArtistName(cleanLiteral(binding2.get("artistname")
-						.toString()));
+				temp_album.setArtistName(cleanLiteral(binding2
+						.get("artistname").toString()));
 			}
 			qe2.close();
 
@@ -531,9 +680,5 @@ public class Results {
 		qe.close();
 		return mybean;
 	}
-	
 
-
-
-	
 }

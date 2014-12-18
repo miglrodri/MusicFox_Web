@@ -43,37 +43,36 @@ public class searchController extends HttpServlet {
 			String search = query.get("query")[0], tmp;
 			String[] q = null;
 			
-			if(search.contains("genre")){
-				tmp = search.replaceFirst("genre", "");
-				q = new String[]{"genre",tmp.trim()};
-			}
-			else if(search.contains("track")){
-				tmp = search.replaceFirst("tracks", "");
-				tmp = tmp.replaceFirst("track", "");
-				q = new String[]{"track",tmp.trim()};
-			}
-			else if(search.contains("album")){
-				tmp = search.replaceFirst("albums", "");
-				tmp = tmp.replaceFirst("album", "");
-				q = new String[]{"album",tmp.trim()};
-			}
-			else if(search.contains("artist")){
-				tmp = search.replaceFirst("artists", "");
-				tmp = tmp.replaceFirst("artist", "");
-				q = new String[]{"artist",tmp.trim()};
-			}
-			else if(search.contains("decade")){
-				tmp = search.replaceFirst("decade", "");
-				q = new String[]{"decade",tmp.trim()};
-			}
-//			else if(search.contains("year")){
-//				tmp = search.replaceFirst("year", "");
-//				q = new String[]{"year",tmp.trim()};
+//			if(search.contains("genre")){
+//				tmp = search.replaceFirst("genre", "");
+//				q = new String[]{"genre",tmp.trim()};
 //			}
-			else {
-				q = new String[]{"all",search};
-				System.out.println("\\ALL : search: "+ search);
-			}
+//			else if(search.contains("track")){
+//				tmp = search.replaceFirst("tracks", "");
+//				tmp = tmp.replaceFirst("track", "");
+//				q = new String[]{"track",tmp.trim()};
+//			}
+//			else if(search.contains("album")){
+//				tmp = search.replaceFirst("albums", "");
+//				tmp = tmp.replaceFirst("album", "");
+//				q = new String[]{"album",tmp.trim()};
+//			}
+//			else if(search.contains("artist")){
+//				tmp = search.replaceFirst("artists", "");
+//				tmp = tmp.replaceFirst("artist", "");
+//				q = new String[]{"artist",tmp.trim()};
+//			}
+//			else if(search.contains("decade")){
+//				tmp = search.replaceFirst("decade", "");
+//				q = new String[]{"decade",tmp.trim()};
+//			}
+//			else {
+//				q = new String[]{"all",search};
+//				System.out.println("\\ALL : search: "+ search);
+//			}
+			
+			q = new String[]{"new",search};
+			System.out.println("\\ALL : search: "+ search);
 			
 			JavaBean bean = Results.search(null, q);
 	
