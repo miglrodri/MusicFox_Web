@@ -38,7 +38,7 @@
     <![endif]-->
 
 <style>
-.tooltip>p {
+.tooltip>span {
 	text-align: left;
 }
 </style>
@@ -64,7 +64,7 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
-				<p class="glyphicon glyphicon-info-sign" data-placement="bottom" data-toggle="popover" id="example"></p>
+				<!-- <p class="glyphicon glyphicon-info-sign" data-placement="bottom" data-toggle="popover" id="example"></p> -->
 				<form action="searchController" method="POST"
 					class="navbar-form navbar-left" role="search">
 					<div class="input-group">
@@ -75,6 +75,7 @@
 						<button type="submit" class="btn btn-default">Submit</button>
 					</span>
 					</div>
+					<span class="glyphicon glyphicon-info-sign" data-placement="bottom" data-toggle="popover" id="example"></span>
 				</form>
 				
 					
@@ -627,14 +628,13 @@
 	<script src="js/small_cover.js"></script>
 	<script src="js/large_cover.js"></script>
 	<script type="text/javascript">
-	$(document).ready(function() {
-			
+	$(document).ready(function() {		
 		  $('body').popover({
 			  selector: "[data-toggle=popover]",
 			  container: "body",
 			  html : true,
-		  	  title : "<strong>Examples</strong>",
-		  	  content : "<i>To search for an Artist:</i><br/>Artist name<br/><i>To search for an Album:</i></br>Album title<br/>"
+		  	  title : "<strong>Some help to start searching!</strong>",
+		  	  content : "<i><b>Search syntax</b></i><br/>[<span style=\"color:gray;\">artist</span>s | <span style=\"color:blue;\">album</span>s | <span style=\"color:orange;\">track</span>s]<br/>[<span style=\"color:green;\">genre</span>] ex. rock<br/>[<span style=\"color:green;\">decade</span>] ex. 1990<br/>[<span style=\"color:green;\">search_string</span>] ex. black friday<br/><br/><i><b>Search examples</b></i><br/>rock artist<br/>artist cher<br/>country artist 2010<br/>rock album 2010<br/>paris<br/>1920 tracks<br/>"
 			  });
 	});
 	</script>
