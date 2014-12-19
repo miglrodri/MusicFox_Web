@@ -2,7 +2,9 @@ package com.musicfox;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import javax.servlet.http.HttpServletRequest;
+
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -89,6 +91,26 @@ public class Results {
 		String nothing_filter = "";
 
 		/**
+		 * Code to get exact searches! example query: <rock "track">
+		 */
+		int firstIndex = 0;
+		int lastIndex = 0;
+		String exactSearch = "";
+		boolean error = false;
+		try {
+			firstIndex = query.indexOf("\"", 0);
+			lastIndex = query.indexOf("\"", firstIndex + 1);
+			exactSearch = query.substring(firstIndex + 1, lastIndex);
+		} catch (Exception e) {
+			// e.printStackTrace();
+			error = true;
+			exactSearch = "";
+		}
+		if (!error) {
+			nothing_filter = exactSearch;
+		}
+		
+		/**
 		 * Code to retrieve all genre types available
 		 */
 		// searchQuery =
@@ -134,6 +156,10 @@ public class Results {
 			isClass = false;
 			isProperty = false;
 			isNothing = false;
+			
+			if (token.contains("\"")) {
+				continue;
+			}
 
 			/**
 			 * Verify if its a class
