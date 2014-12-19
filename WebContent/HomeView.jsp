@@ -37,9 +37,11 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-<link
-	href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
-	rel="stylesheet">
+<style>
+.tooltip>p {
+	text-align: left;
+}
+</style>
 </head>
 
 <body>
@@ -62,18 +64,23 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
+				<p class="glyphicon glyphicon-info-sign" data-placement="bottom" data-toggle="popover" id="example"></p>
 				<form action="searchController" method="POST"
 					class="navbar-form navbar-left" role="search">
-					<div class="form-group">
+					<div class="input-group">
 						<input type="text" class="form-control" name="query"
 							placeholder="Search">
+					
+					<span class="input-group-btn">
+						<button type="submit" class="btn btn-default">Submit</button>
+					</span>
 					</div>
-					<button type="submit" class="btn btn-default">Submit</button>
 				</form>
+				
+					
 				<ul class="nav navbar-nav navbar-right">
 
-					<li><p class="navbar-text">by Luís Jerónimo &amp; Miguel
-							Jesus</p></li>
+					<li><p class="navbar-text">by Luís Jerónimo &amp; Miguel Jesus</p></li>
 
 				</ul>
 			</div>
@@ -619,7 +626,18 @@
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/small_cover.js"></script>
 	<script src="js/large_cover.js"></script>
-
+	<script type="text/javascript">
+	$(document).ready(function() {
+			
+		  $('body').popover({
+			  selector: "[data-toggle=popover]",
+			  container: "body",
+			  html : true,
+		  	  title : "<strong>Examples</strong>",
+		  	  content : "<i>To search for an Artist:</i><br/>Artist name<br/><i>To search for an Album:</i></br>Album title<br/>"
+			  });
+	});
+	</script>
 	<!-- /#page-content-wrapper -->
 
 	<!-- /#wrapper -->
