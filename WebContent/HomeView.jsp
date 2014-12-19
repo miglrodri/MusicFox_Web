@@ -96,26 +96,27 @@
 
 				<h3>Genres</h3>
 				<ul class="nav nav-sidebar">
-					<li><a href="MusicController?genre=Blues">Blues</a></li>
-					<li><a href="MusicController?genre=Country">Country</a></li>
-					<li><a href="MusicController?genre=Vocal">Vocal</a></li>
-					<li><a href="MusicController?genre=Electronic">Electronic</a></li>
+					<li><a href="MusicController?genre=Blues">Blues <span class="badge">24</span></a></li>
+					<li><a href="MusicController?genre=Country">Country <span class="badge">31</span></a></li>
+					<li><a href="MusicController?genre=Electronica">Electronica <span class="badge">34</span></a></li>
 					<!-- <li><a href="?genre=International">International</a></li> -->
-					<li><a href="MusicController?genre=Jazz">Jazz</a></li>
-					<li><a href="MusicController?genre=Pop">Pop</a></li>
-					<li><a href="MusicController?genre=Rock">Rock</a></li>
-					<li><a href="MusicController?genre=RnB">RnB</a></li>
-					<li><a href="MusicController?genre=Rap">Rap</a></li>
-					<li><a href="MusicController?genre=Reggae">Reggae</a></li>
+					<li><a href="MusicController?genre=Jazz">Jazz <span class="badge">59</span></a></li>
+					<li><a href="MusicController?genre=Pop">Pop <span class="badge">51</span></a></li>
+					<li><a href="MusicController?genre=Rock">Rock <span class="badge">32</span></a></li>
+					<li><a href="MusicController?genre=RnB">RnB <span class="badge">46</span></a></li>
+					<li><a href="MusicController?genre=Rap">Rap <span class="badge">51</span></a></li>
+					<li><a href="MusicController?genre=Reggae">Reggae <span class="badge">41</span></a></li>
+					<li><a href="MusicController?genre=Soul">Soul <span class="badge">46</span></a></li>
+					
 				</ul>
 
 				<h3>Decades</h3>
 				<ul class="nav nav-sidebar">
-					<li><a href="MusicController?decade=1970">1970</a></li>
-					<li><a href="MusicController?decade=1980">1980</a></li>
-					<li><a href="MusicController?decade=1990">1990</a></li>
-					<li><a href="MusicController?decade=2000">2000</a></li>
-					<li><a href="MusicController?decade=2010">2010</a></li>
+					<li><a href="MusicController?decade=1970">1970 <span class="badge">121</span></a></li>
+					<li><a href="MusicController?decade=1980">1980 <span class="badge">153</span></a></li>
+					<li><a href="MusicController?decade=1990">1990 <span class="badge">232</span></a></li>
+					<li><a href="MusicController?decade=2000">2000 <span class="badge">318</span></a></li>
+					<li><a href="MusicController?decade=2010">2010 <span class="badge">244</span></a></li>
 				</ul>
 
 			</div>
