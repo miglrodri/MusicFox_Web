@@ -93,6 +93,7 @@ public class Results {
 	}
 
 	/**
+	 * Perform the query to the DataBase
 	 * 
 	 * @param query
 	 * @return
@@ -164,6 +165,8 @@ public class Results {
 		// "SELECT DISTINCT ?s WHERE {  ?s rdf:type owl:DatatypeProperty   } ";
 
 		String active_class = "";
+		ArrayList<String> queriesToExecute = new ArrayList<String>();
+		boolean allClassSearch = false;
 		boolean isClass;
 		boolean isProperty;
 		boolean isDecade = false;
@@ -172,6 +175,7 @@ public class Results {
 		boolean firstNothing = true;
 		boolean firstFilter = true;
 		int genre_index = 0;
+		int decade_index = 0;
 
 		/**
 		 * QUERY SPARQL example: PEARL JAM ALBUM ROCK 1992 nothing nothing class
@@ -185,7 +189,6 @@ public class Results {
 			System.out.println(token);
 			isClass = false;
 			isProperty = false;
-			isDecade = false;
 			isNothing = false;
 
 			/**
@@ -238,19 +241,22 @@ public class Results {
 				System.out.println(token + " is property(decade)");
 				isDecade = true;
 				isProperty = true;
-				where += " ?s music:hasDecade ?decade. ";
+				where += " ?s music:hasDecade ?decade" + decade_index + ". ";
 				if (!firstFilter) {
 					filter += " && ";
 				}
-				filter += " regex( ?decade, \"" + token + "\", \"i\" ) ";
+				filter += " regex( ?decade" + decade_index + ", \"" + token
+						+ "\", \"i\" ) ";
 				firstFilter = false;
+				decade_index++;
 			}
 
 			/**
 			 * Verify if its a value
 			 */
 			// verify if its a NOTHING
-			else if (isClass == false && isProperty == false) {
+			else if (!isClass && !isProperty) {
+				isNothing = true;
 				System.out.println(token + " is nothing(value)");
 				if (firstNothing) {
 					nothing_filter = token;
@@ -262,161 +268,608 @@ public class Results {
 
 		}
 
-		// verify if its a genre and a class to know the best way to construct
-		// sparql query
-		if (isGenre && active_class.equals("artist")) {
-			// do nothing for now!
+		/**
+		 * here has finished reading all tokens!
+		 */
 
-		} else if (isGenre && active_class.equals("album")) {
-			where = " WHERE { ";
-			for (int i = 0; i < genre_index; i++) {
-				where += " ?other music:hasMainGenre ?genre" + i + ". ";
+		/**
+		 * Verify if its a genre or decade
+		 */
+		if (isGenre || isDecade) {
+			/**
+			 * Verify if its an artist, album or track
+			 */
+			// artist class
+			if (active_class.equals("artist")) {
+				// do nothing for now
 			}
-			where += " ?other rdf:type music:Artist. ";
-			where += " ?other music:producesAlbum ?s. ";
-			where += " ?s music:hasTitle ?value. ";
-			// String cenas =
-			// "SELECT ?s1 ?value   WHERE {  ?s music:hasMainGenre ?genre0.  ?s rdf:type music:Artist. "
-			// + "?s music:producesAlbum ?s1.  ?s1 music:hasTitle ?value.   "
-			// + "FILTER ( regex( ?genre0, \"rock\", \"i\" )  )  }";
 
-		} else if (isGenre && active_class.equals("track")) {
-			where = " WHERE { ";
-			for (int i = 0; i < genre_index; i++) {
-				where += " ?other music:hasMainGenre ?genre" + i + ". ";
+			// album class
+			else if (active_class.equals("album")) {
+				where = " WHERE { ";
+				for (int i = 0; i < genre_index; i++) {
+					where += " ?other music:hasMainGenre ?genre" + i + ". ";
+				}
+				for (int i = 0; i < decade_index; i++) {
+					where += " ?s music:hasDecade ?decade" + i + ". ";
+				}
+				if (isGenre) {
+					where += " ?other rdf:type music:Artist. ";
+					where += " ?other music:producesAlbum ?s. ";
+					where += " ?s music:hasTitle ?albumvalue. ";
+				} else if (isDecade) {
+					where += " ?s music:hasTitle ?albumvalue. ";
+				}
 			}
-			where += " ?other rdf:type music:Artist. ";
-			where += " ?other music:writesTrack ?s. ";
-			where += " ?s music:hasTitle ?value. ";
-			// String cenas =
-			// "SELECT ?s1 ?value   WHERE {  ?s music:hasMainGenre ?genre0.  ?s rdf:type music:Artist. "
-			// + "?s music:producesAlbum ?s1.  ?s1 music:hasTitle ?value.   "
-			// + "FILTER ( regex( ?genre0, \"rock\", \"i\" )  )  }";
+
+			// track class
+			else if (active_class.equals("track")) {
+				where = " WHERE { ";
+				for (int i = 0; i < genre_index; i++) {
+					where += " ?other music:hasMainGenre ?genre" + i + ". ";
+				}
+				for (int i = 0; i < decade_index; i++) {
+					where += " ?other music:hasDecade ?decade" + i + ". ";
+				}
+				if (isGenre) {
+					where += " ?other rdf:type music:Artist. ";
+					where += " ?other music:writesTrack ?s. ";
+					where += " ?s music:hasTitle ?trackvalue. ";
+				} else if (isDecade) {
+					where += " ?other rdf:type music:Album. ";
+					where += " ?other music:hasTrack ?s. ";
+					where += " ?s music:hasTitle ?trackvalue. ";
+				}
+			}
+
+			// no classes associated
+			else {
+				System.out
+						.println("perform 3 queries!! all classes. but look for nothing content too.");
+				allClassSearch = true;
+
+				// reset
+				String temp_where = "";
+				String temp_select = "";
+				String temp_filter = "";
+				String temp_query = "";
+
+				// prepare artists query
+				temp_where = " WHERE { ";
+				for (int i = 0; i < genre_index; i++) {
+					temp_where += " ?s music:hasMainGenre ?genre" + i + ". ";
+				}
+				for (int i = 0; i < decade_index; i++) {
+					temp_where += " ?s music:hasDecade ?decade" + i + ". ";
+				}
+				temp_where += " ?s rdf:type music:Artist. ";
+				temp_where += " ?s music:hasName ?artistvalue. ";
+				temp_select += " ?artistvalue ";
+
+				if (!nothing_filter.isEmpty()) {
+					if (!firstFilter) {
+						temp_filter += " && ";
+					}
+					temp_filter += " regex( ?artistvalue, \"" + nothing_filter
+							+ "\", \"i\" ) ";
+				}
+
+				temp_query = select + temp_select + temp_where + filter
+						+ temp_filter + " ) " + " } ";
+
+				System.out.println("added query: " + temp_query);
+				queriesToExecute.add(temp_query);
+
+				// reset
+				temp_where = "";
+				temp_select = "";
+				temp_filter = "";
+				temp_query = "";
+
+				// prepare albums query
+				temp_where = " WHERE { ";
+				for (int i = 0; i < genre_index; i++) {
+					temp_where += " ?other music:hasMainGenre ?genre" + i
+							+ ". ";
+				}
+				for (int i = 0; i < decade_index; i++) {
+					temp_where += " ?s music:hasDecade ?decade" + i + ". ";
+				}
+				temp_where += " ?other rdf:type music:Artist. ";
+				temp_where += " ?other music:producesAlbum ?s. ";
+				temp_where += " ?s rdf:type music:Album. ";
+				temp_where += " ?s music:hasTitle ?albumvalue. ";
+				temp_select += " ?albumvalue ";
+
+				if (!nothing_filter.isEmpty()) {
+					if (!firstFilter) {
+						temp_filter += " && ";
+					}
+					temp_filter += " regex( ?albumvalue, \"" + nothing_filter
+							+ "\", \"i\" ) ";
+				}
+
+				temp_query = select + temp_select + temp_where + filter
+						+ temp_filter + " ) " + " } ";
+
+				System.out.println("added query: " + temp_query);
+				queriesToExecute.add(temp_query);
+
+				// reset
+				temp_where = "";
+				temp_select = "";
+				temp_filter = "";
+				temp_query = "";
+
+				// prepare tracks query
+				temp_where = " WHERE { ";
+				for (int i = 0; i < genre_index; i++) {
+					temp_where += " ?other music:hasMainGenre ?genre" + i
+							+ ". ";
+				}
+				for (int i = 0; i < decade_index; i++) {
+					temp_where += " ?other music:hasDecade ?decade" + i + ". ";
+				}
+				if (isGenre) {
+					temp_where += " ?other rdf:type music:Artist. ";
+					temp_where += " ?other music:writesTrack ?s. ";
+					temp_where += " ?s rdf:type music:Track. ";
+					temp_where += " ?s music:hasTitle ?trackvalue. ";
+					temp_select += " ?trackvalue ";
+				} else if (isDecade) {
+					temp_where += " ?other rdf:type music:Album. ";
+					temp_where += " ?other music:hasTrack ?s. ";
+					temp_where += " ?s rdf:type music:Track. ";
+					temp_where += " ?s music:hasTitle ?trackvalue. ";
+					temp_select += " ?trackvalue ";
+				}
+
+				if (!nothing_filter.isEmpty()) {
+					if (!firstFilter) {
+						temp_filter += " && ";
+					}
+					temp_filter += " regex( ?trackvalue, \"" + nothing_filter
+							+ "\", \"i\" ) ";
+
+				}
+
+				temp_query = select + temp_select + temp_where + filter
+						+ temp_filter + " ) " + " } ";
+
+				System.out.println("added query: " + temp_query);
+				queriesToExecute.add(temp_query);
+			}
 		}
 
-		// if nothin contains some search text
+		/**
+		 * Verify if nothing variable has some value
+		 */
 		if (!nothing_filter.isEmpty()) {
-			if (!active_class.equals("artist") && !active_class.equals("album")
-					&& !active_class.equals("track")) {
-				// tem que procurar em todas as classes
-
-				// procura no artista
-				where += " ?s rdf:type music:Artist. ";
-				where += " ?s music:hasName ?artistvalue. ";
-				select += " ?artistvalue ";
-
+			/**
+			 * Verify if its an artist, album or track
+			 */
+			// artist class
+			if (active_class.equals("artist")) {
 				if (!firstFilter) {
 					filter += " && ";
 				}
 				filter += " regex( ?artistvalue, \"" + nothing_filter
 						+ "\", \"i\" ) ";
 				firstFilter = false;
+			}
 
-			} else {
+			// album class
+			else if (active_class.equals("album")) {
 				if (!firstFilter) {
 					filter += " && ";
 				}
-				if (active_class.equals("artist")) {
-					filter += " regex( ?artistvalue, \"" + nothing_filter
-							+ "\", \"i\" ) ";
-				} else if (active_class.equals("album")) {
-					filter += " regex( ?albumvalue, \"" + nothing_filter
-							+ "\", \"i\" ) ";
-				} else if (active_class.equals("track")) {
-					filter += " regex( ?trackvalue, \"" + nothing_filter
-							+ "\", \"i\" ) ";
-				}
+				filter += " regex( ?albumvalue, \"" + nothing_filter
+						+ "\", \"i\" ) ";
 				firstFilter = false;
 			}
+
+			// track class
+			else if (active_class.equals("track")) {
+				if (!firstFilter) {
+					filter += " && ";
+				}
+				filter += " regex( ?trackvalue, \"" + nothing_filter
+						+ "\", \"i\" ) ";
+				firstFilter = false;
+			}
+
+			// no classes associated
+			else {
+				System.out
+						.println("perform 3 queries!! all classes. check if nothing was already set earlier.");
+				if (allClassSearch == false) {
+					allClassSearch = true;
+
+					// reset
+					String temp_where = "";
+					String temp_select = "";
+					String temp_filter = "";
+					String temp_query = "";
+
+					// prepare artists query
+					temp_where += " ?s rdf:type music:Artist. ";
+					temp_where += " ?s music:hasName ?artistvalue. ";
+					temp_select += " ?artistvalue ";
+					if (!firstFilter) {
+						temp_filter += " && ";
+					}
+					temp_filter += " regex( ?artistvalue, \"" + nothing_filter
+							+ "\", \"i\" ) ";
+					temp_query = select + temp_select + where + temp_where
+							+ filter + temp_filter + " ) " + " } ";
+
+					System.out.println("added query: " + temp_query);
+					queriesToExecute.add(temp_query);
+
+					// reset
+					temp_where = "";
+					temp_select = "";
+					temp_filter = "";
+					temp_query = "";
+
+					// prepare albums query
+					temp_where += " ?s rdf:type music:Album. ";
+					temp_where += " ?s music:hasTitle ?albumvalue. ";
+					temp_select += " ?albumvalue ";
+					if (!firstFilter) {
+						temp_filter += " && ";
+					}
+					temp_filter += " regex( ?albumvalue, \"" + nothing_filter
+							+ "\", \"i\" ) ";
+					temp_query = select + temp_select + where + temp_where
+							+ filter + temp_filter + " ) " + " } ";
+
+					System.out.println("added query: " + temp_query);
+					queriesToExecute.add(temp_query);
+
+					// reset
+					temp_where = "";
+					temp_select = "";
+					temp_filter = "";
+					temp_query = "";
+
+					// prepare tracks query
+					temp_where += " ?s rdf:type music:Track. ";
+					temp_where += " ?s music:hasTitle ?trackvalue. ";
+					temp_select += " ?trackvalue ";
+					if (!firstFilter) {
+						temp_filter += " && ";
+					}
+					temp_filter += " regex( ?trackvalue, \"" + nothing_filter
+							+ "\", \"i\" ) ";
+					temp_query = select + temp_select + where + temp_where
+							+ filter + temp_filter + " ) " + " } ";
+
+					System.out.println("added query: " + temp_query);
+					queriesToExecute.add(temp_query);
+				}
+			}
 		}
+
+		// prepare final query
+		if (!allClassSearch) {
+			SPARQL_QUERY = select + where + filter + " ) " + " } ";
+			System.out.println("SPARQL QUERY: " + SPARQL_QUERY);
+			queriesToExecute.add(SPARQL_QUERY);
+		}
+
+		// verify if its a genre and a class to know the best way to construct
+		// sparql query
+		// if (isGenre && active_class.equals("artist")) {
+		// // do nothing for now!
+		//
+		// } else if (isGenre && active_class.equals("album")) {
+		// where = " WHERE { ";
+		// for (int i = 0; i < genre_index; i++) {
+		// where += " ?other music:hasMainGenre ?genre" + i + ". ";
+		// }
+		// where += " ?other rdf:type music:Artist. ";
+		// where += " ?other music:producesAlbum ?s. ";
+		// where += " ?s music:hasTitle ?albumvalue. ";
+		// // String cenas =
+		// //
+		// "SELECT ?s1 ?value   WHERE {  ?s music:hasMainGenre ?genre0.  ?s rdf:type music:Artist. "
+		// // + "?s music:producesAlbum ?s1.  ?s1 music:hasTitle ?value.   "
+		// // + "FILTER ( regex( ?genre0, \"rock\", \"i\" )  )  }";
+		//
+		// } else if (isGenre && active_class.equals("track")) {
+		// where = " WHERE { ";
+		// for (int i = 0; i < genre_index; i++) {
+		// where += " ?other music:hasMainGenre ?genre" + i + ". ";
+		// }
+		// where += " ?other rdf:type music:Artist. ";
+		// where += " ?other music:writesTrack ?s. ";
+		// where += " ?s music:hasTitle ?tarckvalue. ";
+		// // String cenas =
+		// //
+		// "SELECT ?s1 ?value   WHERE {  ?s music:hasMainGenre ?genre0.  ?s rdf:type music:Artist. "
+		// // + "?s music:producesAlbum ?s1.  ?s1 music:hasTitle ?value.   "
+		// // + "FILTER ( regex( ?genre0, \"rock\", \"i\" )  )  }";
+		// }
+
+		// if nothing contains some search text and its not genre or decade
+		// if (!nothing_filter.isEmpty() && (!isGenre || !isDecade)) {
+
+		// if has some text and is not associated to any class!
+		// if (!active_class.equals("artist") &&
+		// !active_class.equals("album")
+		// && !active_class.equals("track")) {
+		// // tem que procurar em todas as classes
+		//
+		// allClassSearch = true;
+		// String temp_where = "";
+		// String temp_select = "";
+		// String temp_filter = "";
+		// String temp_query = "";
+		//
+		// /**
+		// * Artists lookup
+		// */
+		// temp_where += " ?s rdf:type music:Artist. ";
+		// temp_where += " ?s music:hasName ?artistvalue. ";
+		// temp_select += " ?artistvalue ";
+		// if (!firstFilter) {
+		// temp_filter += " && ";
+		// }
+		// temp_filter += " regex( ?artistvalue, \"" + nothing_filter
+		// + "\", \"i\" ) ";
+		// // firstFilter = false;
+		//
+		// temp_query = select + temp_select + where + temp_where + filter
+		// + temp_filter + " ) " + " } ";
+		// System.out.println("added query: " + temp_query);
+		// queriesToExecute.add(temp_query);
+		//
+		// // reset temp vars
+		// temp_where = "";
+		// temp_select = "";
+		// temp_filter = "";
+		// temp_query = "";
+		//
+		// /**
+		// * Albums lookup
+		// */
+		// temp_where += " ?s rdf:type music:Album. ";
+		// temp_where += " ?s music:hasTitle ?albumvalue. ";
+		// temp_select += " ?albumvalue ";
+		// if (!firstFilter) {
+		// temp_filter += " && ";
+		// }
+		// temp_filter += " regex( ?albumvalue, \"" + nothing_filter
+		// + "\", \"i\" ) ";
+		// // firstFilter = false;
+		//
+		// temp_query = select + temp_select + where + temp_where + filter
+		// + temp_filter + " ) " + " } ";
+		// System.out.println("added query: " + temp_query);
+		// queriesToExecute.add(temp_query);
+		//
+		// // reset temp vars
+		// temp_where = "";
+		// temp_select = "";
+		// temp_filter = "";
+		// temp_query = "";
+		//
+		// /**
+		// * Tracks lookup
+		// */
+		// temp_where += " ?s rdf:type music:Track. ";
+		// temp_where += " ?s music:hasTitle ?trackvalue. ";
+		// temp_select += " ?trackvalue ";
+		// if (!firstFilter) {
+		// temp_filter += " && ";
+		// }
+		// temp_filter += " regex( ?trackvalue, \"" + nothing_filter
+		// + "\", \"i\" ) ";
+		// // firstFilter = false;
+		//
+		// temp_query = select + temp_select + where + temp_where + filter
+		// + temp_filter + " ) " + " } ";
+		// System.out.println("added query: " + temp_query);
+		// queriesToExecute.add(temp_query);
+		//
+		// }
+		// contains some text and is associated to a class
+		// else {
+		// if (!firstFilter) {
+		// filter += " && ";
+		// }
+		// if (active_class.equals("artist")) {
+		// if (!firstFilter) {
+		// filter += " && ";
+		// }
+		// filter += " regex( ?artistvalue, \"" + nothing_filter
+		// + "\", \"i\" ) ";
+		// firstFilter = false;
+		// } else if (active_class.equals("album")) {
+		// filter += " regex( ?albumvalue, \"" + nothing_filter
+		// + "\", \"i\" ) ";
+		// } else if (active_class.equals("track")) {
+		// filter += " regex( ?trackvalue, \"" + nothing_filter
+		// + "\", \"i\" ) ";
+		// }
+		// firstFilter = false;
+		// }
+		// }
+
+		// if nothing contains something and is genre or decade
+		// else if (isGenre || isDecade) {
+		//
+		// System.out
+		// .println("got some nothing text, no class associated, and has genre or decade. perform 3 queries.");
+		// allClassSearch = true;
+		// String temp_where = "";
+		// String temp_select = "";
+		// String temp_filter = "";
+		// String temp_query = "";
+		//
+		// /**
+		// * Artists lookup
+		// */
+		// temp_where += " ?s rdf:type music:Artist. ";
+		// temp_where += " ?s music:hasName ?artistvalue. ";
+		// temp_select += " ?artistvalue ";
+		// if (!firstFilter) {
+		// temp_filter += " && ";
+		// }
+		// temp_filter += " regex( ?artistvalue, \"" + nothing_filter
+		// + "\", \"i\" ) ";
+		// // firstFilter = false;
+		//
+		// temp_query = select + temp_select + where + temp_where + filter
+		// + temp_filter + " ) " + " } ";
+		// System.out.println("added query: " + temp_query);
+		// queriesToExecute.add(temp_query);
+		//
+		// // reset temp vars
+		// temp_where = "";
+		// temp_select = "";
+		// temp_filter = "";
+		// temp_query = "";
+		//
+		// /**
+		// * Albums lookup
+		// */
+		// temp_where += " ?s rdf:type music:Album. ";
+		// temp_where += " ?s music:hasTitle ?albumvalue. ";
+		// temp_select += " ?albumvalue ";
+		// if (!firstFilter) {
+		// temp_filter += " && ";
+		// }
+		// temp_filter += " regex( ?albumvalue, \"" + nothing_filter
+		// + "\", \"i\" ) ";
+		// // firstFilter = false;
+		//
+		// temp_query = select + temp_select + where + temp_where + filter
+		// + temp_filter + " ) " + " } ";
+		// System.out.println("added query: " + temp_query);
+		// queriesToExecute.add(temp_query);
+		//
+		// // reset temp vars
+		// temp_where = "";
+		// temp_select = "";
+		// temp_filter = "";
+		// temp_query = "";
+		//
+		// /**
+		// * Tracks lookup
+		// */
+		// temp_where += " ?s rdf:type music:Track. ";
+		// temp_where += " ?s music:hasTitle ?trackvalue. ";
+		// temp_select += " ?trackvalue ";
+		// if (!firstFilter) {
+		// temp_filter += " && ";
+		// }
+		// temp_filter += " regex( ?trackvalue, \"" + nothing_filter
+		// + "\", \"i\" ) ";
+		// // firstFilter = false;
+		//
+		// temp_query = select + temp_select + where + temp_where + filter
+		// + temp_filter + " ) " + " } ";
+		// System.out.println("added query: " + temp_query);
+		// queriesToExecute.add(temp_query);
+		// }
 
 		// nothing string is empty
-		else {
-			// no class associated and one or various genres associated
-			if (active_class.equals("") && isGenre) {
-				// procura no artista
-				where += " ?s rdf:type music:Artist. ";
-				where += " ?s music:hasName ?value. ";
-				select += " ?value ";
-			} else if (active_class.equals("") && isDecade) {
-				// procura no artista
-				where += " ?s rdf:type music:Artist. ";
-				where += " ?s music:hasName ?value. ";
-				select += " ?value ";
-			}
+		// else {
+		// // no class associated and one or various genres or decades
+		// // associated
+		// if (active_class.equals("") && isGenre) {
+		// // procura no artista
+		// where += " ?s rdf:type music:Artist. ";
+		// where += " ?s music:hasName ?artistvalue. ";
+		// select += " ?artistvalue ";
+		// } else if (active_class.equals("") && isDecade) {
+		// // procura no artista
+		// where += " ?s rdf:type music:Artist. ";
+		// where += " ?s music:hasName ?artistvalue. ";
+		// select += " ?artistvalue ";
+		// }
+		//
+		// }
 
-		}
+		// if (!allClassSearch) {
+		// SPARQL_QUERY = select + where + filter + " ) " + " } ";
+		// System.out.println("SPARQL QUERY: " + SPARQL_QUERY);
+		// queriesToExecute.add(SPARQL_QUERY);
+		// }
 
-		SPARQL_QUERY = select + where + filter + " ) " + " } ";
-
-		System.out.println("SPARQL QUERY: " + SPARQL_QUERY);
-
-		searchQuery = SPARQL_QUERY;
-
-		qe = queryDB(searchQuery);
-		results = qe.execSelect();
+		/**
+		 * Going to run all queries!
+		 */
 		temp = 0;
+		for (int i = 0; i < queriesToExecute.size(); i++) {
+			searchQuery = queriesToExecute.get(i);
+			qe = queryDB(searchQuery);
+			results = qe.execSelect();
 
-		while (results.hasNext()) {
-			// System.out.println("got results from the query!");
-			QuerySolution binding = results.nextSolution();
-			boolean isArtistResult = false;
-			boolean isAlbumResult = false;
-			boolean isTrackResult = false;
+			/**
+			 * For each query!
+			 */
+			while (results.hasNext()) {
+				// System.out.println("got results from the query!");
+				QuerySolution binding = results.nextSolution();
+				boolean isArtistResult = false;
+				boolean isAlbumResult = false;
+				boolean isTrackResult = false;
 
-			String temp_id = binding.get("s").toString();
+				String temp_id = binding.get("s").toString();
+				String temp_value = "";
 
-			String temp_artist_name = "";
+				try {
+					temp_value = binding.get("artistvalue").toString();
+					isArtistResult = true;
+					// System.out.println("read artistvalue" + temp_value);
+				} catch (Exception e) {
+					// e.printStackTrace();
+				}
+				try {
+					temp_value = binding.get("albumvalue").toString();
+					isAlbumResult = true;
+					// System.out.println("read albumvalue" + temp_value);
+				} catch (Exception e) {
+					// e.printStackTrace();
+				}
+				try {
+					temp_value = binding.get("trackvalue").toString();
+					isTrackResult = true;
+					// System.out.println("read trackvalue" + temp_value);
+				} catch (Exception e) {
+					// e.printStackTrace();
+				}
 
-			try {
-				temp_artist_name = binding.get("artistvalue").toString();
-				isArtistResult = true;
-				System.out.println("read artistvalue" + temp_artist_name);
-			} catch (Exception e) {
-				// e.printStackTrace();
+				// System.out.println("temp_value: \"" + temp_value + "\"");
+				// System.out.println("loaded result: id:"+ temp_artist_id +
+				// " # name:"+temp_artist_name);
+
+				SemanticResult sresult = new SemanticResult();
+				if (isArtistResult) {
+					// System.out.println("storing artist data");
+					sresult.setResource_name("a" + cleanLiteral(temp_value));
+					sresult.setResource_url("MusicController?artistid="
+							+ cleanId(temp_id));
+				} else if (isAlbumResult) {
+					// System.out.println("storing album data");
+					sresult.setResource_name("b" + cleanLiteral(temp_value));
+					sresult.setResource_url("MusicController?albumid="
+							+ cleanId(temp_id));
+				} else if (isTrackResult) {
+					// System.out.println("storing track data");
+					sresult.setResource_name("c" + cleanLiteral(temp_value));
+					sresult.setResource_url("MusicController?trackid="
+							+ cleanId(temp_id));
+				}
+
+				temp++; // incremente o contador do nr de resultados
+				// encontrados
+				mybean.addToSemanticArray(sresult);
 			}
-			try {
-				temp_artist_name = binding.get("albumvalue").toString();
-				isAlbumResult = true;
-				System.out.println("read albumvalue" + temp_artist_name);
-			} catch (Exception e) {
-				// e.printStackTrace();
-			}
-			try {
-				temp_artist_name = binding.get("trackvalue").toString();
-				isTrackResult = true;
-				System.out.println("read trackvalue" + temp_artist_name);
-			} catch (Exception e) {
-				// e.printStackTrace();
-			}
-
-			System.out.println("temp_name: \"" + temp_artist_name + "\"");
-			// System.out.println("loaded result: id:"+ temp_artist_id +
-			// " # name:"+temp_artist_name);
-
-			SemanticResult sresult = new SemanticResult();
-			if (isArtistResult) {
-				System.out.println("storing artist data");
-				sresult.setResource_name("a" + cleanLiteral(temp_artist_name));
-				sresult.setResource_url("MusicController?artistid="
-						+ cleanId(temp_id));
-			} else if (isAlbumResult) {
-				System.out.println("storing album data");
-				sresult.setResource_name("b" + cleanLiteral(temp_artist_name));
-				sresult.setResource_url("MusicController?albumid="
-						+ cleanId(temp_id));
-			} else if (isTrackResult) {
-				System.out.println("storing track data");
-				sresult.setResource_name("c" + cleanLiteral(temp_artist_name));
-				sresult.setResource_url("MusicController?trackid="
-						+ cleanId(temp_id));
-			}
-
-			temp++; // incremente o contador do nr de resultados
-			// encontrados
-			mybean.addToSemanticArray(sresult);
 		}
-
 		mybean.setPageType("semantic_search_page");
 		mybean.setOption(query);
 		mybean.setNumberItems(temp);
