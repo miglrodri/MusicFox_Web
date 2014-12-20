@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -75,7 +76,7 @@ public class searchController extends HttpServlet {
 			System.out.println("\\ALL : search: "+ search);
 			
 			JavaBean bean = Results.search(null, q);
-	
+			
 			request.setAttribute("mybean", bean);
 			//System.out.println(bean.getNumberItems()+" "+query.get("query")[0]);
 		}
