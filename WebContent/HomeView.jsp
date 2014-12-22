@@ -42,6 +42,111 @@
 	text-align: left;
 }
 </style>
+<!-- Cookie -->
+<script type="text/javascript" >
+
+	if(getCookie("tracking") === ""){
+		var trackingJSON = {
+			genre: {
+				
+			},
+			decade: {
+				
+			},
+			artist: {
+				
+			},
+			album: {
+				
+			},
+			track:  {
+				
+			}
+		}	
+	}
+	else 
+		var trackingJSON = JSON.parse(getCookie("tracking"));
+	
+	String.prototype.hashCode = function() {
+		  var hash = 0, i, chr, len;
+		  if (this.length == 0) return hash;
+		  for (i = 0, len = this.length; i < len; i++) {
+		    chr   = this.charCodeAt(i);
+		    hash  = ((hash << 5) - hash) + chr;
+		    hash |= 0; // Convert to 32bit integer
+		  }
+		  return hash;
+		};
+	
+	function getCookie(cname) {
+	    var name = cname + "=";
+	    var ca = document.cookie.split(';');
+	    for(var i=0; i<ca.length; i++) {
+	        var c = ca[i];
+	        while (c.charAt(0)==' ') c = c.substring(1);
+	        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+	    }
+	    return "";
+	}
+	
+	function setCookie(cname, cvalue, exdays) {
+	    var d = new Date();
+	    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+	    var expires = "expires="+d.toUTCString();
+	    document.cookie = cname + "=" + cvalue + "; " + expires;
+	}
+	
+	function setAlbum(id) {
+		//var id = _id.hash();
+		var t = trackingJSON.album[id];
+		if(t === undefined)
+			trackingJSON.album[id] = 1;
+		else
+			trackingJSON.album[id] = t+1;
+		setCookie("tracking",JSON.stringify(trackingJSON),1);
+	}
+
+	function setTrack(id) {
+		//var id = _id.hash();
+		var t = trackingJSON.track[id];
+		if(t === undefined)
+			trackingJSON.track[id] = 1;
+		else
+			trackingJSON.track[id] = t+1;
+		setCookie("tracking",JSON.stringify(trackingJSON),1);
+	}
+	
+	function setArtist(id) {
+		//var id = _id.hash();
+		//console.log(_id.replace("-", '_'));
+		var t = trackingJSON.artist[id];
+		if( t === undefined)
+			trackingJSON.artist[id] = 1;
+		else
+			trackingJSON.artist[id] = t+1;
+		setCookie("tracking",JSON.stringify(trackingJSON),1);
+	}
+	
+	function setGenre(g) {
+		var t = trackingJSON.genre[g];
+		if(t === undefined)
+			trackingJSON.genre[g] = 1;
+		else
+			trackingJSON.genre[g] = t+1;
+		setCookie("tracking",JSON.stringify(trackingJSON),1);
+	}
+	
+	function setDecade(d) {
+		var t = trackingJSON.decade[d];
+		if (t === undefined)
+			trackingJSON.decade[d] = 1;
+		else
+			trackingJSON.decade[d] = t+1;
+		setCookie("tracking",JSON.stringify(trackingJSON),1);
+	}
+	
+	
+	</script>
 </head>
 
 <body>
@@ -96,27 +201,27 @@
 
 				<h3>Genres</h3>
 				<ul class="nav nav-sidebar">
-					<li><a href="MusicController?genre=Blues">Blues <span class="badge">24</span></a></li>
-					<li><a href="MusicController?genre=Country">Country <span class="badge">31</span></a></li>
-					<li><a href="MusicController?genre=Electronica">Electronica <span class="badge">34</span></a></li>
+					<li><a href="MusicController?genre=Blues" onclick="setGenre('Blues')">Blues <span class="badge">24</span></a></li>
+					<li><a href="MusicController?genre=Country" onclick="setGenre('Country')">Country <span class="badge">31</span></a></li>
+					<li><a href="MusicController?genre=Electronica" onclick="setGenre('Electronica')">Electronica <span class="badge">34</span></a></li>
 					<!-- <li><a href="?genre=International">International</a></li> -->
-					<li><a href="MusicController?genre=Jazz">Jazz <span class="badge">59</span></a></li>
-					<li><a href="MusicController?genre=Pop">Pop <span class="badge">51</span></a></li>
-					<li><a href="MusicController?genre=Rock">Rock <span class="badge">32</span></a></li>
-					<li><a href="MusicController?genre=RnB">RnB <span class="badge">46</span></a></li>
-					<li><a href="MusicController?genre=Rap">Rap <span class="badge">51</span></a></li>
-					<li><a href="MusicController?genre=Reggae">Reggae <span class="badge">41</span></a></li>
-					<li><a href="MusicController?genre=Soul">Soul <span class="badge">46</span></a></li>
+					<li><a href="MusicController?genre=Jazz" onclick="setGenre('Jazz')">Jazz <span class="badge">59</span></a></li>
+					<li><a href="MusicController?genre=Pop" onclick="setGenre('Pop')">Pop <span class="badge">51</span></a></li>
+					<li><a href="MusicController?genre=Rock" onclick="setGenre('Rock')">Rock <span class="badge">32</span></a></li>
+					<li><a href="MusicController?genre=RnB" onclick="setGenre('RnB')">RnB <span class="badge">46</span></a></li>
+					<li><a href="MusicController?genre=Rap" onclick="setGenre('Rap')">Rap <span class="badge">51</span></a></li>
+					<li><a href="MusicController?genre=Reggae" onclick="setGenre('Reggae')">Reggae <span class="badge">41</span></a></li>
+					<li><a href="MusicController?genre=Soul" onclick="setGenre('Soul')">Soul <span class="badge">46</span></a></li>
 					
 				</ul>
 
 				<h3>Decades</h3>
 				<ul class="nav nav-sidebar">
-					<li><a href="MusicController?decade=1970">1970 <span class="badge">121</span></a></li>
-					<li><a href="MusicController?decade=1980">1980 <span class="badge">153</span></a></li>
-					<li><a href="MusicController?decade=1990">1990 <span class="badge">232</span></a></li>
-					<li><a href="MusicController?decade=2000">2000 <span class="badge">318</span></a></li>
-					<li><a href="MusicController?decade=2010">2010 <span class="badge">244</span></a></li>
+					<li><a href="MusicController?decade=1970" onclick="setDecade(1970)">1970 <span class="badge">121</span></a></li>
+					<li><a href="MusicController?decade=1980" onclick="setDecade(1980)">1980 <span class="badge">153</span></a></li>
+					<li><a href="MusicController?decade=1990" onclick="setDecade(1990)">1990 <span class="badge">232</span></a></li>
+					<li><a href="MusicController?decade=2000" onclick="setDecade(2000)">2000 <span class="badge">318</span></a></li>
+					<li><a href="MusicController?decade=2010" onclick="setDecade(2010)">2010 <span class="badge">244</span></a></li>
 				</ul>
 
 			</div>
@@ -306,7 +411,7 @@
 							<tr>
 								<td><%=temp_albumtitle%></td>
 								<td><a
-									href="MusicController<%="?albumid=" + temp_albumid%>"
+									href="MusicController<%="?albumid=" + temp_albumid%>" onclick="setAlbum('<%=temp_albumid%>)'"
 									class="btn btn-default" role="button">More info</a></td>
 							</tr>
 							<%
@@ -332,7 +437,7 @@
 						<ol class="breadcrumb">
 							<li><a href="HomeView.jsp">Home</a></li>
 							<li><a
-								href="MusicController?artistid=<%=temp_albumartistid%>">Artist:
+								href="MusicController?artistid=<%=temp_albumartistid%>" onclick="setArtist('<%=temp_albumartistid%>')">Artist:
 									<%=temp_albumartistname%></a></li>
 							<li class="active">Album: <%=temp_albumtitle%></li>
 						</ol>
@@ -380,7 +485,7 @@
 								<td><%=temp_trackindex%></td>
 								<td><%=temp_tracktitle%></td>
 								<td><a
-									href="MusicController<%="?trackid=" + temp_trackid%>"
+									href="MusicController<%="?trackid=" + temp_trackid%>" onclick="setTrack('<%=temp_trackid%>')"
 									class="btn btn-default" role="button">More info</a></td>
 
 							</tr>
@@ -407,9 +512,9 @@
 						<ol class="breadcrumb">
 							<li><a href="HomeView.jsp">Home</a></li>
 							<li><a
-								href="MusicController?artistid=<%=temp_trackartistid%>">Artist:
+								href="MusicController?artistid=<%=temp_trackartistid%>" onclick="setArtist('<%=temp_trackartistid%>')">Artist:
 									<%=temp_trackartistname%></a></li>
-							<li><a href="MusicController?albumid=<%=temp_trackalbumid%>">Album:
+							<li><a href="MusicController?albumid=<%=temp_trackalbumid%>" onclick="setAlbum('<%=temp_trackalbumid%>')">Album:
 									<%=temp_trackalbumname%></a></li>
 							<li class="active">Track: <%=temp_tracktitle%></li>
 						</ol>
@@ -445,11 +550,11 @@
 						%>
 
 						<div class="col-xs-6 col-md-3 thumbnail" style="height: 200px">
-							<a href="MusicController<%="?artistid=" + artist_id%>"> <img class="cover" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxANDQwKCBANCAwIDQwICQgICBsIDQgKFB0WFhQRExMkKCggGBolGxMTITEhJSkrLi4yFx8zODMsNygtLisBCgoKBQUFDgUFDisZExkrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAHgAeAMBIgACEQEDEQH/xAAZAAEAAwEBAAAAAAAAAAAAAAAAAgMEAQf/xAAlEAEAAQEJAAIDAQAAAAAAAAAAAQIDERIhMUFRcZGhwTJhsRP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9bAAAASoov8AuUWiiLo+Qc/yjtGbHj5WgM80TGyLUrtqN421BSAAAAAAAAABGsdtTNTrHcNIAAB9gDLMDtesuAAAAAAAAA7TrHcNLLGsfrNqAAAABmr1ntx2rWe3AAAAAAAAAF9lVfHWShKzqunvIGgAByuq6L/HWauq/XbQHAAAAAAAAAACBKzpvn+g0AAMs6y1KLWm6b9pBAAAAAAAFlFlf+WQK4jjNZFlO+XytiLtHQVxZRvn8LIi7TIAAAAAQmyjrpCbHjP9aLgGWYu1yGqYv1U12W9PgKwAWWNN83zt/VyFjGXaYAAAAAAAAAAAAKbem7ONxO206kAs5i6NPUsUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AI2kxdOceugD//Z"
+							<a href="MusicController<%="?artistid=" + artist_id%>" onclick="setArtist('<%=artist_id%>')"> <img class="cover" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxANDQwKCBANCAwIDQwICQgICBsIDQgKFB0WFhQRExMkKCggGBolGxMTITEhJSkrLi4yFx8zODMsNygtLisBCgoKBQUFDgUFDisZExkrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAHgAeAMBIgACEQEDEQH/xAAZAAEAAwEBAAAAAAAAAAAAAAAAAgMEAQf/xAAlEAEAAQEJAAIDAQAAAAAAAAAAAQIDERIhMUFRcZGhwTJhsRP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9bAAAASoov8AuUWiiLo+Qc/yjtGbHj5WgM80TGyLUrtqN421BSAAAAAAAAABGsdtTNTrHcNIAAB9gDLMDtesuAAAAAAAAA7TrHcNLLGsfrNqAAAABmr1ntx2rWe3AAAAAAAAAF9lVfHWShKzqunvIGgAByuq6L/HWauq/XbQHAAAAAAAAAACBKzpvn+g0AAMs6y1KLWm6b9pBAAAAAAAFlFlf+WQK4jjNZFlO+XytiLtHQVxZRvn8LIi7TIAAAAAQmyjrpCbHjP9aLgGWYu1yGqYv1U12W9PgKwAWWNN83zt/VyFjGXaYAAAAAAAAAAAAKbem7ONxO206kAs5i6NPUsUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AI2kxdOceugD//Z"
 								style="height: 100px;" alt="<%= artist_name %>">
 							</a>
 							<div class="caption" style="">
-								<h3><a href="MusicController<%="?artistid=" + artist_id%>"><%=artist_name%></a>
+								<h3><a href="MusicController<%="?artistid=" + artist_id%>" onclick="setArtist('<%=artist_id%>')"><%=artist_name%></a>
 								</h3>
 								<%--p>
 									<a href="MusicController<%="?artistid=" + artist_id%>"
@@ -482,13 +587,6 @@
 										//
 										// Implement ordem no array, para ficar com artists, albums e tracks
 										//
-
-										
-										/* TODO: ?x hasGenre country
-												?x rdf:type Artist
-												?x hasDecade ?s
-												FILTER REGEX(?s, "1980")
-										*/
 										
 										for (int i = 0; i < temp_array.size(); i++) {
 											String temp_resource_url = temp_array.get(i)
@@ -497,18 +595,24 @@
 													.getResource_name();
 											String class_label = "label_danger";
 											String label_name = "SOME";
+											String ref = "REF";
 											// verificar se é artista, album ou track e definir:
 											// class_label =
 											// label_name =
+											//TODO VERIFICAR ID'S
+											
 											if (temp_resource_name.charAt(0) == 'a') {
 												class_label = "label-default";
 												label_name = "ARTIST";
+												ref = "onclick=\"setArtist("+temp_resource_url+")\"";
 											} else if (temp_resource_name.charAt(0) == 'b') {
 												class_label = "label-info";
 												label_name = "ALBUM";
+												ref = "onclick=\"setAlbum("+temp_resource_url+")\"";
 											} else if (temp_resource_name.charAt(0) == 'c') {
 												class_label = "label-warning";
 												label_name = "TRACK";
+												ref = "onclick=\"setTrack("+temp_resource_url+")\"";
 											}
 							%>
 							<tr>
@@ -516,7 +620,7 @@
 									<%=temp_resource_name.substring(1,
 								temp_resource_name.length())%></td>
 								<td><a href="<%=temp_resource_url%>"
-									class="btn btn-default" role="button">More info</a></td>
+									class="btn btn-default" role="button" <%=ref%>>More info</a></td>
 
 
 							</tr>
