@@ -43,7 +43,7 @@
 }
 </style>
 <!-- Cookie -->
-<script type="text/javascript" >
+<script type="text/javascript">
 
 	if(getCookie("tracking") === ""){
 		var trackingJSON = {
@@ -174,19 +174,19 @@
 					class="navbar-form navbar-left" role="search">
 					<div class="input-group">
 						<input type="text" class="form-control" name="query"
-							placeholder="Search">
-					
-					<span class="input-group-btn">
-						<button type="submit" class="btn btn-default">Submit</button>
-					</span>
+							placeholder="Search"> <span class="input-group-btn">
+							<button type="submit" class="btn btn-default">Submit</button>
+						</span>
 					</div>
-					<span class="glyphicon glyphicon-info-sign" data-placement="bottom" data-toggle="popover" id="example"></span>
+					<span class="glyphicon glyphicon-info-sign" data-placement="bottom"
+						data-toggle="popover" id="example"></span>
 				</form>
-				
-					
+
+
 				<ul class="nav navbar-nav navbar-right">
 
-					<li><p class="navbar-text">by Luís Jerónimo &amp; Miguel Jesus</p></li>
+					<li><p class="navbar-text">by Luís Jerónimo &amp; Miguel
+							Jesus</p></li>
 
 				</ul>
 			</div>
@@ -201,27 +201,43 @@
 
 				<h3>Genres</h3>
 				<ul class="nav nav-sidebar">
-					<li><a href="MusicController?genre=Blues" onclick="setGenre('Blues')">Blues <span class="badge">24</span></a></li>
-					<li><a href="MusicController?genre=Country" onclick="setGenre('Country')">Country <span class="badge">31</span></a></li>
-					<li><a href="MusicController?genre=Electronica" onclick="setGenre('Electronica')">Electronica <span class="badge">34</span></a></li>
+					<li><a href="MusicController?genre=Blues"
+						onclick="setGenre('Blues')">Blues <span class="badge">24</span></a></li>
+					<li><a href="MusicController?genre=Country"
+						onclick="setGenre('Country')">Country <span class="badge">31</span></a></li>
+					<li><a href="MusicController?genre=Electronica"
+						onclick="setGenre('Electronica')">Electronica <span
+							class="badge">34</span></a></li>
 					<!-- <li><a href="?genre=International">International</a></li> -->
-					<li><a href="MusicController?genre=Jazz" onclick="setGenre('Jazz')">Jazz <span class="badge">59</span></a></li>
-					<li><a href="MusicController?genre=Pop" onclick="setGenre('Pop')">Pop <span class="badge">51</span></a></li>
-					<li><a href="MusicController?genre=Rock" onclick="setGenre('Rock')">Rock <span class="badge">32</span></a></li>
-					<li><a href="MusicController?genre=RnB" onclick="setGenre('RnB')">RnB <span class="badge">46</span></a></li>
-					<li><a href="MusicController?genre=Rap" onclick="setGenre('Rap')">Rap <span class="badge">51</span></a></li>
-					<li><a href="MusicController?genre=Reggae" onclick="setGenre('Reggae')">Reggae <span class="badge">41</span></a></li>
-					<li><a href="MusicController?genre=Soul" onclick="setGenre('Soul')">Soul <span class="badge">46</span></a></li>
-					
+					<li><a href="MusicController?genre=Jazz"
+						onclick="setGenre('Jazz')">Jazz <span class="badge">59</span></a></li>
+					<li><a href="MusicController?genre=Pop"
+						onclick="setGenre('Pop')">Pop <span class="badge">51</span></a></li>
+					<li><a href="MusicController?genre=Rock"
+						onclick="setGenre('Rock')">Rock <span class="badge">32</span></a></li>
+					<li><a href="MusicController?genre=RnB"
+						onclick="setGenre('RnB')">RnB <span class="badge">46</span></a></li>
+					<li><a href="MusicController?genre=Rap"
+						onclick="setGenre('Rap')">Rap <span class="badge">51</span></a></li>
+					<li><a href="MusicController?genre=Reggae"
+						onclick="setGenre('Reggae')">Reggae <span class="badge">41</span></a></li>
+					<li><a href="MusicController?genre=Soul"
+						onclick="setGenre('Soul')">Soul <span class="badge">46</span></a></li>
+
 				</ul>
 
 				<h3>Decades</h3>
 				<ul class="nav nav-sidebar">
-					<li><a href="MusicController?decade=1970" onclick="setDecade(1970)">1970 <span class="badge">121</span></a></li>
-					<li><a href="MusicController?decade=1980" onclick="setDecade(1980)">1980 <span class="badge">153</span></a></li>
-					<li><a href="MusicController?decade=1990" onclick="setDecade(1990)">1990 <span class="badge">232</span></a></li>
-					<li><a href="MusicController?decade=2000" onclick="setDecade(2000)">2000 <span class="badge">318</span></a></li>
-					<li><a href="MusicController?decade=2010" onclick="setDecade(2010)">2010 <span class="badge">244</span></a></li>
+					<li><a href="MusicController?decade=1970"
+						onclick="setDecade(1970)">1970 <span class="badge">121</span></a></li>
+					<li><a href="MusicController?decade=1980"
+						onclick="setDecade(1980)">1980 <span class="badge">153</span></a></li>
+					<li><a href="MusicController?decade=1990"
+						onclick="setDecade(1990)">1990 <span class="badge">232</span></a></li>
+					<li><a href="MusicController?decade=2000"
+						onclick="setDecade(2000)">2000 <span class="badge">318</span></a></li>
+					<li><a href="MusicController?decade=2010"
+						onclick="setDecade(2010)">2010 <span class="badge">244</span></a></li>
 				</ul>
 
 			</div>
@@ -232,12 +248,12 @@
 
 				<%
 					if (mybean.getPageType() != null
-							&& (mybean.getPageType().equals("artist_page")
-									|| mybean.getPageType().equals("album_page") || mybean
-									.getPageType().equals("track_page"))) {
-						// para já nada
-					} else if (mybean.getPageType() != null
-							&& mybean.getPageType().equals("semantic_search_page")) {
+											&& (mybean.getPageType().equals("artist_page")
+													|| mybean.getPageType().equals("album_page") || mybean
+													.getPageType().equals("track_page"))) {
+										// para já nada
+									} else if (mybean.getPageType() != null
+											&& mybean.getPageType().equals("semantic_search_page")) {
 				%>
 				<h3 class="page-header">
 					Search:
@@ -246,7 +262,7 @@
 				</h3>
 				<%
 					} else if (mybean.getPageType() != null
-							&& mybean.getPageType().equals("artist_list_page")) {
+											&& mybean.getPageType().equals("artist_list_page")) {
 				%>
 				<h3 class="page-header">
 					Artists:
@@ -262,12 +278,12 @@
 						<p>Navigate through our Artists, Albums and Tracks database.</p>
 						<p>
 							<a class="btn btn-primary btn-lg"
-								href="MusicController?genre=rock" role="button">See some
-								Rock artists right away!</a>
+								href="MusicController?genre=rock" onclick="setGenre('Rock')"
+								role="button">See some Rock artists right away!</a>
 						</p>
 					</div>
 				</div>
-				
+
 
 				<%
 					}
@@ -279,23 +295,23 @@
 
 						<%
 							if (mybean.getPageType() != null
-									&& mybean.getPageType().equals("artist_page")) {
-								Artist temp_artist = mybean.getArtistsArray().get(0);
+										&& mybean.getPageType().equals("artist_page")) {
+									Artist temp_artist = mybean.getArtistsArray().get(0);
 
-								String temp_artistname = temp_artist.getName();
-								String temp_artistgenre = temp_artist.getMainGenre();
-								String temp_artistdecade = temp_artist.getDecade();
-								String temp_artistgender = temp_artist.getGender();
-								String temp_artistvevourl = temp_artist.getVevoUrl();
-								int temp_artistvevolm = temp_artist.getVevoViewsLastMonth();
-								int temp_artistvevotviews = temp_artist.getVevoViewsTotal();
-								String temp_artistturl = temp_artist.getTwitterUrl();
-								int temp_artisttfoll = temp_artist.getTwitterFollowers();
-								String temp_artistfburl = temp_artist.getFacebookUrl();
-								int temp_artistfbpta = temp_artist
-										.getFacebookPeopleTalkingAbout();
-								int temp_artistfblikes = temp_artist.getFacebookLikes();
-						%>
+									String temp_artistname = temp_artist.getName();
+									String temp_artistgenre = temp_artist.getMainGenre();
+									String temp_artistdecade = temp_artist.getDecade();
+									String temp_artistgender = temp_artist.getGender();
+									String temp_artistvevourl = temp_artist.getVevoUrl();
+									int temp_artistvevolm = temp_artist.getVevoViewsLastMonth();
+									int temp_artistvevotviews = temp_artist.getVevoViewsTotal();
+									String temp_artistturl = temp_artist.getTwitterUrl();
+									int temp_artisttfoll = temp_artist.getTwitterFollowers();
+									String temp_artistfburl = temp_artist.getFacebookUrl();
+									int temp_artistfbpta = temp_artist
+											.getFacebookPeopleTalkingAbout();
+									int temp_artistfblikes = temp_artist.getFacebookLikes();
+%>
 
 						<ol class="breadcrumb">
 							<li><a href="HomeView.jsp">Home</a></li>
@@ -303,11 +319,13 @@
 						</ol>
 
 						<div class="page-header">
-							<img class="cover-large" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxANDQwKCBANCAwIDQwICQgICBsIDQgKFB0WFhQRExMkKCggGBolGxMTITEhJSkrLi4yFx8zODMsNygtLisBCgoKBQUFDgUFDisZExkrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAHgAeAMBIgACEQEDEQH/xAAZAAEAAwEBAAAAAAAAAAAAAAAAAgMEAQf/xAAlEAEAAQEJAAIDAQAAAAAAAAAAAQIDERIhMUFRcZGhwTJhsRP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9bAAAASoov8AuUWiiLo+Qc/yjtGbHj5WgM80TGyLUrtqN421BSAAAAAAAAABGsdtTNTrHcNIAAB9gDLMDtesuAAAAAAAAA7TrHcNLLGsfrNqAAAABmr1ntx2rWe3AAAAAAAAAF9lVfHWShKzqunvIGgAByuq6L/HWauq/XbQHAAAAAAAAAACBKzpvn+g0AAMs6y1KLWm6b9pBAAAAAAAFlFlf+WQK4jjNZFlO+XytiLtHQVxZRvn8LIi7TIAAAAAQmyjrpCbHjP9aLgGWYu1yGqYv1U12W9PgKwAWWNN83zt/VyFjGXaYAAAAAAAAAAAAKbem7ONxO206kAs5i6NPUsUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AI2kxdOceugD//Z"
-								style="height: 250px; " alt="<%= temp_artistname %>">
-								
-								<h2>
-								<%= temp_artistname %> <small><%= temp_artistgenre %></small>
+							<img class="cover-large"
+								src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxANDQwKCBANCAwIDQwICQgICBsIDQgKFB0WFhQRExMkKCggGBolGxMTITEhJSkrLi4yFx8zODMsNygtLisBCgoKBQUFDgUFDisZExkrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAHgAeAMBIgACEQEDEQH/xAAZAAEAAwEBAAAAAAAAAAAAAAAAAgMEAQf/xAAlEAEAAQEJAAIDAQAAAAAAAAAAAQIDERIhMUFRcZGhwTJhsRP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9bAAAASoov8AuUWiiLo+Qc/yjtGbHj5WgM80TGyLUrtqN421BSAAAAAAAAABGsdtTNTrHcNIAAB9gDLMDtesuAAAAAAAAA7TrHcNLLGsfrNqAAAABmr1ntx2rWe3AAAAAAAAAF9lVfHWShKzqunvIGgAByuq6L/HWauq/XbQHAAAAAAAAAACBKzpvn+g0AAMs6y1KLWm6b9pBAAAAAAAFlFlf+WQK4jjNZFlO+XytiLtHQVxZRvn8LIi7TIAAAAAQmyjrpCbHjP9aLgGWYu1yGqYv1U12W9PgKwAWWNN83zt/VyFjGXaYAAAAAAAAAAAAKbem7ONxO206kAs5i6NPUsUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AI2kxdOceugD//Z"
+								style="height: 250px;" alt="<%=temp_artistname%>">
+
+							<h2>
+								<%=temp_artistname%>
+								<small><%=temp_artistgenre%></small>
 							</h2>
 						</div>
 
@@ -351,7 +369,7 @@
 								<%
 									if (temp_artistturl != null && !temp_artistturl.equals("null")) {
 								%>
-								<td><a href="<%=temp_artistturl%>"  target="_blank"><%=temp_artistturl%></a></td>
+								<td><a href="<%=temp_artistturl%>" target="_blank"><%=temp_artistturl%></a></td>
 								<%
 									} else {
 								%>
@@ -403,16 +421,17 @@
 
 							<%
 								ArrayList<Album> temp_album_list = new ArrayList<Album>();
-									temp_album_list = temp_artist.getAlbumsArray();
-									for (int i = 0; i < temp_album_list.size(); i++) {
-										String temp_albumid = temp_album_list.get(i).getId();
-										String temp_albumtitle = temp_album_list.get(i).getTitle();
+																			temp_album_list = temp_artist.getAlbumsArray();
+																			for (int i = 0; i < temp_album_list.size(); i++) {
+																				String temp_albumid = temp_album_list.get(i).getId();
+																				String temp_albumtitle = temp_album_list.get(i).getTitle();
 							%>
 							<tr>
 								<td><%=temp_albumtitle%></td>
 								<td><a
-									href="MusicController<%="?albumid=" + temp_albumid%>" onclick="setAlbum('<%=temp_albumid%>)'"
-									class="btn btn-default" role="button">More info</a></td>
+									href="MusicController<%="?albumid=" + temp_albumid%>"
+									onclick="setAlbum('<%=temp_albumid%>)'" class="btn btn-default"
+									role="button">More info</a></td>
 							</tr>
 							<%
 								}
@@ -422,29 +441,30 @@
 
 						<%
 							} else if (mybean.getPageType() != null
-									&& mybean.getPageType().equals("album_page")) {
-								Album temp_album = mybean.getAlbum_information();
+																	&& mybean.getPageType().equals("album_page")) {
+																Album temp_album = mybean.getAlbum_information();
 
-								String temp_albumtitle = temp_album.getTitle();
-								String temp_albumid = temp_album.getId();
-								String temp_albumrelease = temp_album.getReleaseDate();
-								int temp_albumntracks = temp_album.getNumberOfTracks();
-								String temp_albumdecade = temp_album.getDecade();
-								String temp_albumartistid = temp_album.getArtistId();
-								String temp_albumartistname = temp_album.getArtistName();
+																String temp_albumtitle = temp_album.getTitle();
+																String temp_albumid = temp_album.getId();
+																String temp_albumrelease = temp_album.getReleaseDate();
+																int temp_albumntracks = temp_album.getNumberOfTracks();
+																String temp_albumdecade = temp_album.getDecade();
+																String temp_albumartistid = temp_album.getArtistId();
+																String temp_albumartistname = temp_album.getArtistName();
 						%>
 
 						<ol class="breadcrumb">
 							<li><a href="HomeView.jsp">Home</a></li>
 							<li><a
-								href="MusicController?artistid=<%=temp_albumartistid%>" onclick="setArtist('<%=temp_albumartistid%>')">Artist:
-									<%=temp_albumartistname%></a></li>
+								href="MusicController?artistid=<%=temp_albumartistid%>"
+								onclick="setArtist('<%=temp_albumartistid%>')">Artist: <%=temp_albumartistname%></a></li>
 							<li class="active">Album: <%=temp_albumtitle%></li>
 						</ol>
 
 						<div class="page-header">
 							<h2>
-								<%=temp_albumtitle%> <small>by <%=temp_albumartistname%></small>
+								<%=temp_albumtitle%>
+								<small>by <%=temp_albumartistname%></small>
 							</h2>
 						</div>
 
@@ -474,19 +494,20 @@
 
 							<%
 								ArrayList<Track> temp_track_list = new ArrayList<Track>();
-									temp_track_list = temp_album.getTracksArray();
-									for (int i = 0; i < temp_track_list.size(); i++) {
-										String temp_trackid = temp_track_list.get(i).getId();
-										String temp_tracktitle = temp_track_list.get(i).getTitle();
-										String temp_trackindex = temp_track_list.get(i)
-												.getTrackIndex();
+																			temp_track_list = temp_album.getTracksArray();
+																			for (int i = 0; i < temp_track_list.size(); i++) {
+																				String temp_trackid = temp_track_list.get(i).getId();
+																				String temp_tracktitle = temp_track_list.get(i).getTitle();
+																				String temp_trackindex = temp_track_list.get(i)
+																						.getTrackIndex();
 							%>
 							<tr>
 								<td><%=temp_trackindex%></td>
 								<td><%=temp_tracktitle%></td>
 								<td><a
-									href="MusicController<%="?trackid=" + temp_trackid%>" onclick="setTrack('<%=temp_trackid%>')"
-									class="btn btn-default" role="button">More info</a></td>
+									href="MusicController<%="?trackid=" + temp_trackid%>"
+									onclick="setTrack('<%=temp_trackid%>')" class="btn btn-default"
+									role="button">More info</a></td>
 
 							</tr>
 							<%
@@ -497,31 +518,32 @@
 						<%
 							}
 
-							else if (mybean.getPageType() != null
-									&& mybean.getPageType().equals("track_page")) {
-								Track temp_track = mybean.getTrack_information();
+															else if (mybean.getPageType() != null
+																	&& mybean.getPageType().equals("track_page")) {
+																Track temp_track = mybean.getTrack_information();
 
-								String temp_tracktitle = temp_track.getTitle();
-								String temp_trackindex = temp_track.getTrackIndex();
-								String temp_trackduration = temp_track.getDuration();
-								String temp_trackartistid = temp_track.getArtistId();
-								String temp_trackartistname = temp_track.getArtistName();
-								String temp_trackalbumid = temp_track.getAlbumId();
-								String temp_trackalbumname = temp_track.getAlbumName();
+																String temp_tracktitle = temp_track.getTitle();
+																String temp_trackindex = temp_track.getTrackIndex();
+																String temp_trackduration = temp_track.getDuration();
+																String temp_trackartistid = temp_track.getArtistId();
+																String temp_trackartistname = temp_track.getArtistName();
+																String temp_trackalbumid = temp_track.getAlbumId();
+																String temp_trackalbumname = temp_track.getAlbumName();
 						%>
 						<ol class="breadcrumb">
 							<li><a href="HomeView.jsp">Home</a></li>
 							<li><a
-								href="MusicController?artistid=<%=temp_trackartistid%>" onclick="setArtist('<%=temp_trackartistid%>')">Artist:
-									<%=temp_trackartistname%></a></li>
-							<li><a href="MusicController?albumid=<%=temp_trackalbumid%>" onclick="setAlbum('<%=temp_trackalbumid%>')">Album:
-									<%=temp_trackalbumname%></a></li>
+								href="MusicController?artistid=<%=temp_trackartistid%>"
+								onclick="setArtist('<%=temp_trackartistid%>')">Artist: <%=temp_trackartistname%></a></li>
+							<li><a href="MusicController?albumid=<%=temp_trackalbumid%>"
+								onclick="setAlbum('<%=temp_trackalbumid%>')">Album: <%=temp_trackalbumname%></a></li>
 							<li class="active">Track: <%=temp_tracktitle%></li>
 						</ol>
 
 						<div class="page-header">
 							<h2>
-								<%=temp_tracktitle%> <small>by <%=temp_trackartistname%></small>
+								<%=temp_tracktitle%>
+								<small>by <%=temp_trackartistname%></small>
 							</h2>
 						</div>
 
@@ -539,22 +561,26 @@
 						<%
 							}
 
-							else if (mybean.getPageType() != null
-									&& mybean.getPageType().equals("artist_list_page")) {
-								if (mybean.getNumberItems() > 0) {
-									ArrayList<Artist> temp_array = mybean.getArtistsArray();
-									for (int i = 0; i < temp_array.size(); i++) {
-										String artist_id = temp_array.get(i).getId();
-										String artist_name = temp_array.get(i).getName();
-										//String artist_cover = temp_array.get(i).getCoverUrl();
+															else if (mybean.getPageType() != null
+																	&& mybean.getPageType().equals("artist_list_page")) {
+																if (mybean.getNumberItems() > 0) {
+																	ArrayList<Artist> temp_array = mybean.getArtistsArray();
+																	for (int i = 0; i < temp_array.size(); i++) {
+																		String artist_id = temp_array.get(i).getId();
+																		String artist_name = temp_array.get(i).getName();
+																		//String artist_cover = temp_array.get(i).getCoverUrl();
 						%>
 
 						<div class="col-xs-6 col-md-3 thumbnail" style="height: 200px">
-							<a href="MusicController<%="?artistid=" + artist_id%>" onclick="setArtist('<%=artist_id%>')"> <img class="cover" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxANDQwKCBANCAwIDQwICQgICBsIDQgKFB0WFhQRExMkKCggGBolGxMTITEhJSkrLi4yFx8zODMsNygtLisBCgoKBQUFDgUFDisZExkrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAHgAeAMBIgACEQEDEQH/xAAZAAEAAwEBAAAAAAAAAAAAAAAAAgMEAQf/xAAlEAEAAQEJAAIDAQAAAAAAAAAAAQIDERIhMUFRcZGhwTJhsRP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9bAAAASoov8AuUWiiLo+Qc/yjtGbHj5WgM80TGyLUrtqN421BSAAAAAAAAABGsdtTNTrHcNIAAB9gDLMDtesuAAAAAAAAA7TrHcNLLGsfrNqAAAABmr1ntx2rWe3AAAAAAAAAF9lVfHWShKzqunvIGgAByuq6L/HWauq/XbQHAAAAAAAAAACBKzpvn+g0AAMs6y1KLWm6b9pBAAAAAAAFlFlf+WQK4jjNZFlO+XytiLtHQVxZRvn8LIi7TIAAAAAQmyjrpCbHjP9aLgGWYu1yGqYv1U12W9PgKwAWWNN83zt/VyFjGXaYAAAAAAAAAAAAKbem7ONxO206kAs5i6NPUsUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AI2kxdOceugD//Z"
-								style="height: 100px;" alt="<%= artist_name %>">
+							<a href="MusicController<%="?artistid=" + artist_id%>"
+								onclick="setArtist('<%=artist_id%>')"> <img class="cover"
+								src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxANDQwKCBANCAwIDQwICQgICBsIDQgKFB0WFhQRExMkKCggGBolGxMTITEhJSkrLi4yFx8zODMsNygtLisBCgoKBQUFDgUFDisZExkrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAHgAeAMBIgACEQEDEQH/xAAZAAEAAwEBAAAAAAAAAAAAAAAAAgMEAQf/xAAlEAEAAQEJAAIDAQAAAAAAAAAAAQIDERIhMUFRcZGhwTJhsRP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9bAAAASoov8AuUWiiLo+Qc/yjtGbHj5WgM80TGyLUrtqN421BSAAAAAAAAABGsdtTNTrHcNIAAB9gDLMDtesuAAAAAAAAA7TrHcNLLGsfrNqAAAABmr1ntx2rWe3AAAAAAAAAF9lVfHWShKzqunvIGgAByuq6L/HWauq/XbQHAAAAAAAAAACBKzpvn+g0AAMs6y1KLWm6b9pBAAAAAAAFlFlf+WQK4jjNZFlO+XytiLtHQVxZRvn8LIi7TIAAAAAQmyjrpCbHjP9aLgGWYu1yGqYv1U12W9PgKwAWWNN83zt/VyFjGXaYAAAAAAAAAAAAKbem7ONxO206kAs5i6NPUsUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AI2kxdOceugD//Z"
+								style="height: 100px;" alt="<%=artist_name%>">
 							</a>
 							<div class="caption" style="">
-								<h3><a href="MusicController<%="?artistid=" + artist_id%>" onclick="setArtist('<%=artist_id%>')"><%=artist_name%></a>
+								<h3>
+									<a href="MusicController<%="?artistid=" + artist_id%>"
+										onclick="setArtist('<%=artist_id%>')"><%=artist_name%></a>
 								</h3>
 								<%--p>
 									<a href="MusicController<%="?artistid=" + artist_id%>"
@@ -564,56 +590,56 @@
 						</div>
 						<%
 							}
-								} else {
-									// no items to show!!
-								}
+																} else {
+																	// no items to show!!
+																}
 
-							}
+															}
 
-							// ve se é uma semantic search
-							else if (mybean.getPageType() != null
-									&& mybean.getPageType().equals("semantic_search_page")) {
+															// ve se é uma semantic search
+															else if (mybean.getPageType() != null
+																	&& mybean.getPageType().equals("semantic_search_page")) {
 
-								
-								if (mybean.getNumberItems() > 0) {
+																
+																if (mybean.getNumberItems() > 0) {
 						%>
 
 						<table class="table table-hover table-bordered">
-							
+
 
 							<%
 								ArrayList<SemanticResult> temp_array = mybean
-												.getSemanticArray();
-										//
-										// Implement ordem no array, para ficar com artists, albums e tracks
-										//
-										
-										for (int i = 0; i < temp_array.size(); i++) {
-											String temp_resource_url = temp_array.get(i)
-													.getResource_url();
-											String temp_resource_name = temp_array.get(i)
-													.getResource_name();
-											String class_label = "label_danger";
-											String label_name = "SOME";
-											String ref = "REF";
-											// verificar se é artista, album ou track e definir:
-											// class_label =
-											// label_name =
-											//TODO VERIFICAR ID'S
-											
-											if (temp_resource_name.charAt(0) == 'a') {
-												class_label = "label-default";
-												label_name = "ARTIST";
-												ref = "onclick=\"setArtist("+temp_resource_url+")\"";
-											} else if (temp_resource_name.charAt(0) == 'b') {
-												class_label = "label-info";
-												label_name = "ALBUM";
-												ref = "onclick=\"setAlbum("+temp_resource_url+")\"";
-											} else if (temp_resource_name.charAt(0) == 'c') {
-												class_label = "label-warning";
-												label_name = "TRACK";
-												ref = "onclick=\"setTrack("+temp_resource_url+")\"";
-											}
+																						.getSemanticArray();
+																				//
+																				// Implement ordem no array, para ficar com artists, albums e tracks
+																				//
+																				
+																				for (int i = 0; i < temp_array.size(); i++) {
+																					String temp_resource_url = temp_array.get(i)
+																							.getResource_url();
+																					String temp_resource_name = temp_array.get(i)
+																							.getResource_name();
+																					String class_label = "label_danger";
+																					String label_name = "SOME";
+																					String ref = "REF";
+																					// verificar se é artista, album ou track e definir:
+																					// class_label =
+																					// label_name =
+																					//TODO VERIFICAR ID'S
+																					
+																					if (temp_resource_name.charAt(0) == 'a') {
+																						class_label = "label-default";
+																						label_name = "ARTIST";
+																						ref = "onclick=\"setArtist("+temp_resource_url+")\"";
+																					} else if (temp_resource_name.charAt(0) == 'b') {
+																						class_label = "label-info";
+																						label_name = "ALBUM";
+																						ref = "onclick=\"setAlbum("+temp_resource_url+")\"";
+																					} else if (temp_resource_name.charAt(0) == 'c') {
+																						class_label = "label-warning";
+																						label_name = "TRACK";
+																						ref = "onclick=\"setTrack("+temp_resource_url+")\"";
+																					}
 							%>
 							<tr>
 								<td><span class="label <%=class_label%>"><%=label_name%></span>
@@ -633,14 +659,14 @@
 
 						<%
 							} else {
-									// no items to show!!
-								}
+																	// no items to show!!
+																}
 
-							}
+															}
 
-							else {
-								// nao sei o que mostrar
-							}
+															else {
+																// nao sei o que mostrar
+															}
 						%>
 
 
