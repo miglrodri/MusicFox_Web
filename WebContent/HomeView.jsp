@@ -430,7 +430,7 @@
 								<td><%=temp_albumtitle%></td>
 								<td><a
 									href="MusicController<%="?albumid=" + temp_albumid%>"
-									onclick="setAlbum('<%=temp_albumid%>)'" class="btn btn-default"
+									onclick="setAlbum('<%=temp_albumid%>')" class="btn btn-default"
 									role="button">More info</a></td>
 							</tr>
 							<%
