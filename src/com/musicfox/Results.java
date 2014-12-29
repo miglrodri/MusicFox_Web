@@ -633,10 +633,11 @@ public class Results {
 			// e.printStackTrace();
 			return false;
 		}
-		if (numero < 1900 || numero > 2020) {
-			return false;
+		if (numero > 1900 && numero < 2020 && numero%10==0) {
+			return true;
 		}
-		return true;
+		
+		return false;
 	}
 
 	/**

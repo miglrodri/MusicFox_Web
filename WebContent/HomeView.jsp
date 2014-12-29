@@ -67,16 +67,6 @@
 	else 
 		var trackingJSON = JSON.parse(getCookie("tracking"));
 	
-	String.prototype.hashCode = function() {
-		  var hash = 0, i, chr, len;
-		  if (this.length == 0) return hash;
-		  for (i = 0, len = this.length; i < len; i++) {
-		    chr   = this.charCodeAt(i);
-		    hash  = ((hash << 5) - hash) + chr;
-		    hash |= 0; // Convert to 32bit integer
-		  }
-		  return hash;
-		};
 	
 	function getCookie(cname) {
 	    var name = cname + "=";
@@ -128,6 +118,7 @@
 	}
 	
 	function setGenre(g) {
+		g = g.toLowerCase();
 		var t = trackingJSON.genre[g];
 		if(t === undefined)
 			trackingJSON.genre[g] = 1;
@@ -145,6 +136,45 @@
 		setCookie("tracking",JSON.stringify(trackingJSON),1);
 	}
 	
+	
+	function search(){
+		var t = document.getElementById("semanticSearch").value;
+		var splits = t.split(" ");
+				
+		var array = ["reggae", "ska", "vocals", "jazz", "country",
+						"pop", "soul", "r&b", "rock", "rap", "hip hop",
+						"latin", "electronica", "dance", "alternative",
+						"indie", "soundtracks", "world", "blues", "classical",
+						"opera", "new age", "folk"];
+		
+		for(key in splits){
+			if(checkDecade(splits[key])){
+				setDecade(splits[key]);
+			}
+			else if(contains(array, splits[key]))
+				setGenre(splits[key]);
+		}
+	}
+	
+	function checkDecade(numero){
+		
+		var x = parseInt(numero);
+		if(x === "NaN")
+			return false;
+		if (x > 1900 && x < 2020 && x%10==0) {
+			return true;
+		}
+	}
+	
+	function contains(a, obj) {
+	    var i = a.length;
+	    while (i--) {
+	       if (a[i] === obj) {
+	           return true;
+	       }
+	    }
+	    return false;
+	}
 	
 	</script>
 </head>
@@ -174,8 +204,8 @@
 					class="navbar-form navbar-left" role="search">
 					<div class="input-group">
 						<input type="text" class="form-control" name="query"
-							placeholder="Search"> <span class="input-group-btn">
-							<button type="submit" class="btn btn-default">Submit</button>
+							placeholder="Search" id="semanticSearch"> <span class="input-group-btn">
+							<button onclick="search()" type="submit" class="btn btn-default">Submit</button>
 						</span>
 					</div>
 					<span class="glyphicon glyphicon-info-sign" data-placement="bottom"
@@ -317,6 +347,9 @@
 							<li><a href="HomeView.jsp">Home</a></li>
 							<li class="active">Artist: <%=temp_artistname%></li>
 						</ol>
+						<script type="text/javascript">						
+							setGenre("<%=temp_artistgenre%>");
+						</script>
 
 						<div class="page-header">
 							<img class="cover-large"
@@ -627,18 +660,20 @@
 																					// label_name =
 																					//TODO VERIFICAR ID'S
 																					
+																					String temp_id = temp_resource_url.substring(temp_resource_url.indexOf("=") + 1, temp_resource_url.length());
+																					
 																					if (temp_resource_name.charAt(0) == 'a') {
 																						class_label = "label-default";
 																						label_name = "ARTIST";
-																						ref = "onclick=\"setArtist("+temp_resource_url+")\"";
+																						ref = "onclick=\"setArtist('"+temp_id+"')\"";
 																					} else if (temp_resource_name.charAt(0) == 'b') {
 																						class_label = "label-info";
 																						label_name = "ALBUM";
-																						ref = "onclick=\"setAlbum("+temp_resource_url+")\"";
+																						ref = "onclick=\"setAlbum('"+temp_id+"')\"";
 																					} else if (temp_resource_name.charAt(0) == 'c') {
 																						class_label = "label-warning";
 																						label_name = "TRACK";
-																						ref = "onclick=\"setTrack("+temp_resource_url+")\"";
+																						ref = "onclick=\"setTrack('"+temp_id+"')\"";
 																					}
 							%>
 							<tr>
