@@ -34,18 +34,18 @@ $(document).ready(function() {
 		    	if (images[0] != null) {
 		    		//console.log(images[0]);
 		    		var en_image_url = images[0].url;
-		    		console.log(en_image_url);
-		    		console.log("found artist and photos for name: "+ artist_name_cleaned +" \ going to set photo src.");
+		    		//console.log(en_image_url);
+		    		//console.log("found artist and photos for name: "+ artist_name_cleaned +" \ going to set photo src.");
 		    		artist.prop('src', en_image_url);
 		    	}
 		    	else {
-		    		console.log("found artist with name: "+ artist_name_cleaned + " but he has no photos available.");
+		    		//console.log("found artist with name: "+ artist_name_cleaned + " but he has no photos available.");
 		    	}
 		    	
 		    });
 	    	}
 	    	else {
-	    		console.log("no artists found in the api with name: "+ artist_name_cleaned);
+	    		//console.log("no artists found in the api with name: "+ artist_name_cleaned);
 	    		// put imagem default
 	    	}
 	    	

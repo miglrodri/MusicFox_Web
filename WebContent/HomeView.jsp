@@ -204,7 +204,8 @@
 					class="navbar-form navbar-left" role="search">
 					<div class="input-group">
 						<input type="text" class="form-control" name="query"
-							placeholder="Search" id="semanticSearch"> <span class="input-group-btn">
+							placeholder="Search" id="semanticSearch"> <span
+							class="input-group-btn">
 							<button onclick="search()" type="submit" class="btn btn-default">Submit</button>
 						</span>
 					</div>
@@ -715,32 +716,7 @@
 					<small>Artists you may like</small>
 				</h3>
 				<div class="row placeholders">
-					<div class="row">
-						<div class="col-xs-6 col-md-3 thumbnail">
-							<a href="#"> <img src="images/cenas.png" alt="cenas">
-							</a>
-							<div class="caption">
-								<h3>Thumbnail label</h3>
-								<p>asd asd asd asd asd asd asd asd asd</p>
-								<p>
-									<a href="#" class="btn btn-primary" role="button">Button</a> <a
-										href="#" class="btn btn-default" role="button">Button</a>
-								</p>
-							</div>
-						</div>
-						<div class="col-xs-6 col-md-3 thumbnail">
-							<a href="#"> <img src="images/cenas.png" alt="cenas">
-							</a>
-							<div class="caption">
-								<h3>Thumbnail label</h3>
-								<p>asd asd asd asd asd asd asd asd asd</p>
-								<p>
-									<a href="#" class="btn btn-primary" role="button">Button</a> <a
-										href="#" class="btn btn-default" role="button">Button</a>
-								</p>
-							</div>
-						</div>
-					</div>
+					<div id="recommended-artists" class="row"></div>
 				</div>
 
 
@@ -802,6 +778,27 @@
 		  	  title : "<strong>Some help to start searching!</strong>",
 		  	  content : "<i><b>Search syntax</b></i><br/>[<span style=\"color:gray;\">artist</span>s | <span style=\"color:blue;\">album</span>s | <span style=\"color:orange;\">track</span>s]<br/>[<span style=\"color:green;\">genre</span>] ex. rock<br/>[<span style=\"color:green;\">decade</span>] ex. 1990<br/>[<span style=\"color:green;\">search_string</span>] ex. black friday<br/><br/><i><b>Search examples</b></i><br/>rock artist<br/>artist cher<br/>country artist 2010<br/>rock album 2010<br/>paris<br/>1920 tracks<br/>rock \"track\"<br/>"
 			  });
+		  
+		  
+		  $.post("RecommendationController", {'track' : JSON.stringify(trackingJSON)},
+				   function(data) {
+				     //alert("Data Loaded: " + data);
+				     
+				     var temp_artist = "<div class=\"col-xs-6 col-md-3 thumbnail\" style=\"height: 200px\"><a href=\"CENAS\" onclick=\"setArtist('cenas')\"> <img class=\"cover\" src=\"cenas\" style=\"height: 100px;\" alt=\"cenas\"></a><div class=\"caption\" style=\"\"><h3><a href=\"cenas\" onclick=\"setArtist('cenas')\">artist name</a></h3></div></div>";
+									
+				     var obj = jQuery.parseJSON(data);
+				     //alert("obj"+obj);
+				     for (cenas in obj) {
+				    	 console.log("artist: " +  cenas);
+				    	 console.log("url: "  +obj[cenas]);
+				     }
+				     //alert( obj.name === "John" );
+				     
+				     $("#recommended-artists").html(temp_artist);
+				     
+				     
+				   });
+		  
 	});
 	</script>
 	<!-- /#page-content-wrapper -->
