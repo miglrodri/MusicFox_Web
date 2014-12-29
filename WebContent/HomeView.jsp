@@ -782,22 +782,34 @@
 		  
 		  $.post("RecommendationController", {'track' : JSON.stringify(trackingJSON)},
 				   function(data) {
-				     //alert("Data Loaded: " + data);
-				     
-				     var temp_artist = "<div class=\"col-xs-6 col-md-3 thumbnail\" style=\"height: 200px\"><a href=\"CENAS\" onclick=\"setArtist('cenas')\"> <img class=\"cover\" src=\"cenas\" style=\"height: 100px;\" alt=\"cenas\"></a><div class=\"caption\" style=\"\"><h3><a href=\"cenas\" onclick=\"setArtist('cenas')\">artist name</a></h3></div></div>";
-									
+				     				
 				     var obj = jQuery.parseJSON(data);
-				     //alert("obj"+obj);
+				     
+				     function divs(artist, url, id){
+				    	 return "<div class=\"col-xs-6 col-md-3 thumbnail\" style=\"height: 200px\">"+
+				    	 "<a href=\""+url+"\" onclick=\"setArtist('"+id+"')\"> <img class=\"cover\" "+ 
+				    	 +"\" style=\"height: 100px;\" alt=\""+artist+"\"></a>"+
+				    	 "<div class=\"caption\" style=\"\"><h3><a href=\""+url+"\" onclick=\"setArtist('"+id+"')\">"+artist+"</a></h3></div></div>";
+				     }
+				     
+				     var temp_artist = "";
+				     
 				     for (cenas in obj) {
 				    	 console.log("artist: " +  cenas);
 				    	 console.log("url: "  +obj[cenas]);
+				    	 var temp_url = String(obj[cenas]);
+				    	 var temp_id = temp_url.substr(temp_url.indexOf("=") + 1, temp_url.length);
+				    	 temp_artist += divs(cenas, temp_url, temp_id); 
 				     }
-				     //alert( obj.name === "John" );
 				     
 				     $("#recommended-artists").html(temp_artist);
 				     
 				     
 				   });
+		  
+		  
+		  
+		  
 		  
 	});
 	</script>
