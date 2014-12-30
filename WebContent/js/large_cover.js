@@ -31,22 +31,24 @@ $(document).ready(function() {
 		    	var rresponse = rdata.response;
 		    	//console.log(rresponse);
 		    	var images = rresponse.images;
-		    	if (images[0] != null) {
+		    	if (images[0] != null && images[0].url.search("myspacecdn.com") == -1) {
 		    		//console.log(images[0]);
 		    		var en_image_url = images[0].url;
-		    		console.log(en_image_url);
-		    		console.log("found artist and photos for name: "+ artist_name_cleaned +" \ going to set photo src.");
+		    		//console.log(en_image_url);
+		    		//console.log("found artist and photos for name: "+ artist_name_cleaned +" \ going to set photo src.");
 		    		artist.prop('src', en_image_url);
 		    	}
 		    	else {
-		    		console.log("found artist with name: "+ artist_name_cleaned + " but he has no photos available.");
+		    		//console.log("found artist with name: "+ artist_name_cleaned + " but he has no photos available.");
+		    		artist.prop('src', "images/user.jpg");
 		    	}
 		    	
 		    });
 	    	}
 	    	else {
-	    		console.log("no artists found in the api with name: "+ artist_name_cleaned);
+	    		//console.log("no artists found in the api with name: "+ artist_name_cleaned);
 	    		// put imagem default
+	    		artist.prop('src', "images/user.jpg");
 	    	}
 	    	
 	    	

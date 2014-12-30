@@ -354,7 +354,7 @@
 
 						<div class="page-header">
 							<img class="cover-large"
-								src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxANDQwKCBANCAwIDQwICQgICBsIDQgKFB0WFhQRExMkKCggGBolGxMTITEhJSkrLi4yFx8zODMsNygtLisBCgoKBQUFDgUFDisZExkrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAHgAeAMBIgACEQEDEQH/xAAZAAEAAwEBAAAAAAAAAAAAAAAAAgMEAQf/xAAlEAEAAQEJAAIDAQAAAAAAAAAAAQIDERIhMUFRcZGhwTJhsRP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9bAAAASoov8AuUWiiLo+Qc/yjtGbHj5WgM80TGyLUrtqN421BSAAAAAAAAABGsdtTNTrHcNIAAB9gDLMDtesuAAAAAAAAA7TrHcNLLGsfrNqAAAABmr1ntx2rWe3AAAAAAAAAF9lVfHWShKzqunvIGgAByuq6L/HWauq/XbQHAAAAAAAAAACBKzpvn+g0AAMs6y1KLWm6b9pBAAAAAAAFlFlf+WQK4jjNZFlO+XytiLtHQVxZRvn8LIi7TIAAAAAQmyjrpCbHjP9aLgGWYu1yGqYv1U12W9PgKwAWWNN83zt/VyFjGXaYAAAAAAAAAAAAKbem7ONxO206kAs5i6NPUsUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AI2kxdOceugD//Z"
+								src="images/user.jpg"
 								style="height: 250px;" alt="<%=temp_artistname%>">
 
 							<h2>
@@ -608,7 +608,7 @@
 						<div class="col-xs-6 col-md-3 thumbnail" style="height: 200px">
 							<a href="MusicController<%="?artistid=" + artist_id%>"
 								onclick="setArtist('<%=artist_id%>')"> <img class="cover"
-								src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxANDQwKCBANCAwIDQwICQgICBsIDQgKFB0WFhQRExMkKCggGBolGxMTITEhJSkrLi4yFx8zODMsNygtLisBCgoKBQUFDgUFDisZExkrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAHgAeAMBIgACEQEDEQH/xAAZAAEAAwEBAAAAAAAAAAAAAAAAAgMEAQf/xAAlEAEAAQEJAAIDAQAAAAAAAAAAAQIDERIhMUFRcZGhwTJhsRP/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9bAAAASoov8AuUWiiLo+Qc/yjtGbHj5WgM80TGyLUrtqN421BSAAAAAAAAABGsdtTNTrHcNIAAB9gDLMDtesuAAAAAAAAA7TrHcNLLGsfrNqAAAABmr1ntx2rWe3AAAAAAAAAF9lVfHWShKzqunvIGgAByuq6L/HWauq/XbQHAAAAAAAAAACBKzpvn+g0AAMs6y1KLWm6b9pBAAAAAAAFlFlf+WQK4jjNZFlO+XytiLtHQVxZRvn8LIi7TIAAAAAQmyjrpCbHjP9aLgGWYu1yGqYv1U12W9PgKwAWWNN83zt/VyFjGXaYAAAAAAAAAAAAKbem7ONxO206kAs5i6NPUsUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AGKOY9MUcx6AI2kxdOceugD//Z"
+								src="images/user.jpg"
 								style="height: 100px;" alt="<%=artist_name%>">
 							</a>
 							<div class="caption" style="">
@@ -725,32 +725,7 @@
 					<small>Tracks you may like</small>
 				</h3>
 				<div class="row placeholders">
-					<div class="row">
-						<div class="col-xs-6 col-md-3 thumbnail">
-							<a href="#"> <img src="images/cenas.png" alt="cenas">
-							</a>
-							<div class="caption">
-								<h3>Thumbnail label</h3>
-								<p>asd asd asd asd asd asd asd asd asd</p>
-								<p>
-									<a href="#" class="btn btn-primary" role="button">Button</a> <a
-										href="#" class="btn btn-default" role="button">Button</a>
-								</p>
-							</div>
-						</div>
-						<div class="col-xs-6 col-md-3 thumbnail">
-							<a href="#"> <img src="images/cenas.png" alt="cenas">
-							</a>
-							<div class="caption">
-								<h3>Thumbnail label</h3>
-								<p>asd asd asd asd asd asd asd asd asd</p>
-								<p>
-									<a href="#" class="btn btn-primary" role="button">Button</a> <a
-										href="#" class="btn btn-default" role="button">Button</a>
-								</p>
-							</div>
-						</div>
-					</div>
+					<div id="recommended-tracks" class="row"></div>
 				</div>
 
 
@@ -766,53 +741,16 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+	<% // smallcover-js functions start before the myjsfunctions.js actually populate the DOM with the elements.
+	   // that way recommendation covers are not fullfilled
+	   // TODO find a way to do it synchronous.%>
+	<script src="js/myjsfunctions.js"></script>
+
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/small_cover.js"></script>
 	<script src="js/large_cover.js"></script>
-	<script type="text/javascript">
-	$(document).ready(function() {		
-		  $('body').popover({
-			  selector: "[data-toggle=popover]",
-			  container: "body",
-			  html : true,
-		  	  title : "<strong>Some help to start searching!</strong>",
-		  	  content : "<i><b>Search syntax</b></i><br/>[<span style=\"color:gray;\">artist</span>s | <span style=\"color:blue;\">album</span>s | <span style=\"color:orange;\">track</span>s]<br/>[<span style=\"color:green;\">genre</span>] ex. rock<br/>[<span style=\"color:green;\">decade</span>] ex. 1990<br/>[<span style=\"color:green;\">search_string</span>] ex. black friday<br/><br/><i><b>Search examples</b></i><br/>rock artist<br/>artist cher<br/>country artist 2010<br/>rock album 2010<br/>paris<br/>1920 tracks<br/>rock \"track\"<br/>"
-			  });
-		  
-		  
-		  $.post("RecommendationController", {'track' : JSON.stringify(trackingJSON)},
-				   function(data) {
-				     				
-				     var obj = jQuery.parseJSON(data);
-				     
-				     function divs(artist, url, id){
-				    	 return "<div class=\"col-xs-6 col-md-3 thumbnail\" style=\"height: 200px\">"+
-				    	 "<a href=\""+url+"\" onclick=\"setArtist('"+id+"')\"> <img class=\"cover\" "+ 
-				    	 +"\" style=\"height: 100px;\" alt=\""+artist+"\"></a>"+
-				    	 "<div class=\"caption\" style=\"\"><h3><a href=\""+url+"\" onclick=\"setArtist('"+id+"')\">"+artist+"</a></h3></div></div>";
-				     }
-				     
-				     var temp_artist = "";
-				     
-				     for (cenas in obj) {
-				    	 console.log("artist: " +  cenas);
-				    	 console.log("url: "  +obj[cenas]);
-				    	 var temp_url = String(obj[cenas]);
-				    	 var temp_id = temp_url.substr(temp_url.indexOf("=") + 1, temp_url.length);
-				    	 temp_artist += divs(cenas, temp_url, temp_id); 
-				     }
-				     
-				     $("#recommended-artists").html(temp_artist);
-				     
-				     
-				   });
-		  
-		  
-		  
-		  
-		  
-	});
-	</script>
 	<!-- /#page-content-wrapper -->
 
 	<!-- /#wrapper -->
