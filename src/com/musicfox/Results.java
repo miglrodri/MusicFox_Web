@@ -2,6 +2,9 @@ package com.musicfox;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -71,7 +74,7 @@ public class Results {
 	 * @param POST
 	 * @return
 	 */
-	private static JavaBean semanticSearch(String query) {
+	public static JavaBean semanticSearch(String query) {
 		/**
 		 * QUERY SPARQL example: PEARL(nothing) JAM(nothing) ALBUM(class)
 		 * ROCK(property=genre) 1992(property=decade)
@@ -675,13 +678,15 @@ public class Results {
 				Artist temp_artist = new Artist();
 				temp_artist.setId(cleanId(temp_artist_id));
 				temp_artist.setName(cleanLiteral(temp_artist_name));
-
+				
 				mybean.addToArtistsArray(temp_artist);
 				temp++; // incremente o contador do nr de resultados
 						// encontrados
 
 			}
-
+			
+			mybean.setArtistsArray(orderByViews(mybean.getArtistsArray()));
+			
 			mybean.setPageType("artist_list_page");
 			mybean.setOption(value);
 			mybean.setNumberItems(temp);
@@ -868,7 +873,11 @@ public class Results {
 			mybean.setPageType("artist_page");
 			mybean.addToArtistsArray(temp_artist);
 			mybean.setOption(null);
+			
+			mybean.setArtistsArray(orderByViews(mybean.getArtistsArray()));
 		}
+		
+		
 		qe.close();
 		return mybean;
 	}
@@ -911,4 +920,37 @@ public class Results {
 	public static String cleanLiteral(String dirty) {
 		return dirty.substring(0, dirty.indexOf("^^"));
 	}
+	
+	public static ArrayList<Artist> orderByViews(ArrayList<Artist> artistsArray){
+		
+		Collections.sort(artistsArray, new CustomComparator());
+		
+		return artistsArray;
+		
+	}
+	
+	public static class CustomComparator implements Comparator<Artist> {
+
+		@Override
+		public int compare(Artist arg0, Artist arg1) {
+			// TODO Auto-generated method stub
+			
+			int countA = arg0.getFacebookLikes() + 
+					arg0.getFacebookPeopleTalkingAbout() + 
+					arg0.getLastFMListeners() + 
+					arg0.getLastFMPlayCount() + 
+					arg0.getTwitterFollowers() + 
+					arg0.getVevoViewsTotal();
+			
+			int countB = arg1.getFacebookLikes() + 
+					arg1.getFacebookPeopleTalkingAbout() + 
+					arg1.getLastFMListeners() + 
+					arg1.getLastFMPlayCount() + 
+					arg1.getTwitterFollowers() + 
+					arg1.getVevoViewsTotal();
+			
+			return countB - countA;
+		}
+	}
+	
 }

@@ -66,26 +66,29 @@ public class RecommendationController extends HttpServlet {
 
 			JSONObject resultsArray = new JSONObject();
 
-			String fav_genre = getFav(json, "genre");
-			String fav_decade = getFav(json, "decade");
+			String[] fav_genre = getFav(json, "genre");
+			String[] fav_decade = getFav(json, "decade");
 
 			/**
 			 * Perform the query to get recommended artists
 			 */
+			
 			String searchQuery = "SELECT DISTINCT ?name " + "WHERE {"
 					+ " ?id rdf:type music:Artist. "
 					+ " ?id music:hasName ?name. "
 					+ " ?id music:hasMainGenre ?genre. "
 					+ " ?id music:hasDecade ?decade. "
-					+ " FILTER ( regex(?genre, \"" + fav_genre
-					+ "\", \"i\") && regex(?decade, \"" + fav_decade
+					+ " FILTER ( regex(?genre, \"" + fav_genre[0]
+					+ "\", \"i\") && regex(?decade, \"" + fav_decade[0]
+					+ "\", \"i\") && regex(?genre, \"" + fav_genre[1]
+					+ "\", \"i\") && regex(?decade, \"" + fav_decade[1]
 					+ "\", \"i\") ) }" + " ORDER BY ?name LIMIT 50 ";
 
 			//System.out.println("recommendation query for artists: "	+ searchQuery);
-
-			int temp_counter = 1;
 			QueryExecution qe = Results.queryDB(searchQuery);
 			ResultSet results = qe.execSelect();
+			
+			int temp_counter = 1;
 			if (results.hasNext()) {
 				while (results.hasNext()) {
 					if (temp_counter > 20) {
@@ -120,18 +123,23 @@ public class RecommendationController extends HttpServlet {
 			}
 			qe.close();
 			//System.out.println("# of results: " + temp_counter);
-
+			 
+	
+			
 			/**
 			 * Perform the query to get recommended tracks
 			 */
+			
 			searchQuery = "SELECT DISTINCT ?name " + "WHERE {"
 					+ " ?s rdf:type music:Artist. "
 					+ " ?s music:hasMainGenre ?genre. "
 					+ " ?s music:hasDecade ?decade. "
 					+ " ?s music:writesTrack ?id. "
 					+ " ?id music:hasTitle ?name. "
-					+ " FILTER ( regex(?genre, \"" + fav_genre
-					+ "\", \"i\") && regex(?decade, \"" + fav_decade
+					+ " FILTER ( regex(?genre, \"" + fav_genre[0]
+					+ "\", \"i\") && regex(?decade, \"" + fav_decade[0]
+					+ "\", \"i\") && regex(?genre, \"" + fav_genre[1]
+					+ "\", \"i\") && regex(?decade, \"" + fav_decade[1]
 					+ "\", \"i\") ) }" + " ORDER BY ?name LIMIT 50 ";
 
 			//System.out.println("recommendation query for tracks: "					+ searchQuery);
@@ -169,11 +177,13 @@ public class RecommendationController extends HttpServlet {
 			//System.out.println("# of results: " + temp_counter);
 			qe.close();
 
+	
+
 			writer.print(resultsArray);
 			System.out.println("wrote message to the response!");
 			writer.close();
+			
 		} catch (Exception ex) {
-			ex.getStackTrace();
 			System.out.println(ex);
 		}
 	}
@@ -181,7 +191,7 @@ public class RecommendationController extends HttpServlet {
 	private String getTrackIdFromName(String temp_track_name) {
 		String searchQuery = "SELECT ?id " + "WHERE {"
 				+ " ?id rdf:type music:Track. " + " ?id music:hasTitle ?name. "
-				+ " FILTER regex(?name, \"" + temp_track_name + "\", \"i\") }";
+				+ " FILTER regex(?name, \"" + temp_track_name.replace("\"", "") + "\", \"i\") }";
 		//System.out.println("query for track id: "+ searchQuery);
 		String result = "";
 		try {
@@ -196,7 +206,7 @@ public class RecommendationController extends HttpServlet {
 			qe.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			//System.out.println(">>" + e.getMessage());
+			//System.out.println(">>" + e.getMessage());1\1
 		}
 		return result;
 	}
@@ -224,9 +234,10 @@ public class RecommendationController extends HttpServlet {
 		return result;
 	}
 
-	private String getFav(JSONObject json, String option) {
+	private String[] getFav(JSONObject json, String option) {
 		JSONObject option_temp = (JSONObject) json.get(option);
 		String fav_option = "";
+		String fav2_option = "";
 		long max_option = 0;
 		for (Object item : option_temp.keySet()) {
 			// System.out.println(item);
@@ -234,12 +245,12 @@ public class RecommendationController extends HttpServlet {
 			// System.out.println(t1);
 			if (t1 > max_option) {
 				max_option = t1;
+				fav2_option = fav_option;
 				fav_option = (String) item;
 			}
-
 		}
-		System.out.println("fav_" + option + ": " + fav_option);
-		return fav_option;
+		//System.out.println("fav_" + option + ": " + fav_option);
+		return new String[]{fav_option, fav2_option};
 	}
 
 }

@@ -58,7 +58,7 @@ $(document).ready(function() {
 				     
 				     $("#recommended-artists").html(temp_artist);
 				     $("#recommended-tracks").html(temp_track);
-				     
+				     smallCovers();
 				     
 				     console.log("finished to create recommended elements!");
 				     
