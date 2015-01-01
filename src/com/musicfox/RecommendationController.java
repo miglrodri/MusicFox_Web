@@ -78,11 +78,11 @@ public class RecommendationController extends HttpServlet {
 					+ " ?id music:hasName ?name. "
 					+ " ?id music:hasMainGenre ?genre. "
 					+ " ?id music:hasDecade ?decade. "
-					+ " FILTER ( regex(?genre, \"" + fav_genre[0]
-					+ "\", \"i\") && regex(?decade, \"" + fav_decade[0]
-					+ "\", \"i\") && regex(?genre, \"" + fav_genre[1]
-					+ "\", \"i\") && regex(?decade, \"" + fav_decade[1]
-					+ "\", \"i\") ) }" + " ORDER BY ?name LIMIT 50 ";
+					+ " FILTER ( (regex(?genre, \"" + fav_genre[0]
+					+ "\", \"i\") || regex(?genre, \"" + fav_genre[1]
+					+ "\", \"i\")) && ( regex(?decade, \"" + fav_decade[0]
+					+ "\", \"i\") || regex(?decade, \"" + fav_decade[1]
+					+ "\", \"i\") ) ) }" + " ORDER BY ?name LIMIT 50 ";
 
 			//System.out.println("recommendation query for artists: "	+ searchQuery);
 			QueryExecution qe = Results.queryDB(searchQuery);
@@ -136,11 +136,11 @@ public class RecommendationController extends HttpServlet {
 					+ " ?s music:hasDecade ?decade. "
 					+ " ?s music:writesTrack ?id. "
 					+ " ?id music:hasTitle ?name. "
-					+ " FILTER ( regex(?genre, \"" + fav_genre[0]
-					+ "\", \"i\") && regex(?decade, \"" + fav_decade[0]
-					+ "\", \"i\") && regex(?genre, \"" + fav_genre[1]
-					+ "\", \"i\") && regex(?decade, \"" + fav_decade[1]
-					+ "\", \"i\") ) }" + " ORDER BY ?name LIMIT 50 ";
+					+ " FILTER ( (regex(?genre, \"" + fav_genre[0]
+					+ "\", \"i\") || regex(?genre, \"" + fav_genre[1]
+					+ "\", \"i\")) && ( regex(?decade, \"" + fav_decade[0]
+					+ "\", \"i\") || regex(?decade, \"" + fav_decade[1]
+					+ "\", \"i\") ) ) }" + " ORDER BY ?name LIMIT 50 ";
 
 			//System.out.println("recommendation query for tracks: "					+ searchQuery);
 
