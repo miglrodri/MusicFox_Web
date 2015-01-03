@@ -678,6 +678,7 @@ public class Results {
 				Artist temp_artist = new Artist();
 				temp_artist.setId(cleanId(temp_artist_id));
 				temp_artist.setName(cleanLiteral(temp_artist_name));
+				temp_artist.setVevoViewsTotal(RecommendationController.getArtistVevoViewsTotalFromName(temp_artist.getName()));
 				
 				mybean.addToArtistsArray(temp_artist);
 				temp++; // incremente o contador do nr de resultados
@@ -873,6 +874,8 @@ public class Results {
 			mybean.setPageType("artist_page");
 			mybean.addToArtistsArray(temp_artist);
 			mybean.setOption(null);
+			
+			// TODO QUESTION? : Aqui só vai haver o retorno de 1 artist, não faz sentido estar a fazer order.
 			
 			mybean.setArtistsArray(orderByViews(mybean.getArtistsArray()));
 		}

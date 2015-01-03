@@ -637,7 +637,7 @@
 																	}
 																	%>
 						</div>
-						<nav><ul class="pager"><li><button id="button-refresh" type="button" class=" btn btn-default"><span class="glyphicon glyphicon-refresh"></span> Show more artists</button></li></ul></nav>
+						<nav><ul class="pager"><li><button id="button-refresh" type="button" class=" btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span> Show more artists</button></li></ul></nav>
 																	<%
 																} else {
 																	// no items to show!!

@@ -100,15 +100,12 @@ public class RecommendationController extends HttpServlet {
 					
 					QuerySolution binding = results.nextSolution();
 					String temp_artist_name = binding.get("name").toString();
-					String temp_artist_id = getArtistIdFromName(Results
-							.cleanLiteral(temp_artist_name));
+					String temp_artist_id = getArtistIdFromName(Results.cleanLiteral(temp_artist_name));
 					String temp_url = "MusicController?artistid="
 							+ Results.cleanId(temp_artist_id);
-
+					int temp_artist_vevoviews = getArtistVevoViewsTotalFromName(Results.cleanLiteral(temp_artist_name));
 					// resultsArray.put("a"+Results.cleanLiteral(temp_artist_name),
 					// "xx");
-					
-					//System.out.println(">> " + temp_artist_name);
 					
 					if (!dirtyResultsArray.contains(Results.cleanLiteral(temp_artist_name).toLowerCase())) {
 						resultsArray.put(
@@ -238,6 +235,32 @@ public class RecommendationController extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 			//System.out.println(">>" + e.getMessage());
+		}
+		return result;
+	}
+	
+	public static int getArtistVevoViewsTotalFromName(String temp_artist_name) {
+		String searchQuery = "SELECT ?vevo " + "WHERE {"
+				+ " ?id rdf:type music:Artist.  ?id music:hasName ?name. " + " ?id music:hasVevoViewsTotal ?vevo. "
+				+ " FILTER regex(?name, \"" + temp_artist_name + "\", \"i\") }";
+		int result = 0;
+		try {
+			QueryExecution qe = Results.queryDB(searchQuery);
+			ResultSet results = qe.execSelect();
+			while (results.hasNext()) {
+				QuerySolution binding = results.nextSolution();
+				//result = Integer.parseInt(Results.cleanLiteral(binding.get("vevovtotal").toString()));
+				result = Integer
+						.parseInt(Results.cleanLiteral(binding.get("vevo")
+								.toString()));
+				//System.out.println(">> got some results for name: " + temp_track_name + " # "+ result);
+				return result;
+			}
+			qe.close();
+		} catch (Exception e) {
+			//e.printStackTrace();
+			//System.out.println(">>" + e.getMessage());
+			return 0;
 		}
 		return result;
 	}
