@@ -608,6 +608,9 @@ public class Results {
 				mybean.addToSemanticArray(sresult);
 			}
 		}
+		
+		// TODO order semanticArray by popularity
+		
 		mybean.setPageType("semantic_search_page");
 		mybean.setOption(query);
 		mybean.setNumberItems(temp);
@@ -871,9 +874,7 @@ public class Results {
 			mybean.addToArtistsArray(temp_artist);
 			mybean.setOption(null);
 			
-			// TODO QUESTION? : Aqui só vai haver o retorno de 1 artist, não faz sentido estar a fazer order.
-			
-			mybean.setArtistsArray(orderByViews(mybean.getArtistsArray()));
+			mybean.setArtistsArray(mybean.getArtistsArray());
 		}
 		
 		
@@ -932,7 +933,6 @@ public class Results {
 
 		@Override
 		public int compare(Artist arg0, Artist arg1) {
-			// TODO Auto-generated method stub
 			
 			int countA = arg0.getFacebookLikes() + 
 					arg0.getFacebookPeopleTalkingAbout() + 
