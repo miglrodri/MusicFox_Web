@@ -4,12 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
-
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.http.cookie.Cookie;
-
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -80,11 +75,6 @@ public class Results {
 		 * ROCK(property=genre) 1992(property=decade)
 		 */
 
-		/**
-		 * TODO Implementar caso queiramos procurar sintáticamente:
-		 * "keit country" -> interpretar tudo dentro das aspas como uma string
-		 */
-
 		System.out.println("\n\n\n\n########semanticSearch(String " + query
 				+ ")");
 
@@ -147,7 +137,6 @@ public class Results {
 		boolean isProperty;
 		boolean isDecade = false;
 		boolean isGenre = false;
-		boolean isNothing = false;
 		boolean firstNothing = true;
 		boolean firstFilter = true;
 		int genre_index = 0;
@@ -160,7 +149,6 @@ public class Results {
 			System.out.println(token);
 			isClass = false;
 			isProperty = false;
-			isNothing = false;
 			
 			if (token.contains("\"")) {
 				continue;
@@ -234,7 +222,6 @@ public class Results {
 			 */
 			// verify if its a NOTHING
 			else if (!isClass && !isProperty) {
-				isNothing = true;
 				System.out.println(token + " is nothing(value)");
 				if (firstNothing) {
 					nothing_filter = token;

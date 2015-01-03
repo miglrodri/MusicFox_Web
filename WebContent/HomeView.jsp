@@ -671,10 +671,6 @@
 																					String class_label = "label_danger";
 																					String label_name = "SOME";
 																					String ref = "REF";
-																					// verificar se é artista, album ou track e definir:
-																					// class_label =
-																					// label_name =
-																					//TODO VERIFICAR ID'S
 																					
 																					String temp_id = temp_resource_url.substring(temp_resource_url.indexOf("=") + 1, temp_resource_url.length());
 																					
@@ -763,11 +759,7 @@
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 
-	<% // smallcover-js functions start before the myjsfunctions.js actually populate the DOM with the elements.
-	   // that way recommendation covers are not fullfilled
-	   // TODO find a way to do it synchronous.%>
 	<script src="js/myjsfunctions.js"></script>
-
 	
 	<script src="js/small_cover.js"></script>
 	<script src="js/large_cover.js"></script>

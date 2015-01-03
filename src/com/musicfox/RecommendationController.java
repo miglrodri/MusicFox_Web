@@ -103,9 +103,7 @@ public class RecommendationController extends HttpServlet {
 					String temp_artist_id = getArtistIdFromName(Results.cleanLiteral(temp_artist_name));
 					String temp_url = "MusicController?artistid="
 							+ Results.cleanId(temp_artist_id);
-					int temp_artist_vevoviews = getArtistVevoViewsTotalFromName(Results.cleanLiteral(temp_artist_name));
-					// resultsArray.put("a"+Results.cleanLiteral(temp_artist_name),
-					// "xx");
+					//int temp_artist_vevoviews = getArtistVevoViewsTotalFromName(Results.cleanLiteral(temp_artist_name));
 					
 					if (!dirtyResultsArray.contains(Results.cleanLiteral(temp_artist_name).toLowerCase())) {
 						resultsArray.put(
@@ -182,7 +180,7 @@ public class RecommendationController extends HttpServlet {
 			//System.out.println("# of results: " + temp_counter);
 			qe.close();
 
-	
+			// TODO pegar no dirtyResultsArray, ordenar por Total Views, e construir o resultsArray já ordenado. (será que o JSON fica ordenado?)
 
 			writer.print(resultsArray);
 			System.out.println("wrote message to the response!");
