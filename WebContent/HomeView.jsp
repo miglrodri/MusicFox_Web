@@ -38,9 +38,11 @@
     <![endif]-->
 
 <style>
-.tooltip>span {
-	text-align: left;
-}
+	.tooltip>span {text-align: left;}
+	.hidden-page {display: none;}
+	.active-page {display: inherit;}
+	.hidden-button {display: none;}
+	.active-button {display: inherit;}
 </style>
 <!-- Cookie -->
 <script type="text/javascript">
@@ -716,7 +718,10 @@
 					<small>Artists you may like</small>
 				</h3>
 				<div class="row placeholders">
-					<div id="recommended-artists" class="row"></div>
+					<div id="recommended-artists" class="row">
+						<div><p><span id="paginate-artists-button" class="glyphicon glyphicon-tasks"></span> Loading artist recommendations...</p></div>
+					</div>
+					<nav><ul class="pager"><li><button id="button1" type="button" class=" btn btn-default hidden-button"><span class="glyphicon glyphicon-refresh"></span> More artist recommendations</button></li></ul></nav>
 				</div>
 
 
@@ -725,9 +730,11 @@
 					<small>Tracks you may like</small>
 				</h3>
 				<div class="row placeholders">
-					<div id="recommended-tracks" class="row"></div>
+					<div id="recommended-tracks" class="row">
+						<div><p><span class="glyphicon glyphicon-tasks"></span> Loading track recommendations...</p></div>
+					</div>
+					<nav><ul class="pager"><li><button id="button2" type="button" class=" btn btn-default hidden-button"><span class="glyphicon glyphicon-refresh"></span> More track recommendations</button></li></ul></nav>
 				</div>
-
 
 
 
@@ -741,14 +748,14 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
+	<script src="js/bootstrap.min.js"></script>
 
 	<% // smallcover-js functions start before the myjsfunctions.js actually populate the DOM with the elements.
 	   // that way recommendation covers are not fullfilled
 	   // TODO find a way to do it synchronous.%>
 	<script src="js/myjsfunctions.js"></script>
 
-	<script src="js/bootstrap.min.js"></script>
+	
 	<script src="js/small_cover.js"></script>
 	<script src="js/large_cover.js"></script>
 	<!-- /#page-content-wrapper -->

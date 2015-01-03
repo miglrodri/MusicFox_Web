@@ -52,6 +52,9 @@ public class RecommendationController extends HttpServlet {
 		
 		ArrayList<String> dirtyResultsArray = new ArrayList<String>();
 		PrintWriter writer = response.getWriter();
+		
+		int LIMIT = 28;
+		
 		try {
 			System.out.println("reading json data");
 			JSONObject json = (JSONObject) new JSONParser().parse(request
@@ -91,7 +94,7 @@ public class RecommendationController extends HttpServlet {
 			int temp_counter = 1;
 			if (results.hasNext()) {
 				while (results.hasNext()) {
-					if (temp_counter > 20) {
+					if (temp_counter > LIMIT) {
 						break;
 					}
 					
@@ -149,25 +152,30 @@ public class RecommendationController extends HttpServlet {
 			results = qe.execSelect();
 			if (results.hasNext()) {
 				while (results.hasNext()) {
-					if (temp_counter > 20) {
+					if (temp_counter > LIMIT) {
 						break;
 					}
 					
 					QuerySolution binding = results.nextSolution();
 					String temp_track_name = binding.get("name").toString();
-					String temp_track_id = getTrackIdFromName(Results
-							.cleanLiteral(temp_track_name));
-					String temp_url = "MusicController?trackid=" + Results.cleanId(temp_track_id);
-
-					//System.out.println(">> " + temp_track_name);
-					
-					if (!dirtyResultsArray.contains(Results.cleanLiteral(temp_track_name).toLowerCase()) && !temp_track_id.isEmpty()) {
-						resultsArray.put(
-								"b" + Results.cleanLiteral(temp_track_name),
-								temp_url);
-						dirtyResultsArray.add(Results.cleanLiteral(temp_track_name).toLowerCase());
-						//System.out.println(">>>> added: |" + Results.cleanLiteral(temp_track_name) + "|");
-						temp_counter++;
+					if (Results.cleanLiteral(temp_track_name).length() > 3) {
+						String temp_track_id = getTrackIdFromName(Results
+								.cleanLiteral(temp_track_name));
+						String temp_url = "MusicController?trackid="
+								+ Results.cleanId(temp_track_id);
+						if (!dirtyResultsArray.contains(Results.cleanLiteral(
+								temp_track_name).toLowerCase())
+								&& !temp_track_id.isEmpty()) {
+							resultsArray
+									.put("b"
+											+ Results
+													.cleanLiteral(temp_track_name),
+											temp_url);
+							dirtyResultsArray.add(Results.cleanLiteral(
+									temp_track_name).toLowerCase());
+							//System.out.println(">>>> added: |"+ Results.cleanLiteral(temp_track_name) + "|");
+							temp_counter++;
+						}
 					}
 				}
 
