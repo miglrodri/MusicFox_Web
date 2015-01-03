@@ -53,7 +53,7 @@ public class RecommendationController extends HttpServlet {
 		ArrayList<String> dirtyResultsArray = new ArrayList<String>();
 		PrintWriter writer = response.getWriter();
 		
-		int LIMIT = 28;
+		int LIMIT = 32;
 		
 		try {
 			System.out.println("reading json data");
@@ -63,9 +63,6 @@ public class RecommendationController extends HttpServlet {
 			/**
 			 * Prepare recommendation response
 			 */
-
-			// ?retirar artistas já vistos?
-			// ?filtrar / order by total views?
 
 			JSONObject resultsArray = new JSONObject();
 
@@ -87,7 +84,7 @@ public class RecommendationController extends HttpServlet {
 					+ "\", \"i\") || regex(?decade, \"" + fav_decade[1]
 					+ "\", \"i\") ) ) }" + " ORDER BY ?name LIMIT 50 ";
 
-			//System.out.println("recommendation query for artists: "	+ searchQuery);
+			System.out.println("recommendation query for artists: "	+ searchQuery);
 			QueryExecution qe = Results.queryDB(searchQuery);
 			ResultSet results = qe.execSelect();
 			
@@ -278,7 +275,8 @@ public class RecommendationController extends HttpServlet {
 				fav_option = (String) item;
 			}
 		}
-		//System.out.println("fav_" + option + ": " + fav_option);
+		System.out.println("fav_" + option + ": " + fav_option);
+		System.out.println("fav_" + option + ": " + fav2_option);
 		return new String[]{fav_option, fav2_option};
 	}
 

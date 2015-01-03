@@ -150,7 +150,7 @@ public class Results {
 			isClass = false;
 			isProperty = false;
 			
-			if (token.contains("\"")) {
+			if (token.contains("\"") || token.equals("genre") || token.equals("decade")) {
 				continue;
 			}
 
@@ -529,6 +529,15 @@ public class Results {
 					System.out.println("added query: " + temp_query);
 					queriesToExecute.add(temp_query);
 				}
+			}
+		}
+		else if (!isGenre && !isDecade) {
+			if (active_class.equals("artist")) {
+				filter += " regex( ?artistvalue, \"\") ";
+			} else if (active_class.equals("album")) {
+				filter += " regex( ?albumvalue, \"\") ";
+			} else if (active_class.equals("track")) {
+				filter += " regex( ?trackvalue, \"\") ";
 			}
 		}
 

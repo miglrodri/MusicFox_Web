@@ -81,7 +81,7 @@ $(document).ready(function() {
 				"/MusicFox_web/", "");
 		// alert(current_url);
 
-		function divs(name, url, id) {
+		function divArtist(name, url, id) {
 			return "<div class=\"col-xs-6 col-md-3 thumbnail\" style=\"height: 200px\">"
 					+ "<a href=\""
 					+ url
@@ -100,6 +100,26 @@ $(document).ready(function() {
 					+ "</a></h3></div></div>";
 		}
 
+		function divTrack(name, url, id) {
+//			return "<div class=\"col-xs-6 col-md-3 thumbnail\" style=\"height: 200px\">"
+//					+ "<a href=\""+ url	+ "\" onclick=\"setArtist('"+ id+ "')\">" +
+//							"<img class=\"cover\" "	+ " src=\"images/user.jpg\" style=\"height: 100px;\" alt=\"" + name + "\">" +
+//						"</a>"
+//					+ "<div class=\"caption\"><h3><a href=\"" + url + "\" onclick=\"setTrack('" + id + "')\">"
+//							+ name
+//							+ "</a></h3>" +
+//						"</div>" +
+//					"</div>";
+			return "<div class=\"col-xs-6 col-md-3 thumbnail\" style=\"height: 200px\">"
+			+ "<a href=\""+ url	+ "\" onclick=\"setArtist('"+ id+ "')\">" +
+			"<img src=\"images/wave.png\" style=\"height: 100px;\" alt=\"" + name + "\">" +
+			"</a>"+ "<div class=\"caption\"><h3><a href=\"" + url + "\" onclick=\"setTrack('" + id + "')\">"
+					+ name
+					+ "</a></h3>" +
+				"</div>" +
+			"</div>";
+		}
+		
 		// create html for ARTISTS
 		var temp_artist = "";
 		var temp_track = "";
@@ -123,7 +143,7 @@ $(document).ready(function() {
 					temp_artist += "<div class=\"page hidden-page\">";
 				}
 				
-				temp_artist += divs(cenas.substr(1,	cenas.length), temp_url, temp_id);
+				temp_artist += divArtist(cenas.substr(1, cenas.length), temp_url, temp_id);
 				artist_counter++;
 				
 			} else if (current_url != temp_url) {
@@ -135,7 +155,7 @@ $(document).ready(function() {
 				}
 				console.log("#item: " + cenas);
 				console.log("url: " +obj[cenas]);
-				temp_track += divs(cenas.substr(1, cenas.length), temp_url, temp_id);
+				temp_track += divTrack(cenas.substr(1, cenas.length), temp_url, temp_id);
 				track_counter++;
 			}
 			
