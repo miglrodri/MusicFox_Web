@@ -323,7 +323,7 @@
 				%>
 
 				<div class="row placeholders">
-					<div class="row">
+					<div id="main-container" class="row">
 
 
 						<%
@@ -601,7 +601,16 @@
 																	&& mybean.getPageType().equals("artist_list_page")) {
 																if (mybean.getNumberItems() > 0) {
 																	ArrayList<Artist> temp_array = mybean.getArtistsArray();
+																	%>
+						<div class="page active-page">
+																	<%
 																	for (int i = 0; i < temp_array.size(); i++) {
+																		if (i % 8 == 0 && i != 0) {
+																			%>
+						</div>
+						<div class="page hidden-page">
+																			<%		
+																		}
 																		String artist_id = temp_array.get(i).getId();
 																		String artist_name = temp_array.get(i).getName();
 																		//String artist_cover = temp_array.get(i).getCoverUrl();
@@ -625,7 +634,11 @@
 							</div>
 						</div>
 						<%
-							}
+																	}
+																	%>
+						</div>
+						<nav><ul class="pager"><li><button id="button-refresh" type="button" class=" btn btn-default"><span class="glyphicon glyphicon-refresh"></span> Show more artists</button></li></ul></nav>
+																	<%
 																} else {
 																	// no items to show!!
 																}

@@ -41,6 +41,30 @@ $(document).ready(function() {
 		}
 	});
 	
+	$("#button-refresh").click(function() {
+		//alert("button clicked!!");
+		//alert( "Handler for .click() called." );
+		var activepage = $("#main-container .active-page");
+		if (typeof  activepage.next(".page").html() == 'undefined') {
+			// next é null
+			//activepage.removeClass("active-page");
+			//activepage.addClass("hidden-page");
+			//$("#main-container .page").first().addClass("active-page");
+			$("#button-refresh").hide();
+		}
+		else {
+			activepage.next(".page").fadeIn();
+			activepage.removeClass("active-page");
+			//activepage.addClass("hidden-page");
+			activepage.next(".page").addClass("active-page");
+			activepage.next(".page").removeClass("hidden-page");
+			var element = activepage.next(".page");
+			if (typeof  element.next(".page").html() == 'undefined') {
+				$("#button-refresh").hide();
+			}
+		}
+	});
+	
 	$.post("RecommendationController",{'track' : JSON.stringify(trackingJSON)},function(data) {
 		console.log("here!");
 		var LIMIT = 4;
