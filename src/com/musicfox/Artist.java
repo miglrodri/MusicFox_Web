@@ -53,19 +53,19 @@ public class Artist {
 		this.vevoUrl = vevoUrl;
 	}
 
-	public int getVevoViewsLastMonth() {
+	public long getVevoViewsLastMonth() {
 		return vevoViewsLastMonth;
 	}
 
-	public void setVevoViewsLastMonth(int vevoViewsLastMonth) {
+	public void setVevoViewsLastMonth(long vevoViewsLastMonth) {
 		this.vevoViewsLastMonth = vevoViewsLastMonth;
 	}
 
-	public int getVevoViewsTotal() {
+	public long getVevoViewsTotal() {
 		return vevoViewsTotal;
 	}
 
-	public void setVevoViewsTotal(int vevoViewsTotal) {
+	public void setVevoViewsTotal(long vevoViewsTotal) {
 		this.vevoViewsTotal = vevoViewsTotal;
 	}
 
@@ -77,11 +77,11 @@ public class Artist {
 		this.twitterUrl = twitterUrl;
 	}
 
-	public int getTwitterFollowers() {
+	public long getTwitterFollowers() {
 		return twitterFollowers;
 	}
 
-	public void setTwitterFollowers(int twitterFollowers) {
+	public void setTwitterFollowers(long twitterFollowers) {
 		this.twitterFollowers = twitterFollowers;
 	}
 
@@ -93,19 +93,19 @@ public class Artist {
 		this.facebookUrl = facebookUrl;
 	}
 
-	public int getFacebookPeopleTalkingAbout() {
+	public long getFacebookPeopleTalkingAbout() {
 		return facebookPeopleTalkingAbout;
 	}
 
-	public void setFacebookPeopleTalkingAbout(int facebookPeopleTalkingAbout) {
+	public void setFacebookPeopleTalkingAbout(long facebookPeopleTalkingAbout) {
 		this.facebookPeopleTalkingAbout = facebookPeopleTalkingAbout;
 	}
 
-	public int getFacebookLikes() {
+	public long getFacebookLikes() {
 		return facebookLikes;
 	}
 
-	public void setFacebookLikes(int facebookLikes) {
+	public void setFacebookLikes(long facebookLikes) {
 		this.facebookLikes = facebookLikes;
 	}
 
@@ -117,19 +117,19 @@ public class Artist {
 		this.lastFMUrl = lastFMUrl;
 	}
 
-	public int getLastFMListeners() {
+	public long getLastFMListeners() {
 		return lastFMListeners;
 	}
 
-	public void setLastFMListeners(int lastFMListeners) {
+	public void setLastFMListeners(long lastFMListeners) {
 		this.lastFMListeners = lastFMListeners;
 	}
 
-	public int getLastFMPlayCount() {
+	public long getLastFMPlayCount() {
 		return lastFMPlayCount;
 	}
 
-	public void setLastFMPlayCount(int lastFMPlayCount) {
+	public void setLastFMPlayCount(long lastFMPlayCount) {
 		this.lastFMPlayCount = lastFMPlayCount;
 	}
 	
@@ -169,15 +169,15 @@ public class Artist {
 	private String decade;
 	private String gender;
 	private String vevoUrl;
-	private int vevoViewsLastMonth;
-	private int vevoViewsTotal;
+	private long vevoViewsLastMonth;
+	private long vevoViewsTotal;
 	private String twitterUrl;
-	private int twitterFollowers;
+	private long twitterFollowers;
 	private String facebookUrl;
-	private int facebookPeopleTalkingAbout;
-	private int facebookLikes;
+	private long facebookPeopleTalkingAbout;
+	private long facebookLikes;
 	private String lastFMUrl;
-	private int lastFMListeners;
-	private int lastFMPlayCount;
+	private long lastFMListeners;
+	private long lastFMPlayCount;
 	private String coverUrl;
 }

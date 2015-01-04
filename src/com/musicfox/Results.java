@@ -834,25 +834,25 @@ public class Results {
 				temp_artist.setVevoUrl(cleanLiteral(binding.get("vevourl")
 						.toString()));
 				temp_artist
-						.setVevoViewsLastMonth(Integer
-								.parseInt(cleanLiteral(binding.get("vevolm")
+						.setVevoViewsLastMonth(Long
+								.parseLong(cleanLiteral(binding.get("vevolm")
 										.toString())));
-				temp_artist.setVevoViewsTotal(Integer
-						.parseInt(cleanLiteral(binding.get("vevovtotal")
+				temp_artist.setVevoViewsTotal(Long
+						.parseLong(cleanLiteral(binding.get("vevovtotal")
 								.toString())));
 				temp_artist.setTwitterUrl(cleanLiteral(binding
 						.get("twitterurl").toString()));
-				temp_artist.setTwitterFollowers(Integer
-						.parseInt(cleanLiteral(binding.get("twitterfoll")
+				temp_artist.setTwitterFollowers(Long
+						.parseLong(cleanLiteral(binding.get("twitterfoll")
 								.toString())));
 				temp_artist.setFacebookUrl(cleanLiteral(binding.get("fburl")
 						.toString()));
 				temp_artist
-						.setFacebookPeopleTalkingAbout(Integer
-								.parseInt(cleanLiteral(binding.get("fbpta")
+						.setFacebookPeopleTalkingAbout(Long
+								.parseLong(cleanLiteral(binding.get("fbpta")
 										.toString())));
-				temp_artist.setFacebookLikes(Integer
-						.parseInt(cleanLiteral(binding.get("fblikes")
+				temp_artist.setFacebookLikes(Long
+						.parseLong(cleanLiteral(binding.get("fblikes")
 								.toString())));
 			}
 			searchQuery = "SELECT ?albumid ?albumtitle WHERE { ?id rdf:type music:Artist. ?id music:producesAlbum ?albumid. ?albumid music:hasTitle ?albumtitle FILTER(str(?id)=\"http://www.semanticweb.org/MusicOntology#"
@@ -934,21 +934,21 @@ public class Results {
 		@Override
 		public int compare(Artist arg0, Artist arg1) {
 			
-			int countA = arg0.getFacebookLikes() + 
+			long countA = arg0.getFacebookLikes() + 
 					arg0.getFacebookPeopleTalkingAbout() + 
 					arg0.getLastFMListeners() + 
 					arg0.getLastFMPlayCount() + 
 					arg0.getTwitterFollowers() + 
 					arg0.getVevoViewsTotal();
 			
-			int countB = arg1.getFacebookLikes() + 
+			long countB = arg1.getFacebookLikes() + 
 					arg1.getFacebookPeopleTalkingAbout() + 
 					arg1.getLastFMListeners() + 
 					arg1.getLastFMPlayCount() + 
 					arg1.getTwitterFollowers() + 
 					arg1.getVevoViewsTotal();
 			
-			return countB - countA;
+			return (int) (countB - countA);
 		}
 	}
 	

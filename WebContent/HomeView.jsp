@@ -336,14 +336,14 @@
 									String temp_artistdecade = temp_artist.getDecade();
 									String temp_artistgender = temp_artist.getGender();
 									String temp_artistvevourl = temp_artist.getVevoUrl();
-									int temp_artistvevolm = temp_artist.getVevoViewsLastMonth();
-									int temp_artistvevotviews = temp_artist.getVevoViewsTotal();
+									long temp_artistvevolm = temp_artist.getVevoViewsLastMonth();
+									long temp_artistvevotviews = temp_artist.getVevoViewsTotal();
 									String temp_artistturl = temp_artist.getTwitterUrl();
-									int temp_artisttfoll = temp_artist.getTwitterFollowers();
+									long temp_artisttfoll = temp_artist.getTwitterFollowers();
 									String temp_artistfburl = temp_artist.getFacebookUrl();
-									int temp_artistfbpta = temp_artist
+									long temp_artistfbpta = temp_artist
 											.getFacebookPeopleTalkingAbout();
-									int temp_artistfblikes = temp_artist.getFacebookLikes();
+									long temp_artistfblikes = temp_artist.getFacebookLikes();
 %>
 
 						<ol class="breadcrumb">
