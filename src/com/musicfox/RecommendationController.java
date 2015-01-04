@@ -264,7 +264,7 @@ public class RecommendationController extends HttpServlet {
 		JSONObject option_temp = (JSONObject) json.get(option);
 		String fav_option = "";
 		String fav2_option = "";
-		long max_option = 0;
+		long max_option = 0, sec_best = 0;
 		for (Object item : option_temp.keySet()) {
 			// System.out.println(item);
 			long t1 = (long) option_temp.get(item);
@@ -273,6 +273,10 @@ public class RecommendationController extends HttpServlet {
 				max_option = t1;
 				fav2_option = fav_option;
 				fav_option = (String) item;
+			}
+			else if (t1 > sec_best) {
+				sec_best = t1;
+				fav2_option = (String) item;
 			}
 		}
 		System.out.println("fav_" + option + ": " + fav_option);
